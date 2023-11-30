@@ -19,6 +19,15 @@ migrate = get_migrate(app)
 def initialize():
     db.drop_all()
     db.create_all()
+
+    bob = create_student('bob', 'bobpass')
+    ranking = create_ranking(bob.id)
+    rob = create_host('rob', 'robpass', 1)
+    bill = create_admin('bill', 'billpass', 1)
+    RunTime = create_competition('RunTime', 1)
+    participant = register_student('bob', 'RunTime')
+    host = join_comp('rob', 'RunTime')
+
     print('database intialized')
 
 '''
@@ -59,6 +68,11 @@ def register_student_command(username, comp_name):
 @click.argument("username", default="bob")
 def display_student_info_command(username):
     print(display_student_info(username))
+
+@student_cli.command("notifications", help="Gets all notifications")
+@click.argument("username", default="bob")
+def display_notifications_command(username):
+    print(display_notifications(username))
 
 app.cli.add_command(student_cli)
 

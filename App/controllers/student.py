@@ -83,3 +83,12 @@ def display_student_info(username):
                 "participated_competitions": [comp.name for comp in student.competitions]
             }
         return profile_info
+
+def display_notifications(username):
+    student = get_student_by_username(username)
+
+    if not student:
+        print(f'{username} does not exist!')
+        return None
+    else:
+        return {"notifications":[notification.get_json() for notification in student.notifications]}
