@@ -63,78 +63,23 @@ def register_student(username, competition_name):
     print(f'{username} was not found')
     return None
 
-"""  
-def get_ranked_users():
-    return User.query.order_by(User.rank.asc()).all()
+def display_student_info(username):
+    student = get_student_by_username(username)
 
-
-
-def add_user_to_comp(user_id, comp_id, rank):
-
-    user = User.query.get(user_id)
-    comp = Competition.query.get(comp_id)
-
-    user_comp = UserCompetition.query.filter_by(user_id=user.id, comp_id=comp.id).first()
-    if user_comp:
-        return False
-        
-    if user and comp:
-        user_comp = UserCompetition(user_id=user.id, comp_id=comp.id, rank = rank)
-        try:
-            db.session.add(user_comp)
-            db.session.commit()
-            return True
-        except Exception as e:
-            print("FAILURE")
-            db.session.rollback()
-            return False
-            
-        print("success")
-        
-
-    return 'Error adding user to competition'
-
-
-def get_user_competitions(user_id):
-    user = User.query.get(user_id)
-    
-    
-    if user:
-        userComps = user.competitions
-        competitions = [Competition.query.get(inst.comp_id) for inst in userComps]
-    # print(competitions)
-        if competitions:
-            results =  [c.toDict() for c in competitions] 
-            return results
+    if not student:
+        print(f'{username} does not exist!')
+        return None
+    else:
+        ranking = Ranking.query.filter_by(student_id=student.id).first()
+        if ranking:
+            profile_info = {
+                "profile": student.get_json(),
+                "ranking": ranking.get_json(),
+                "participated_competitions": [comp.name for comp in student.competitions]
+            }
         else:
-            return competitions
-    return ("User not Found")
-
-
-
-
-
-# def update_ranks():
-#   users = User.query.order_by(User.rank.asc()).limit(20).all()
-  
-#   # Store current ranks
-#   ranks = {u.id: u.rank for u in users}
-  
-#   # Update ranks
-#   db.session.query(User).update({User.rank: User.rank + 1})  
-#   db.session.commit()
-
-#   # Check if ranks changed
-#   for u in users:
-#     if u.rank != ranks[u.id]:
-#       send_notification(u, f"Your rank changed from {ranks[u.id]} to {u.rank}")
-    
-
-def get_user_rankings(user_id):
-    users = User.query.get(user_id)
-    userComps = users.competitions
-
-    ranks = [UserCompetition.query.get(a.id).toDict() for a in userComps]
-    return ranks
-    
-"""
+            profile_info = {
+                "profile": student.get_json(),
+                "participated_competitions": [comp.name for comp in student.competitions]
+            }
+        return profile_info

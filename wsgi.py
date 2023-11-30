@@ -55,6 +55,11 @@ def list_students_command(format):
 def register_student_command(username, comp_name):
     register_student(username, comp_name)
 
+@student_cli.command("display", help="Displays student profile")
+@click.argument("username", default="bob")
+def display_student_info_command(username):
+    print(display_student_info(username))
+
 app.cli.add_command(student_cli)
 
 
