@@ -1,17 +1,30 @@
 from App.database import db
+from App.models import User
 
-class Host(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name =  db.Column(db.String, nullable=False, unique=True)
-    website = db.Column(db.String, nullable=True)
+class Host(User):
+    __tablename__='host'
     
-    competitions = db.relationship("CompetitionHost", lazy=True, backref=db.backref("competitions"), cascade="all, delete-orphan")
+    id = db.Column(db.Integer, primary_key=True)
+    competitions = db.relationship('Competition', secondary="competition_host", overlaps='hosts', lazy=True)
+    
+    def __init__(self, username, password, host_id):
+        super().__init__(username, password)
+        self.host_id = host_id
+  
+    def det_json(self):
+      return {
+         "id": self.id,
+         "username": self.username,
+         "host id": self.host_id
+      }
 
     def toDict(self):
-        res = {
+        return {
             "id": self.id,
-            "name": self.name,
-            "website": self.website
+            "username": self.username,
+            "host id": self.host_id
         }
-        return res
+
+    def __repr__(self):
+        return f'<Host {self.id} : {self.username}>'
     

@@ -3,13 +3,13 @@ from flask_login import UserMixin
 from App.database import db
 
 class User(db.Model, UserMixin):
+    __abstract__=True
+    __tablename__='user'
+    
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
-    overall_rank = db.relationship("Ranking", uselist=False, backref='user', lazy=True)
-
-    competitions = db.relationship("UserCompetition", lazy=True, backref=db.backref("competitions"), cascade="all, delete-orphan")
-
+    
     def __init__(self, username, password):
         self.username = username
         self.set_password(password)
@@ -18,7 +18,6 @@ class User(db.Model, UserMixin):
         return{
             'id': self.id,
             'username': self.username
-            # 'competitions': self.competitions
         }
         
     def toDict(self):
@@ -34,6 +33,4 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         """Check hashed password."""
         return check_password_hash(self.password, password)
-
-
 

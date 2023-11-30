@@ -1,4 +1,4 @@
-from App.models import Competition,User, UserCompetition
+from App.models import Competition, User, student_competition
 from App.database import db
 
 def findCompUser(user_id, comp_id):

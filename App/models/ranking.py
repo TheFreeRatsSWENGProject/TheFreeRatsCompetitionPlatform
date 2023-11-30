@@ -6,8 +6,9 @@ from App.models import state, change, no_change
 
 class Ranking(db.Model):
     __tablename__='ranking'
+
     id = db.Column(db.Integer, primary_key=True)
-    student_id =  db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
+    student_id =  db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False, unique=True)
     total_points = db.Column(db.Integer, default=0)
     curr_ranking = db.Column(db.Integer, nullable=False, default=0)
     prev_ranking = db.Column(db.Integer, nullable=False, default=0)
