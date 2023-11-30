@@ -4,7 +4,7 @@ from .admin import *
 from .host import *
 from .competition import *
 from .competition_host import *
-from .student_competition import *
+from .competition_student import *
 from .ranking import *
 from .state import *
 from .change import *

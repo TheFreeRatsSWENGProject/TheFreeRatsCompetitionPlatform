@@ -4,7 +4,7 @@ from App.models import User
 class Host(User):
     __tablename__='host'
     
-    id = db.Column(db.Integer, primary_key=True)
+    host_id = db.Column(db.Integer, unique=True)
     competitions = db.relationship('Competition', secondary="competition_host", overlaps='hosts', lazy=True)
     
     def __init__(self, username, password, host_id):

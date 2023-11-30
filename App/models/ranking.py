@@ -1,8 +1,8 @@
 from App.database import db
 from App.models import state, change, no_change
-#from .state import *
-#from .change import *
-#from .no_change import *
+from .state import *
+from .change import *
+from .no_change import *
 
 class Ranking(db.Model):
     __tablename__='ranking'
@@ -19,8 +19,8 @@ class Ranking(db.Model):
         self.total_points = 0
         self.curr_ranking = 0
         self.prev_ranking = 0
-        self.change_state = Change(self)
-        self.no_change_state = NoChange(self)
+        self.change_state = Change()
+        self.no_change_state = NoChange()
         self.state = self.no_change_state
 
     def set_points(self, points):
@@ -37,21 +37,38 @@ class Ranking(db.Model):
   
     def set_previous_ranking(self, ranking):
         self.prev_ranking = ranking
-  
+
     def update_state(self):
-        self.state = self.state.update_state()
+        self.change_state = Change()
+        self.no_change_state = NoChange()
+        if self.curr_ranking != self.prev_ranking:
+            if self.curr_ranking <= 20 or (self.prev_ranking <= 20 and self.prev_ranking != 0):
+                self.state = self.change_state
+            else:
+                self.prev_ranking = self.curr_ranking
+                self.update_state()
+                db.session.add(self)
+                db.session.commit()
+        else:
+            self.state = self.no_change_state
 
     def notify(self):
-        return self.state.notify()
+        notification = self.state.notify(self.student_id, self.curr_ranking, self.prev_ranking)
+        if notification:
+            self.prev_ranking = self.curr_ranking
+            self.update_state()
+            db.session.add(self)
+            db.session.commit()
+        return notification
   
     def get_json(self):
         return {
-            'total points': self.total_points,
-            'rank' : self.get_ranking()
+            'rank' : self.get_ranking(),
+            'total points': self.total_points
         }
 
     def toDict(self):
         return {
-            'total points': self.total_points,
-            'rank' : self.get_ranking()
+            'rank' : self.get_ranking(),
+            'total points': self.total_points
         }

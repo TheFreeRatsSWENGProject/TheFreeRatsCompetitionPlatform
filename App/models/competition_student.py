@@ -1,7 +1,7 @@
 from App.database import db
 
-class StudentCompetition(db.Model):
-    __tablename__ = 'student_competition'
+class CompetitionStudent(db.Model):
+    __tablename__ = 'competition_student'
     
     id = db.Column(db.Integer, primary_key=True)
     comp_id = db.Column(db.Integer, db.ForeignKey('competition.id'), nullable=False)

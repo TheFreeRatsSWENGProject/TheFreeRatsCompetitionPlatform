@@ -1,4 +1,4 @@
-from App.models import Competition, User, student_competition
+from App.models import Competition, User, competition_student
 from App.database import db
 
 def create_competition(name, location):
