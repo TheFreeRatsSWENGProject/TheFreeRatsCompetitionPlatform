@@ -1,43 +1,56 @@
-from App.models import User, Competition, competition_student
+from App.models import Student, Competition, Ranking, competition_student
 from App.database import db
 
-def create_user(username, password):
-    newuser = User(username=username, password=password)
+def create_student(username, password):
+    student = get_student_by_username(username)
+    if student:
+        print(f'{username} already exists!')
+        return None
+
+    newStudent = Student(username=username, password=password)
     try:
-        db.session.add(newuser)
+        db.session.add(newStudent)
         db.session.commit()
-        return True
+        print(f'New Student: {username} created!')
+        return newStudent
     except Exception as e:
         db.session.rollback()
-        return False
+        print(f'Something went wrong creating {username}')
+        return None
 
+def get_student_by_username(username):
+    return Student.query.filter_by(username=username).first()
 
-def get_user_by_username(username):
-    return User.query.filter_by(username=username).first()
+def get_student(id):
+    return Student.query.get(id)
 
-def get_user(id):
-    return User.query.get(id)
+def get_all_students():
+    return Student.query.all()
 
-def get_all_users():
-    return User.query.all()
-
-def get_all_users_json():
-    users = User.query.all()
-    if not users:
+def get_all_students_json():
+    students = Student.query.all()
+    if not students:
         return []
-    users = [user.get_json() for user in users]
-    return users
+    students_json = [student.get_json() for student in students]
+    return students_json
 
-def update_user(id, username):
-    user = get_user(id)
-    if user:
-        user.username = username
-        db.session.add(user)
-        return db.session.commit()
+def update_student(id, username):
+    student = get_student(id)
+    if student:
+        student.username = username
+        try:
+            db.session.add(student)
+            db.session.commit()
+            print("Username was updated!")
+            return student
+        except Exception as e:
+            db.session.rollback()
+            print("Username was not updated!")
+            return None
+    print("ID: {id} does not exist!")
     return None
 
-
-    
+"""  
 def get_ranked_users():
     return User.query.order_by(User.rank.asc()).all()
 
@@ -111,3 +124,4 @@ def get_user_rankings(user_id):
     ranks = [UserCompetition.query.get(a.id).toDict() for a in userComps]
     return ranks
     
+"""

@@ -7,17 +7,7 @@ from flask_login import login_required, login_user, current_user, logout_user
 
 from.index import index_views
 
-from App.controllers import (
-    create_user,
-    jwt_authenticate, 
-    get_all_users,
-    get_all_users_json,
-    jwt_required, 
-    get_ranked_users,
-    get_user_competitions,
-    login
-
-)
+from App.controllers import *
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
