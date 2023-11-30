@@ -22,3 +22,26 @@ def get_ranking(id):
 
 def sort_rankings(ranking):
     return ranking.total_points
+
+def update_rankings():
+    rankings = Ranking.query.all()
+    count = 1
+    if rankings:
+        rankings.sort(key=sort_rankings,reverse=True)
+        curr_high = rankings[0].total_points
+        curr_rank = 1
+        for ranking in rankings:
+            if curr_high != ranking.total_points:
+                curr_rank = count
+                curr_high = ranking.total_points
+            ranking.set_ranking(curr_rank)
+            ranking.update_state()
+            db.session.add(ranking)
+            db.session.commit()
+            notification = ranking.notify()
+            if notification:
+                student = Student.query.filter_by(id=ranking.student_id).first()
+                student.add_notification(notification)
+                db.session.add(student)
+                db.session.commit()
+            count += 1

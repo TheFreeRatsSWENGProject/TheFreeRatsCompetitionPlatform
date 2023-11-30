@@ -49,6 +49,12 @@ def list_students_command(format):
     else:
         print(get_all_students_json())
 
+@student_cli.command("register", help="Registers student for a competition")
+@click.argument("username", default="bob")
+@click.argument("comp_name", default="RunTime")
+def register_student_command(username, comp_name):
+    register_student(username, comp_name)
+
 app.cli.add_command(student_cli)
 
 
@@ -107,6 +113,15 @@ def create_host_command(username, password, host_id):
 def join_comp_command(username, comp_name):
     join_comp(username, comp_name)
 
+@host_cli.command("add-results", help="Adds results for a student in a competition")
+@click.argument("host_username", default="rob")
+@click.argument("student_username", default="bob")
+@click.argument("comp_name", default="RunTime")
+@click.argument("score", default="10")
+def add_results_command(host_username, student_username, comp_name, score):
+    add_results(host_username, student_username, comp_name, score)
+    update_rankings()
+
 app.cli.add_command(host_cli)
 
 
@@ -145,65 +160,3 @@ def competition_tests_command(type):
 
 app.cli.add_command(test)
 
-"""
-'''
-Competition commands
-'''
-
-comps = AppGroup('comp', help = 'commands for competition')   
-
-@comps.command("add", help = 'add new competition')
-@click.argument("name", default = "Coding Comp")
-@click.argument("location", default = "Port of Spain")
-def add_comp(name, location):
-    response = create_competition(name, location)
-    if response:
-        print("Competition Created Successfully")
-    else:
-        print("error adding comp")
-
-
-
-
-
-@comps.command("get", help = "list all competitions")
-def get_comps():
-    print(get_all_competitions())
-
-@comps.command("get_json", help = "list all competitions")
-def get_comps():
-    print(get_all_competitions_json())
-
-
-@comps.command("add_user")
-@click.argument("user_id")
-@click.argument("comp_id")
-@click.argument("rank")
-def add_to_comp(user_id, comp_id, rank):
-    add_user_to_comp(user_id, comp_id, rank)
-    print("Done!")
-
-
-@comps.command("getUserComps")
-@click.argument("user_id")
-def getUserCompetitions(user_id):
-    competitions = get_user_competitions(user_id)
-    print("these are the competitions")
-    # print(competitions)
-
-@comps.command("findcompuser")
-@click.argument("user_id")
-@click.argument("comp_id")
-def find_comp_user(user_id, comp_id):
-    findCompUser(user_id, comp_id)
-
-@comps.command("getCompUsers")
-@click.argument("comp_id")
-def get_comp_users(comp_id):
-    get_competition_users(comp_id)
-
-
-
-
-app.cli.add_command(comps)
-"""

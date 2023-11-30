@@ -50,6 +50,19 @@ def update_student(id, username):
     print("ID: {id} does not exist!")
     return None
 
+def register_student(username, competition_name):
+  student = get_student_by_username(username)
+  if student:
+    competition = Competition.query.filter_by(name=competition_name).first()
+    if competition:
+      return student.participate_in_competition(competition)
+    else:
+      print(f'{competition_name} was not found')
+      return None
+  else:
+    print(f'{username} was not found')
+    return None
+
 """  
 def get_ranked_users():
     return User.query.order_by(User.rank.asc()).all()
