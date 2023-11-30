@@ -131,6 +131,18 @@ app.cli.add_command(host_cli)
 
 
 '''
+Ranking commands
+'''
+ranking_cli = AppGroup('ranking', help = "Ranking commands")
+
+@ranking_cli.command("display", help="Displays ranking")
+def display_rankings__command():
+    print(display_rankings())
+
+app.cli.add_command(ranking_cli)
+
+
+'''
 Test Commands
 '''
 

@@ -45,3 +45,24 @@ def update_rankings():
                 db.session.add(student)
                 db.session.commit()
             count += 1
+
+def display_rankings():
+    rankings = Ranking.query.all()
+    if not rankings:
+        print("No Rankings found!")
+        return None
+    else:
+        leaderboard = []
+        count = 1
+        rankings.sort(key=sort_rankings,reverse=True)
+        curr_high = rankings[0].total_points
+        curr_rank = 1
+        for ranking in rankings:
+            if curr_high != ranking.total_points:
+                curr_rank = count
+                curr_high = ranking.total_points
+
+            student = Student.query.filter_by(id=ranking.student_id).first()
+            leaderboard.append({"student": student.username, "ranking":ranking.get_json()})
+            count += 1
+        return leaderboard
