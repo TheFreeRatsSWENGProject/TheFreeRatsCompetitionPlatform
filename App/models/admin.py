@@ -13,11 +13,15 @@ class Admin(User):
     def get_json(self):
         return{
             'id': self.id,
-            'username': self.username
+            'username': self.username,
+            'role': 'Admin',
+            'staff_id': self.staff_id
         }
 
     def toDict(self):
         return{
             'id': self.id,
-            'username': self.username
+            'username': self.username,
+            'role': 'Admin',
+            'staff_id': self.staff_id
         }
