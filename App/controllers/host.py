@@ -71,8 +71,7 @@ def isHost(host_id, comp_id):
     for member in competition.hosts:
         if member.id == host_id:
             return True
-        else:
-            return False
+    return False
 
 def add_results(host_username, student_username, competition_name, score):
     comp = Competition.query.filter_by(name=competition_name).first()

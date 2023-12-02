@@ -162,32 +162,15 @@ Test Commands
 
 test = AppGroup('test', help='Testing commands') 
 
-@test.command("user", help="Run User tests")
+@test.command("app", help="Run User tests")
 @click.argument("type", default="all")
 def user_tests_command(type):
     if type == "unit":
-        sys.exit(pytest.main(["-k", "UserUnitTests"]))
+        sys.exit(pytest.main(["-k", "UnitTests"]))
     elif type == "int":
-        sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
+        sys.exit(pytest.main(["-k", "IntegrationTests"]))
     else:
         sys.exit(pytest.main(["-k", "App"]))
-
-
-
-
-
-@test.command("competition", help = 'Testing Competition commands')
-@click.argument("type", default="all")
-def competition_tests_command(type):
-    if type == "unit":
-        sys.exit(pytest.main(["-k", "CompUnitTests"]))
-    elif type == "int":
-        sys.exit(pytest.main(["-k", "CompIntegrationTests"]))
-    else:
-        print("deafult input, no test ran")
-
-
-
 
 app.cli.add_command(test)
 

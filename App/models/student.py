@@ -16,6 +16,7 @@ class Student(User):
       for comp in self.competitions:
         if (comp.id == competition.id):
           print(f'{self.username} is already registered for {competition.name}!')
+          return None
 
       comp_student = CompetitionStudent(student_id=self.id, competition_id=competition.id)
       try:

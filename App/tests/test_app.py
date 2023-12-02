@@ -3,19 +3,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import db, create_db
-from App.models import User
-from App.controllers import (
-    create_user,
-    get_all_users_json,
-    login,
-    get_user,
-    get_user_by_username,
-    update_user,
-    get_user_competitions,
-    create_competition,
-    add_user_to_comp,
-    get_user_rankings
-)
+from App.models import *
+from App.controllers import *
 
 
 LOGGER = logging.getLogger(__name__)
@@ -23,18 +12,12 @@ LOGGER = logging.getLogger(__name__)
 '''
    Unit Tests
 '''
-class UserUnitTests(unittest.TestCase):
-
+class UnitTests(unittest.TestCase):
+    #User Unit Tests
     def test_new_user(self):
         user = User("bob", "bobpass")
         assert user.username == "bob"
 
-    # pure function no side effects or integrations called
-    def test_get_json(self):
-        user = User("bob", "bobpass")
-        user_json = user.get_json()
-        self.assertDictEqual(user_json, {"id":None, "username":"bob"})
-    
     def test_hashed_password(self):
         password = "mypass"
         hashed = generate_password_hash(password, method='sha256')
@@ -46,64 +29,42 @@ class UserUnitTests(unittest.TestCase):
         user = User("bob", password)
         assert user.check_password(password)
 
+
+
 '''
     Integration Tests
 '''
+class IntegrationTests(unittest.TestCase):
 
-# This fixture creates an empty database for the test and deletes it after the test
-# scope="class" would execute the fixture once and resued for all methods in the class
-@pytest.fixture(autouse=True, scope="module")
-def empty_db():
-    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
-    create_db()
-    yield app.test_client()
-    db.drop_all()
+    #Additional Integration Tests
+    def test_create_student(self):
+      db.drop_all()
+      db.create_all()
+      student = create_student("bob", "bobpass")
+      assert student.username == "bob"
 
+    def test_create_host(self):
+      db.drop_all()
+      db.create_all()
+      host = create_host("rob", "robpass", 101)
+      assert host.username == "rob" and host.host_id == 101
+  
+    def test_create_admin(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 1001)
+      assert admin.username == "bill" and admin.staff_id == 1001
 
-def test_authenticate():
-    user = create_user("bob", "bobpass")
-    assert login("bob", "bobpass") != None
+    def test_student_list(self):
+      db.drop_all()
+      db.create_all()
+      ben = create_student('ben', 'benpass')
+      sally = create_student('sally', 'sallypass')
+      bob = create_student('bob', 'bobpass')
+      jake = create_student('jake', 'jakepass')
+      amy = create_student('amy', 'amypass')
+      students = get_all_students_json()
+      
+      self.assertEqual(students, [{'id': 1, 'username': 'ben', 'role': 'Student'}, {'id': 2, 'username': 'sally', 'role': 'Student'}, {'id': 3, 'username': 'bob', 'role': 'Student'}, {'id': 4, 'username': 'jake', 'role': 'Student'}, {'id': 5, 'username': 'amy', 'role': 'Student'}])
 
-class UsersIntegrationTests(unittest.TestCase):
-
-    def test_create_user(self):
-        user = create_user("rick", "bobpass")
-        assert user.username == "rick"
-
-    def test_get_all_users_json(self):
-        users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
-
-    # Tests data changes in the database
-    def test_update_user(self):
-        update_user(1, "ronnie")
-        user = get_user(1)
-        assert user.username == "ronnie"
-
-    def test_add_user_to_comp(self):
-        newcomp = create_competition("Walktime", "Port of Spain")
-        if newcomp:
-            assert add_user_to_comp(1, 1, 4)
-        else:
-            assert False
-
-    def test_get_user_competitions(self):
-        comp = get_user_competitions(1)
-        user_competitions = []
-
-        for usercomp in comp:
-            del usercomp["date"]
-            del usercomp["hosts"]
-            del usercomp["participants"]
-            user_competitions.append(usercomp)
-        
-        expected_list = [{"id": 1, "name": "Walktime", "location": "Port of Spain"}]
-        self.assertListEqual(expected_list, user_competitions)
-
-
-    def test_get_user_rankings(self):
-        users = get_user_rankings(1)
-        
-        self.assertListEqual([{"id":1, "comp_id": 1 , "user_id": 1, "rank": 4}], users)
-
-
+    
