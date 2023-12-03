@@ -29,7 +29,7 @@ class UnitTests(unittest.TestCase):
         user = User("bob", password)
         assert user.check_password(password)
 
-'Student Unit Tests
+#Student Unit Tests
     def test_new_student(self):
       db.drop_all()
       db.create_all()
@@ -41,6 +41,19 @@ class UnitTests(unittest.TestCase):
       db.create_all()
       student = Student("bob", "bobpass")
       self.assertDictEqual(student.get_json(), {"id": None, "username":"bob", "role": 'Student'})
+
+#Host Unit Tests
+    def test_new_host(self):
+      db.drop_all()
+      db.create_all()
+      host = Host("bill", "billpass", 101)
+      assert host.username == "bill" and host.host_id == 101
+
+    def test_host_get_json(self):
+      db.drop_all()
+      db.create_all()
+      host = Host("bill", "billpass", 101)
+      self.assertDictEqual(host.get_json(), {"id":None, "username":"bill", "role": 'Host', "host id": 101, "competitions": []})
 
 '''
     Integration Tests
