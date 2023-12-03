@@ -172,3 +172,11 @@ class IntegrationTests(unittest.TestCase):
 
       self.assertListEqual(comps, [{"id":1, "name":"CodeSprint", "hosts": [], "participants": []}, {"id":2, "name":"RunTime", "hosts": [], "participants": []}, {"id":3, "name":"HashCode", "hosts": [], "participants": []}])
     
+   def test1_register_student(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp = create_competition("RunTime", 101)
+      student = create_student("bob", "bobpass")
+      assert register_student("bob", "RunTime") != None
+
