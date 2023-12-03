@@ -114,7 +114,22 @@ class IntegrationTests(unittest.TestCase):
       add_results("rob", "bob", "RunTime", 15)
       update_rankings()
       self.assertDictEqual(display_student_info("bob"), {"profile": {'id': 1, 'username': 'bob', 'role': 'Student'}, "ranking": {'rank': 1, 'total points': 15}, "participated_competitions": ['RunTime']})
-   
+
+'Display Notification Integration Tests
+    def test_display_notification(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp = create_competition("RunTime", 101)
+      student = create_student("bob", "bobpass")
+      student_rank = create_ranking(student.id)
+      register_student("bob", "RunTime")
+      host = create_host("rob", "robpass", 1001)
+      join_comp("rob", "RunTime")
+      add_results("rob", "bob", "RunTime", 15)
+      update_rankings()
+      self.assertDictEqual(display_notifications("bob"), {"notifications": [{"id": 1, "notification": "Ranking changed from Unranked to 1"}]})
+
     #Additional Integration Tests
     def test_create_student(self):
       db.drop_all()
