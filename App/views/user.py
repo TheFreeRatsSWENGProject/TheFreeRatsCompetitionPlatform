@@ -21,13 +21,13 @@ def get_users_action():
     users = get_all_users_json()
     return jsonify(users)
 
-@user_views.route('/api/users', methods=['POST'])
-def create_user_endpoint():
-    data = request.json
-    response = create_user(data['username'], data['password'])
-    if response:
-        return (jsonify({'message': f"user created"}),201)
-    return (jsonify({'error': f"error creating user"}),500)
+#@user_views.route('/api/users', methods=['POST'])
+#def create_user_endpoint():
+#    data = request.json
+#    response = create_user(data['username'], data['password'])
+#    if response:
+#        return (jsonify({'message': f"user created"}),201)
+#    return (jsonify({'error': f"error creating user"}),500)
 
 
 @user_views.route('/users', methods=['POST'])
@@ -58,12 +58,12 @@ def get_user_rankings():
 def get_user_comps(id):
     data = request.form
     # comps = get_user_competitions(data['id'])
-    comps = get_user_competitions(id)
+    comps = get_competition(id)
     # userCompetitions =  [c.toDict() for c in comps]
     return jsonify(comps)
 
 @user_views.route('/api/students', methods=['POST'])
-def create_user_endpoint():
+def create_student_endpoint():
     data = request.json
     student  = create_student(data['username'], data['password'])
     if student is None:
