@@ -1,3 +1,4 @@
+from App.controllers.ranking import update_rankings
 from App.models import Host, Competition, Student, Ranking
 from App.models.competition_student import *
 from App.database import db
@@ -103,6 +104,8 @@ def add_results(host_username, student_username, competition_name, score):
                 ranking.set_points(new_total_score)
                 db.session.add(ranking)
                 db.session.commit()
+                update_rankings()
+
                 print("Score added!")
                 return True
 

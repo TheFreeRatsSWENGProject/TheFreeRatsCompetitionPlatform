@@ -1,10 +1,71 @@
 {% extends "layout.html" %}
-{% block title %}Flask MVC App{% endblock %}
-{% block page %}Flask MVC App{% endblock %}
+{% block title %}Homepage{% endblock %}
+{% block page %}Code Comp{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>Flask MVC</h1>
-    <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
+
+<style>
+    .tables-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .leaderboard-table,
+    
+    .competitions-table,.leaderboard-table {
+        width: 20%;
+    }
+</style>
+
+<center>    <h2>The Facilitators Competition Platform</h2> </center>
+
+    <div class="container">
+        <div class="tables-container">
+            <div class="leaderboard-table">
+                <h4>Leaderboard</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Total Points</th>
+                            <th>Overall Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td><a href="{{ url_for('index_views.Student_Profile', user_id=user.id) }}">{{ user.username  }}</a></td>
+                                <td>{{ get_ranking(user.id).total_points }}</td>
+                                <td>{{ get_ranking(user.id).curr_ranking }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="competitions-table">
+                <h4>Competitions</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for competition in competitions %}
+                            <tr>
+                                <td><a href="{{ url_for('index_views.Competition_Details', competition_name=competition.name) }}">{{ competition.name }}</a></td>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+ 
 {% endblock %}

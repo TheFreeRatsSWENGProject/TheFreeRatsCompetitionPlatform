@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}User Profile{% endblock %}
+{% block page %}User Profile{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <h1>Student Profile</h1>
+    <img src="{{ url_for('static', filename='images/ProfilePicture.png') }}" alt="Student Photo">
+
+    <p>Name: {{ user.username }}</p>
+    <p>Competitions Participated in:</p>
+    <ul>
+        {% for competition in competitions %}
+            <li>{{ competition.name }}</li>
+        {% endfor %}
+    </ul>
+    <p>Total Points: {{ ranking.total_points|default('N/A') }}</p>
+    <p>Overall Ranking: {{ ranking.curr_ranking|default('N/A') }}</p>
+{% endblock %}
