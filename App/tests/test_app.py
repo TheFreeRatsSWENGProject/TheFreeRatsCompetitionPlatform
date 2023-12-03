@@ -29,7 +29,18 @@ class UnitTests(unittest.TestCase):
         user = User("bob", password)
         assert user.check_password(password)
 
+'Student Unit Tests
+    def test_new_student(self):
+      db.drop_all()
+      db.create_all()
+      student = Student("bob", "bobpass")
+      assert student.username == "bob"
 
+    def test_student_get_json(self):
+      db.drop_all()
+      db.create_all()
+      student = Student("bob", "bobpass")
+      self.assertDictEqual(student.get_json(), {"id": None, "username":"bob", "role": 'Student'})
 
 '''
     Integration Tests
