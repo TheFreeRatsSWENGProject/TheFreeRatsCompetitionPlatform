@@ -68,6 +68,19 @@ class UnitTests(unittest.TestCase):
       admin = Admin("rob", "robpass", 1001)
       self.assertDictEqual(admin.get_json(), {"id":None, "username":"rob", "role": 'Admin', "staff_id": 1001})
 
+#Competition Unit Tests
+    def test_new_competition(self):
+      db.drop_all()
+      db.create_all()
+      competition = Competition("RunTime")
+      assert competition.name == "RunTime"
+
+    def test_competition_get_json(self):
+      db.drop_all()
+      db.create_all()
+      competition = Competition("RunTime")
+      self.assertDictEqual(competition.get_json(), {"id": None,"name": "RunTime", "hosts": [], "participants": []})
+
 '''
     Integration Tests
 '''
