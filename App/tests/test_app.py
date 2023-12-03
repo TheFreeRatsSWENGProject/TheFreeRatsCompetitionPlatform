@@ -55,6 +55,19 @@ class UnitTests(unittest.TestCase):
       host = Host("bill", "billpass", 101)
       self.assertDictEqual(host.get_json(), {"id":None, "username":"bill", "role": 'Host', "host id": 101, "competitions": []})
 
+#Admin Unit Tests
+    def test_new_admin(self):
+      db.drop_all()
+      db.create_all()
+      admin = Admin("rob", "robpass", 1001)
+      assert admin.username == "rob" and admin.staff_id == 1001
+
+    def test_admin_get_json(self):
+      db.drop_all()
+      db.create_all()
+      admin = Admin("rob", "robpass", 1001)
+      self.assertDictEqual(admin.get_json(), {"id":None, "username":"rob", "role": 'Admin', "staff_id": 1001})
+
 '''
     Integration Tests
 '''
