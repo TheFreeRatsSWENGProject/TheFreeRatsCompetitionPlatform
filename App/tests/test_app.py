@@ -205,12 +205,19 @@ class IntegrationTests(unittest.TestCase):
       student = create_student("bob", "bobpass")
       assert register_student("bob", "RunTime") != None
 
-    def test_join_comp(self):
+    def test1_join_comp(self):
       db.drop_all()
       db.create_all()
       admin = create_admin("bill", "billpass", 101)
       comp = create_competition("RunTime", 101)
       host = create_host("rob", "robpass", 1001)
       assert join_comp("rob", "RunTime") != None
-
-
+       
+    def test2_join_comp(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp = create_competition("RunTime", 101)
+      host = create_host("rob", "robpass", 1001)
+      join_comp("rob", "RunTime")
+      assert join_comp("rob", "RunTime") == None
