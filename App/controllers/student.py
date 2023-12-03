@@ -94,3 +94,12 @@ def display_notifications(username):
         return None
     else:
         return {"notifications":[notification.get_json() for notification in student.notifications]}
+
+def get_notifications(username):
+    student = get_student_by_username(username)
+
+    if not student:
+        print(f'{username} does not exist!')
+        return None
+    else:
+        return student.notifications

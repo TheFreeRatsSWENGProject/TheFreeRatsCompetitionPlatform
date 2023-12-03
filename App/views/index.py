@@ -62,8 +62,9 @@ def Student_Profile(user_id):
         return render_template('404.html')
     competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
     ranking = Ranking.query.filter_by(student_id=user_id).first()
+    notifications= get_notifications(user.username)
 
-    return render_template('Student_Profile.html', user=user, competitions=competitions, ranking=ranking)
+    return render_template('Student_Profile.html', user=user, competitions=competitions, ranking=ranking, notifications=notifications)
 
 
 @index_views.route('/competition/<string:competition_name>', methods=['GET'])
@@ -103,7 +104,7 @@ def Student_Rankk(user_id):
 
 
 @index_views.route('/api/admin', methods=['POST'])
-def create_admin():
+def create_adminV():
     data = request.json
     admin = create_admin(data['username'], data['password'], data['staff_id'])
     if admin:

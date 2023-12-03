@@ -5,6 +5,24 @@
 {{ super() }}
 
 {% block content %}
+
+<style>
+.notifications {
+    border: 5px solid #ccc; 
+    padding: 10px; 
+    margin-top: 10px;
+}
+
+.notifications ul {
+    list-style-type: none; 
+   /
+}
+
+.notifications li {
+    margin-bottom: 15px; 
+}
+
+</style>
     <h1>Student Profile</h1>
     <img src="{{ url_for('static', filename='images/ProfilePicture.png') }}" alt="Student Photo">
 
@@ -17,4 +35,13 @@
     </ul>
     <p>Total Points: {{ ranking.total_points|default('N/A') }}</p>
     <p>Overall Ranking: {{ ranking.curr_ranking|default('N/A') }}</p>
+
+    <div class="notifications">
+        <h5>Notifications:</h5>
+        <ul>
+            {% for notification in notifications %}
+                <li>{{ notification.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
