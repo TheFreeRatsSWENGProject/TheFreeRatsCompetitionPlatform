@@ -115,8 +115,8 @@ class IntegrationTests(unittest.TestCase):
       update_rankings()
       self.assertDictEqual(display_student_info("bob"), {"profile": {'id': 1, 'username': 'bob', 'role': 'Student'}, "ranking": {'rank': 1, 'total points': 15}, "participated_competitions": ['RunTime']})
 
-'Display Notification Integration Tests
-    def test_display_notification(self):
+#Display Notification Integration Tests
+    def test1_display_notification(self):
       db.drop_all()
       db.create_all()
       admin = create_admin("bill", "billpass", 101)
@@ -129,6 +129,31 @@ class IntegrationTests(unittest.TestCase):
       add_results("rob", "bob", "RunTime", 15)
       update_rankings()
       self.assertDictEqual(display_notifications("bob"), {"notifications": [{"id": 1, "notification": "Ranking changed from Unranked to 1"}]})
+
+   def test2_display_notification(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp = create_competition("RunTime", 101)
+      host = create_host("rob", "robpass", 1001)
+      join_comp("rob", "RunTime")
+      ben = create_student("ben", "benpass")
+      ben_rank = create_ranking(ben.id)
+      register_student("ben", "RunTime")
+      sally = create_student("sally", "sallypass")
+      sally_rank = create_ranking(sally.id)
+      register_student("sally", "RunTime")
+      bob = create_student("bob", "bobpass")
+      bob_rank = create_ranking(bob.id)
+      register_student("bob", "RunTime")
+      add_results("rob", "ben", "RunTime", 15)
+      update_rankings()
+      add_results("rob", "sally", "RunTime", 25)
+      update_rankings()
+      add_results("rob", "bob", "RunTime", 20)
+      update_rankings()
+      self.assertDictEqual(display_notifications("ben"), {"notifications": [{"id": 1, "notification": "Ranking changed from Unranked to 1"}, {"id": 5, "notification": "Ranking changed from 1 to 2"}, {"id": 8, "notification": "Ranking changed from 2 to 3"}]})
+
 
     #Additional Integration Tests
     def test_create_student(self):
@@ -172,7 +197,7 @@ class IntegrationTests(unittest.TestCase):
 
       self.assertListEqual(comps, [{"id":1, "name":"CodeSprint", "hosts": [], "participants": []}, {"id":2, "name":"RunTime", "hosts": [], "participants": []}, {"id":3, "name":"HashCode", "hosts": [], "participants": []}])
     
-   def test1_register_student(self):
+    def test1_register_student(self):
       db.drop_all()
       db.create_all()
       admin = create_admin("bill", "billpass", 101)
