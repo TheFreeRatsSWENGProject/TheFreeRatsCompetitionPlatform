@@ -161,4 +161,14 @@ class IntegrationTests(unittest.TestCase):
       
       self.assertEqual(students, [{'id': 1, 'username': 'ben', 'role': 'Student'}, {'id': 2, 'username': 'sally', 'role': 'Student'}, {'id': 3, 'username': 'bob', 'role': 'Student'}, {'id': 4, 'username': 'jake', 'role': 'Student'}, {'id': 5, 'username': 'amy', 'role': 'Student'}])
 
+    def test_comp_list(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp1 = create_competition("CodeSprint", 101)
+      comp2 = create_competition("RunTime", 101)
+      comp3 = create_competition("HashCode", 101)
+      comps = get_all_competitions_json()
+
+      self.assertListEqual(comps, [{"id":1, "name":"CodeSprint", "hosts": [], "participants": []}, {"id":2, "name":"RunTime", "hosts": [], "participants": []}, {"id":3, "name":"HashCode", "hosts": [], "participants": []}])
     
