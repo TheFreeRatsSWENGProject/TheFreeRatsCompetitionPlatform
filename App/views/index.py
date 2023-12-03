@@ -89,7 +89,7 @@ def Register_Competition():
 
 
 @index_views.route('/Student_Ranking/<int:user_id>')
-def Student_Profile(user_id):
+def Student_Rankk(user_id):
     user =get_student(user_id)
 
     if not user:
