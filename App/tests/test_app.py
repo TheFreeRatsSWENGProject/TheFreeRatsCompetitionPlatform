@@ -299,7 +299,7 @@ class IntegrationTests(unittest.TestCase):
       update_rankings()
       self.assertDictEqual(display_notifications("bob"), {"notifications": [{"id": 1, "notification": "Ranking changed from Unranked to 1"}]})
 
-   def test2_display_notification(self):
+    def test2_display_notification(self):
       db.drop_all()
       db.create_all()
       admin = create_admin("bill", "billpass", 101)
