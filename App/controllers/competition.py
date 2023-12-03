@@ -28,6 +28,13 @@ def get_competition_by_name(name):
 def get_competition(id):
     return Competition.query.get(id)
 
+def get_participants(name):
+    comp = get_competition_by_name(name)
+
+    if comp:
+        return comp.participants
+    return None
+
 def get_all_competitions():
     return Competition.query.all()
 

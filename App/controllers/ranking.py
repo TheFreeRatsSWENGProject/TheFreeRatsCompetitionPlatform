@@ -18,7 +18,11 @@ def create_ranking(student_id):
 
 def get_ranking(id):
     ranking = Ranking.query.filter_by(student_id=id).first()
-    return ranking.curr_ranking
+
+    if ranking:
+        return ranking
+    else:
+        return None
 
 def sort_rankings(ranking):
     return ranking.total_points
