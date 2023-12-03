@@ -234,6 +234,18 @@ class IntegrationTests(unittest.TestCase):
       self.assertDictEqual(display_student_info("bob"), {"profile": {'id': 1, 'username': 'bob', 'role': 'Student'}, "ranking": {'rank': 1, 'total points': 15}, "participated_competitions": ['RunTime']})
       
     #Feature 4 Integration Tests
+    def test_display_competition(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp = create_competition("RunTime", 101)
+      student = create_student("bob", "bobpass")
+      register_student("bob", "RunTime")
+      host = create_host("rob", "robpass", 1001)
+      join_comp("rob", "RunTime")
+      self.assertDictEqual(comp.get_json(), {'id': 1, 'name': 'RunTime', 'hosts': ['rob'], 'participants': ['bob']})
+
+    #Feature 5 Integration Tests
     def test_display_rankings(self):
       db.drop_all()
       db.create_all()
@@ -284,7 +296,7 @@ class IntegrationTests(unittest.TestCase):
       update_rankings()
       self.assertListEqual(display_rankings(), [{"student": "ben", "ranking": {"rank": 1, "total points": 30}}, {"student": "sally", "ranking": {"rank": 1, "total points": 30}}, {"student": "bob", "ranking": {"rank": 3, "total points": 25}}, {"student": "jake", "ranking": {"rank": 4, "total points": 20}}, {"student": "amy", "ranking": {"rank": 4, "total points": 20}}, {"student": "jim", "ranking": {"rank": 6, "total points": 15}}])
 
-#Feature 5 Integration Tests
+    #Feature 6 Integration Tests
     def test1_display_notification(self):
       db.drop_all()
       db.create_all()

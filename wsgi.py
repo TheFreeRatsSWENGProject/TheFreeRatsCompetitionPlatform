@@ -105,6 +105,12 @@ comp_cli = AppGroup("comp", help = "Competition commands")
 def create_competition_command(name, staff_id):
     comp = create_competition(name, staff_id)
 
+@comp_cli.command("details", help = "Displays competition details")
+@click.argument("name", default = "RunTime")
+def display_competition_details_command(name):
+    comp = get_competition_by_name(name)
+    print(comp.get_json())
+
 @comp_cli.command("list", help = "list all competitions")
 def list_competition_command():
     print(get_all_competitions_json())
