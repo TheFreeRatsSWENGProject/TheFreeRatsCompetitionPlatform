@@ -61,4 +61,23 @@ def get_user_comps(id):
     comps = get_user_competitions(id)
     # userCompetitions =  [c.toDict() for c in comps]
     return jsonify(comps)
-    
+
+@user_views.route('/api/students', methods=['POST'])
+def create_user_endpoint():
+    data = request.json
+    student  = create_student(data['username'], data['password'])
+    if student is None:
+      return jsonify({'message': f"user {data['username']} already exists"}), 409
+    return jsonify({'message': f"user {student.username} created"})
+
+@user_views.route('/create_competition', methods=['POST'])
+def create_competition():
+    data = request.json
+    admin = Admin.query.filter_by(staff_id=data['CreatorId']).first()
+    if admin:
+      comp=get_competition_by_name(data['name'])
+      if comp is None:
+        comp=create_competition(data['name'], data['CreatorId'])
+        return jsonify({'message': f"Competition {comp.name} created"})
+      return jsonify({'message': f"Competition {comp.name} already exists"}), 409
+    return jsonify({'message': f"Admin {data['CreatorId']} does not exist! Stop the shenanigans students"}), 409

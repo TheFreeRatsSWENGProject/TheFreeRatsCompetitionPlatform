@@ -37,7 +37,7 @@ def init():
     add_results('admin3', 'bob', "RunTime3",5)
     add_results('admin3', 'alice', "RunTime3",10)
     add_results('admin3', 'charlie', "RunTime3",15)
-    
+
     return jsonify(message='The Database has been successfully initialized!')
 
 @index_views.route('/health', methods=['GET'])
@@ -86,3 +86,28 @@ def Register_Competition():
         return f'Successfully registered {username} for {competition_name}'
     else:
         return 'Registration failed'
+
+
+@index_views.route('/Student_Ranking/<int:user_id>')
+def Student_Profile(user_id):
+    user =get_student(user_id)
+
+    if not user:
+        return render_template('404.html')
+    competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
+    ranking = Ranking.query.filter_by(student_id=user_id).first()
+
+    ranking= ranking.curr_ranking
+
+    return jsonify(ranking) 
+
+
+@index_views.route('/api/admin', methods=['POST'])
+def create_admin():
+    data = request.json
+    admin = create_admin(data['username'], data['password'], data['staff_id'])
+    if admin:
+        return jsonify({'message': f"admin {admin.username} created"})
+    else:
+        return jsonify({'message': f"Failed to create admin"})
+
