@@ -86,6 +86,20 @@ class UnitTests(unittest.TestCase):
 '''
 class IntegrationTests(unittest.TestCase):
 
+#Create Competition Integration Tests
+    def test1_create_competition(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      comp = create_competition("RunTime", 101)
+      assert comp.name == "RunTime"
+
+    def test2_create_competition(self):
+      db.drop_all()
+      db.create_all()
+      admin = create_admin("bill", "billpass", 101)
+      assert create_competition("CodeSprint", 100) == None
+   
 #Display Student Info Integration Tests
     def test_display_student_info(self):
       db.drop_all()
