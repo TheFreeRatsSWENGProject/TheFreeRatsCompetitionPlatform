@@ -36,8 +36,7 @@ def add_comp_user():
 
 @comp_views.route('/competitions/<int:id>', methods=['GET'])
 def get_competition(id):
-    print(id)
-    competition = get_competition_by_id(id)
+    competition = get_competition(id)
     if not competition:
         return jsonify({'error': 'competition not found'}), 404 
     return (jsonify(competition.toDict()),200)
@@ -45,14 +44,14 @@ def get_competition(id):
 @comp_views.route('/competitions/results', methods=['POST'])
 def add_comp_results():
     data = request.json
-    response = add_user_to_comp(data['user_id'],data['comp_id'], data['rank'])
+    response = add_results(data['Host_username'],data['Student_username'], data['comp_name'], data['score'])
     if response:
         return (jsonify({'message': f"results added successfully"}),201)
     return (jsonify({'error': f"error adding results"}),500)
 
 @comp_views.route('/rankings/<int:id>', methods =['GET'])
 def get_rankings(id):
-    ranks = get_user_rankings(id)
+    ranks = get_ranking(id)
     return (jsonify(ranks),200)
 
 

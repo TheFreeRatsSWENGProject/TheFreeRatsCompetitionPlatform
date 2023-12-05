@@ -18,7 +18,7 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
 @user_views.route('/api/users', methods=['GET'])
 def get_users_action():
-    users = get_all_users_json()
+    users = get_all_students_json()
     return jsonify(users)
 
 #@user_views.route('/api/users', methods=['POST'])
@@ -30,12 +30,24 @@ def get_users_action():
 #    return (jsonify({'error': f"error creating user"}),500)
 
 
-@user_views.route('/users', methods=['POST'])
-def create_user_action():
-    data = request.form
-    flash(f"User {data['username']} created!")
-    create_user(data['username'], data['password'])
-    return redirect(url_for('user_views.get_user_page'))
+
+@user_views.route('/host_join', methods=['POST'])
+def join_competition():
+    data = request.json
+    Hosting  = join_comp(data['username'], data['CompName'])
+    if Hosting is None:
+      return jsonify({'message': f"Error"}), 409
+    return jsonify({'message': f" {Hosting.username} has joined {Hosting.CompName}"})
+
+
+@user_views.route('/Create_Host', methods=['POST'])
+def create_host_action():
+    data = request.json
+    Host  = create_host(data['username'], data['password'],data['host_id'])
+    if Host is None:
+      return jsonify({'message': f"user {data['username']} already exists"}), 409
+    return jsonify({'message': f"user {Host.username} created"})
+
 
 @user_views.route('/static/users', methods=['GET'])
 def static_user_page():
@@ -48,11 +60,12 @@ def random_function():
     return "yes"
 
 
-@user_views.route('/users/rankings', methods=['GET'])
+@user_views.route('/all_rankings', methods=['GET'])
 def get_user_rankings():
-    users = get_ranked_users()
+    users = display_rankings()
     rankings = [u.to_dict() for u in users]
     return jsonify(rankings)
+
 
 @user_views.route('/users/competitions/<int:id>', methods = ['GET'])
 def get_user_comps(id):
@@ -81,3 +94,8 @@ def create_competition():
         return jsonify({'message': f"Competition {comp.name} created"})
       return jsonify({'message': f"Competition {comp.name} already exists"}), 409
     return jsonify({'message': f"Admin {data['CreatorId']} does not exist! Stop the shenanigans students"}), 409
+
+@user_views.route('/AllNotifications', methods=['GET'])
+def get_all_notifications():
+    notifications = display_notifications()
+    return jsonify(notifications)
