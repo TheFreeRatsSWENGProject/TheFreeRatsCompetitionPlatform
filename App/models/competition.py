@@ -1,22 +1,22 @@
 from App.database import db
-from App.models import host
-from .competition_host import *
+from datetime import datetime
 
 class Competition(db.Model):
     __tablename__='competition'
 
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String, nullable=False, unique=True)
-    #date = db.Column(db.DateTime, default= datetime.utcnow)
-    #location = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.DateTime, default= datetime.utcnow)
+    location = db.Column(db.String(120), nullable=False)
+    admins = db.relationship('Admin', secondary="competition_admin", overlaps='competitions', lazy=True)
+    teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
 
-    #host_id = db.Column(db.Integer, nullable=False)
-    hosts = db.relationship('Host', secondary="competition_host", overlaps='competitions', lazy=True)
-    participants = db.relationship('Student', secondary="competition_student", overlaps='competitions', lazy=True)
-
-    def __init__(self, name):
+    def __init__(self, name, date, location):
         self.name = name
-        #self.location = location
+        self.date = date
+        self.location = location
+        self.admins = []
+        self.teams = []
     
     def add_host(self, host):
         for h in self.hosts:
@@ -40,24 +40,22 @@ class Competition(db.Model):
 
     def get_json(self):
         return {
-            'id': self.id,
-            'name': self.name,
-            #'date': self.date,
-            #'location': self.location,
-            'hosts' : [host.username for host in self.hosts],
-            #'host_id': self.host_id,
-            'participants': [student.username for student in self.participants]
+            "id": self.id,
+            "name": self.name,
+            "date": self.date,
+            "location": self.location,
+            "admins": [admin.username for admin in self.admins],
+            "teams": [team.name for team in self.teams]
         }
 
     def toDict(self):
         return {
-            "id": self.id,
-            "name": self.name,
-            #"date": self.date,
-            #"location": self.location,
-            "hosts": [host.username for host in self.hosts],
-            #"host_id": self.host_id,
-            "participants": [participant.toDict() for participant in self.participants]
+            "ID": self.id,
+            "Name": self.name,
+            "Date": self.date,
+            "Location": self.location,
+            "Admins": [admin.username for admin in self.admins],
+            "Teams": [team.name for team in self.teams]
         }
 
     def __repr__(self):

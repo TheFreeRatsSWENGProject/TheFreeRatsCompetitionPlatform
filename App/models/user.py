@@ -22,8 +22,8 @@ class User(db.Model, UserMixin):
         
     def toDict(self):
         return{
-            'id': self.id,
-            'username': self.username
+            'ID': self.id,
+            'Username': self.username
         }
         
     def set_password(self, password):

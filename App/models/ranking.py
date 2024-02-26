@@ -1,8 +1,4 @@
 from App.database import db
-from App.models import state, change, no_change
-from .state import *
-from .change import *
-from .no_change import *
 
 class Ranking(db.Model):
     __tablename__='ranking'
@@ -12,17 +8,13 @@ class Ranking(db.Model):
     total_points = db.Column(db.Integer, default=0)
     curr_ranking = db.Column(db.Integer, nullable=False, default=0)
     prev_ranking = db.Column(db.Integer, nullable=False, default=0)
-    state = db.Column(db.PickleType)
   
     def __init__(self, student_id):
         self.student_id = student_id
         self.total_points = 0
         self.curr_ranking = 0
         self.prev_ranking = 0
-        self.change_state = Change()
-        self.no_change_state = NoChange()
-        self.state = self.no_change_state
-
+    """
     def set_points(self, points):
         self.total_points = points
 
@@ -60,7 +52,7 @@ class Ranking(db.Model):
             db.session.add(self)
             db.session.commit()
         return notification
-  
+    """
     def get_json(self):
         return {
             'rank' : self.get_ranking(),

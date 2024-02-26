@@ -1,4 +1,4 @@
-from App.models import Competition, Student, Admin, competition_student
+#from App.models import Competition, Student, Admin, competition_student
 from App.database import db
 
 def create_competition(name, staff_id):

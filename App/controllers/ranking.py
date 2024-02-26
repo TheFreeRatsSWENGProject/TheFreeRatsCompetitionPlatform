@@ -1,4 +1,4 @@
-from App.models import Student, Ranking, Notification, competition_student
+#from App.models import Student, Ranking, Notification, competition_student
 from App.database import db
 
 def create_ranking(student_id):

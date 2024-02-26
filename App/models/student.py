@@ -1,17 +1,28 @@
 from App.database import db
-from App.models import User#, competition_student, competition
-from .competition_student import *
+from App.models import User
 
 class Student(User):
     __tablename__ = 'student'
 
-    competitions = db.relationship('Competition', secondary="competition_student", overlaps='participants', lazy=True)
-    ranking = db.relationship('Ranking', uselist=False, backref='student', lazy=True)
+    rating_score = db.Column(db.Integer, nullable=False, default=0)
+    comp_count = db.Column(db.Integer, nullable=False, default=0)
+    curr_rank = db.Column(db.Integer, nullable=False, default=0)
+    prev_rank = db.Column(db.Integer, nullable=False, default=0)
+    teams = db.relationship('Team', secondary='student_team', overlaps='students', lazy=True)
+    #participations = db.relationship('Competition', secondary='competition_team', overlaps='student', lazy=True)
     notifications = db.relationship('Notification', backref='student', lazy=True)
 
     def __init__(self, username, password):
         super().__init__(username, password)
+        self.rating_score = 0
+        self.comp_count = 0
+        self.curr_rank = 0
+        self.prev_rank = 0
+        self.teams = []
+        self.participations = []
+        self.notifications = []
     
+    """
     def participate_in_competition(self, competition):
       for comp in self.competitions:
         if (comp.id == competition.id):
@@ -29,6 +40,7 @@ class Student(User):
         db.session.rollback()
         print("Something went wrong!")
         return None
+    """
 
     def add_notification(self, notification):
         if notification:
@@ -45,7 +57,18 @@ class Student(User):
         return {
             "id": self.id,
             "username": self.username,
-            "role": 'Student'
+            "rating_score": self.rating_score,
+            "comp_count" : self.comp_count,
+            "curr_rank" : self.curr_rank
+        }
+
+    def to_Dict(self):
+        return {
+            "ID": self.id,
+            "Username": self.username,
+            "Rating Score": self.rating_score,
+            "Number of Competitions" : comp_count,
+            "Rank" : self.curr_rank
         }
 
     def __repr__(self):

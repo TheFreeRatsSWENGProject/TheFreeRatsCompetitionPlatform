@@ -13,14 +13,15 @@ class Notification(db.Model):
 
     def get_json(self):
       return {
-            'id': self.id,
-            'notification': self.message
+            "id" : self.id,
+            "student_id" : self.student_id,
+            "notification" : self.message
       }
 
     def toDict(self):
       return {
-            'id': self.id,
-            'notification': self.message
+            "ID" : self.id,
+            "Notification" : self.message
       }
   
     def __repr__(self):

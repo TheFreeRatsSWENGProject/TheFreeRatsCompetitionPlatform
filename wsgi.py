@@ -21,12 +21,12 @@ def initialize():
     db.create_all()
 
     bob = create_student('bob', 'bobpass')
-    ranking = create_ranking(bob.id)
-    rob = create_host('rob', 'robpass', 1)
-    bill = create_admin('bill', 'billpass', 1)
-    RunTime = create_competition('RunTime', 1)
-    participant = register_student('bob', 'RunTime')
-    host = join_comp('rob', 'RunTime')
+    #ranking = create_ranking(bob.id)
+    #rob = create_host('rob', 'robpass', 1)
+    #bill = create_admin('bill', 'billpass', 1)
+    #RunTime = create_competition('RunTime', 1)
+    #participant = register_student('bob', 'RunTime')
+    #host = join_comp('rob', 'RunTime')
 
     print('database intialized')
 

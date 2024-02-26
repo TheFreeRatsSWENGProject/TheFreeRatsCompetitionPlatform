@@ -1,5 +1,5 @@
-from App.controllers.ranking import create_ranking
-from App.models import Student, Competition, Ranking, competition_student
+#from App.controllers.ranking import create_ranking
+from App.models import Student#, Competition, Ranking, competition_student
 from App.database import db
 
 def create_student(username, password):
@@ -12,7 +12,7 @@ def create_student(username, password):
     try:
         db.session.add(newStudent)
         db.session.commit()
-        create_ranking(newStudent.id)
+        #create_ranking(newStudent.id)
         print(f'New Student: {username} created!')
         return newStudent
     except Exception as e:
