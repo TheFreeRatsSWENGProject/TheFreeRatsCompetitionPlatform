@@ -4,12 +4,11 @@ from App.models import User
 class Student(User):
     __tablename__ = 'student'
 
-    rating_score = db.Column(db.Integer, nullable=False, default=0)
+    rating_score = db.Column(db.Float, nullable=False, default=0)
     comp_count = db.Column(db.Integer, nullable=False, default=0)
     curr_rank = db.Column(db.Integer, nullable=False, default=0)
     prev_rank = db.Column(db.Integer, nullable=False, default=0)
     teams = db.relationship('Team', secondary='student_team', overlaps='students', lazy=True)
-    #participations = db.relationship('Competition', secondary='competition_team', overlaps='student', lazy=True)
     notifications = db.relationship('Notification', backref='student', lazy=True)
 
     def __init__(self, username, password):

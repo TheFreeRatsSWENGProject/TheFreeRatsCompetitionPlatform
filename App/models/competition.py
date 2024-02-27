@@ -18,19 +18,19 @@ class Competition(db.Model):
         self.admins = []
         self.teams = []
     
-    def add_host(self, host):
-        for h in self.hosts:
-            if h.id == host.id:
-                print("Host already added!")
+    def add_admin(self, admin):
+        for a in self.admins:
+            if a.id == admin.id:
+                print("Admin already added!")
                 return None
         
-        comp_host = CompetitionHost(comp_id=self.id, host_id=host.host_id)
+        comp_admin = CompetitionAdmin(comp_id=self.id, admin_id=admin.admin_id)
         try:
-            self.hosts.append(host)
-            host.competitions.append(self)
+            self.admins.append(admin)
+            admin.competitions.append(self)
             db.session.commit()
-            print(f'{host.username} was added to {self.name}!')
-            return comp_host
+            print(f'{admin.username} was added to {self.name}!')
+            return comp_admin
         except Exception as e:
             db.session.rollback()
             print("Something went wrong!")
