@@ -18,7 +18,7 @@ class Student(User):
         self.curr_rank = 0
         self.prev_rank = 0
         self.teams = []
-        self.participations = []
+        #self.participations = []
         self.notifications = []
     
     """

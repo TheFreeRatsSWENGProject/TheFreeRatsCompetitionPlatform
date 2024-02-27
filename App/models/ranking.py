@@ -1,3 +1,4 @@
+"""
 from App.database import db
 
 class Ranking(db.Model):
@@ -14,7 +15,7 @@ class Ranking(db.Model):
         self.total_points = 0
         self.curr_ranking = 0
         self.prev_ranking = 0
-    """
+    
     def set_points(self, points):
         self.total_points = points
 
@@ -52,7 +53,7 @@ class Ranking(db.Model):
             db.session.add(self)
             db.session.commit()
         return notification
-    """
+
     def get_json(self):
         return {
             'rank' : self.get_ranking(),
@@ -64,3 +65,4 @@ class Ranking(db.Model):
             'rank' : self.get_ranking(),
             'total points': self.total_points
         }
+"""

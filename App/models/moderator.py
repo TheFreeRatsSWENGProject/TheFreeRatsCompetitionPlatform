@@ -1,12 +1,12 @@
 from App.database import db
 from App.models import User
 
-class Admin(User):
-    __tablename__ = 'admin'
+class Moderator(User):
+    __tablename__ = 'moderator'
 
-    competitions = db.relationship('Competition', secondary='competition_admin', overlaps='admins', lazy=True)
+    competitions = db.relationship('Competition', secondary='competition_moderator', overlaps='moderators', lazy=True)
 
-    def __init__(self, username, password, staff_id):
+    def __init__(self, username, password):
         super().__init__(username, password)
         self.competitions = []
 

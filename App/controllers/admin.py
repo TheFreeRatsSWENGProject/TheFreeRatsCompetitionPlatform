@@ -1,4 +1,4 @@
-from App.models import Admin
+#from App.models import Admin
 from App.database import db
 
 def create_admin(username, password, staff_id):

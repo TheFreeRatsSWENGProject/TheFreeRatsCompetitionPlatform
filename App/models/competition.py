@@ -8,16 +8,17 @@ class Competition(db.Model):
     name =  db.Column(db.String, nullable=False, unique=True)
     date = db.Column(db.DateTime, default= datetime.utcnow)
     location = db.Column(db.String(120), nullable=False)
-    admins = db.relationship('Admin', secondary="competition_admin", overlaps='competitions', lazy=True)
+    moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
     teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
 
     def __init__(self, name, date, location):
         self.name = name
         self.date = date
         self.location = location
-        self.admins = []
+        self.moderators = []
         self.teams = []
     
+    """
     def add_admin(self, admin):
         for a in self.admins:
             if a.id == admin.id:
@@ -35,7 +36,7 @@ class Competition(db.Model):
             db.session.rollback()
             print("Something went wrong!")
             return None
-
+    """
 
 
     def get_json(self):
@@ -44,7 +45,7 @@ class Competition(db.Model):
             "name": self.name,
             "date": self.date,
             "location": self.location,
-            "admins": [admin.username for admin in self.admins],
+            "moderators": [mod.username for mod in self.moderators],
             "teams": [team.name for team in self.teams]
         }
 
@@ -54,7 +55,7 @@ class Competition(db.Model):
             "Name": self.name,
             "Date": self.date,
             "Location": self.location,
-            "Admins": [admin.username for admin in self.admins],
+            "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }
 
