@@ -20,18 +20,52 @@ def initialize():
     db.drop_all()
     db.create_all()
 
-    stud1 = create_student('stud1', 'stud1pass')
+    #stud1 = create_student('stud1', 'stud1pass')
     stud2 = create_student('stud2', 'stud2pass')
     stud3 = create_student('stud3', 'stud3pass')
     stud4 = create_student('stud4', 'stud4pass')
     stud5 = create_student('stud5', 'stud5pass')
     stud6 = create_student('stud6', 'stud6pass')
+    stud7 = create_student('stud7', 'stud7pass')
+    stud8 = create_student('stud8', 'stud8pass')
+    stud9 = create_student('stud9', 'stud9pass')
     #ranking = create_ranking(bob.id)
     mod1 = create_moderator('mod1', 'mod1pass')
     mod2 = create_moderator('mod2', 'mod2pass')
-    mod3 = create_moderator('mod3', 'mod3pass')
     #bill = create_admin('bill', 'billpass', 1)
-    Runtime = create_competition('mod1', 'Runtime', '09-02-2024', 'CSL', 1, 25)
+    comp1 = create_competition('mod1', 'comp1', '09-02-2024', 'CSL', 1, 25)
+    comp2 = create_competition('mod2', 'comp2', '09-02-2024', 'CSL', 2, 20)
+    """
+    students = ["stud1", "stud2", "stud3"]
+    team = find_team("A", students)
+    add_team('mod1', 'comp1', team)
+    add_results('mod1', 'comp1', "A", 16)
+    """
+    students = ["stud4", "stud5", "stud6"]
+    team = find_team("B", students)
+    add_team('mod1', 'comp1', team)
+    add_results('mod1', 'comp1', "B", 15)
+
+    students = ["stud7", "stud8", "stud9"]
+    team = find_team("C", students)
+    add_team('mod1', 'comp1', team)
+    add_results('mod1', 'comp1', "C", 12)
+
+    """
+    students = ["stud1", "stud4", "stud7"]
+    team = find_team("A", students)
+    add_team('mod2', 'comp2', team)
+    add_results('mod2', 'comp2', "A", 10)
+    """
+    students = ["stud2", "stud5", "stud8"]
+    team = find_team("B", students)
+    add_team('mod2', 'comp2', team)
+    add_results('mod2', 'comp2', "B", 15)
+
+    students = ["stud3", "stud6", "stud9"]
+    team = find_team("C", students)
+    add_team('mod2', 'comp2', team)
+    add_results('mod2', 'comp2', "C", 12)
 
     #participant = register_student('bob', 'RunTime')
     #host = join_comp('rob', 'RunTime')
@@ -109,7 +143,7 @@ def add_mod_to_comp_command(mod1_name, comp_name, mod2_name):
 @click.argument("student1", default="stud1")
 @click.argument("student2", default="stud2")
 @click.argument("student3", default="stud3")
-def add_mod_to_comp_command(mod_name, comp_name, team_name, student1, student2, student3):
+def add_team_to_comp_command(mod_name, comp_name, team_name, student1, student2, student3):
     students = [student1, student2, student3]
     team = find_team(team_name, students)
     comp = add_team(mod_name, comp_name, team)
@@ -128,13 +162,13 @@ def add_results_command(mod_name, comp_name, team_name, score):
 @click.argument("comp_name", default="Runtime")
 def update_rankings_command(mod_name, comp_name):
     update_ratings(mod_name, comp_name)
-    display_rankings()
+    update_rankings()
 
 @mod_cli.command("rankings", help="Displays overall rankings")
 #@click.argument("mod_name", default="mod1")
 #@click.argument("comp_name", default="Runtime")
 def display_rankings_command():
-    print(display_rankings())
+    display_rankings()
 
 app.cli.add_command(mod_cli)
 

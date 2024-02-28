@@ -1,5 +1,5 @@
 from App.database import db#from App.controllers.ranking import create_ranking
-from App.models import Student#, Competition, Ranking, competition_student
+from App.models import Student, Competition, Notification#, Ranking, competition_student
 
 def create_student(username, password):
     student = get_student_by_username(username)
@@ -107,7 +107,7 @@ def get_notifications(username):
         return student.notifications
 """
 
-def display_rankings():
+def update_rankings():
     students = get_all_students()
 
     students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
@@ -127,7 +127,18 @@ def display_rankings():
         count += 1
         
         student.curr_rank = curr_rank
-        
+        if student.prev_rank == 0:
+            message = f'RANK : {student.curr_rank}. Congratulations on your first rank!'
+        elif student.curr_rank == student.prev_rank:
+            message = f'RANK : {student.curr_rank}. Your rank has remained at {student.curr_rank}'
+        elif student.curr_rank < student.prev_rank:
+            message = f'RANK : {student.curr_rank}. Congratulations your rank has went up to {student.curr_rank}'
+        else:
+            message = f'RANK : {student.curr_rank}. Your rank has went down to {student.curr_rank}'
+        student.prev_rank = student.curr_rank
+        notification = Notification(student.id, message)
+        student.notifications.append(notification)
+
         try:
             db.session.add(student)
             db.session.commit()
@@ -135,3 +146,26 @@ def display_rankings():
             db.session.rollback()
 
     return leaderboard
+
+def display_rankings():
+    students = get_all_students()
+
+    students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+
+    leaderboard = []
+    count = 1
+    curr_high = students[0].rating_score
+    curr_rank = 1
+        
+    for student in students:
+        if curr_high != student.rating_score:
+            curr_rank = count
+            curr_high = student.rating_score
+
+        leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+        count += 1
+
+    print("Rank\tStudent\tRating Score")
+
+    for position in leaderboard:
+        print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')

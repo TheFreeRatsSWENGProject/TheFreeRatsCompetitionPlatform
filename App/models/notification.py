@@ -18,7 +18,7 @@ class Notification(db.Model):
             "notification" : self.message
       }
 
-    def toDict(self):
+    def to_Dict(self):
       return {
             "ID" : self.id,
             "Notification" : self.message
