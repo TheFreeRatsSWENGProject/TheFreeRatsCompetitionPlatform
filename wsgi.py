@@ -113,16 +113,15 @@ def add_mod_to_comp_command(mod_name, comp_name, team_name, student1, student2, 
     students = [student1, student2, student3]
     team = find_team(team_name, students)
     comp = add_team(mod_name, comp_name, team)
-"""
-@host_cli.command("add-results", help="Adds results for a student in a competition")
-@click.argument("host_username", default="rob")
-@click.argument("student_username", default="bob")
-@click.argument("comp_name", default="RunTime")
+
+@mod_cli.command("addResults", help="Adds results for a team in a competition")
+@click.argument("mod_name", default="mod1")
+@click.argument("comp_name", default="Runtime")
+@click.argument("team_name", default="Coders")
 @click.argument("score", default="10")
-def add_results_command(host_username, student_username, comp_name, score):
-    add_results(host_username, student_username, comp_name, score)
-    update_rankings()
-"""
+def add_results_command(mod_name, comp_name, team_name, score):
+    comp_team = add_results(mod_name, comp_name, team_name, score)
+    #update_rankings()
 
 app.cli.add_command(mod_cli)
 
@@ -151,6 +150,10 @@ def display_competition_details_command(name):
 def list_competition_command():
     print(get_all_competitions_json())
 
+@comp_cli.command("results", help = "displays competition results")
+@click.argument("name", default = "Runtime")
+def display_competition_results_command(name):
+    print(display_competition_results(name))
 
 app.cli.add_command(comp_cli)
 
