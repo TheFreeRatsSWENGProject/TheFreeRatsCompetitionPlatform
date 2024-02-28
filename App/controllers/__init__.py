@@ -4,3 +4,4 @@ from .competition import *
 from .host import *
 from .moderator import *
 from .ranking import *
+from .team import *

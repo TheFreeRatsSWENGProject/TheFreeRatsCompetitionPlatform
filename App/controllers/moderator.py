@@ -1,5 +1,5 @@
 from App.database import db
-from App.models import Moderator, Competition
+from App.models import Moderator, Competition, Team, CompetitionTeam
 
 def create_moderator(username, password):
     mod = get_mod_by_username(username)
@@ -67,9 +67,9 @@ def add_mod(mod1_name, comp_name, mod2_name):
                 print(f'Moderator: {mod2_name} not found!')
                 return None
             else:
-                return comp.add_mod(mod)
+                return comp.add_mod(mod2)
 
-def add_team(mod_name, comp_name, team_name, students):
+def add_team(mod_name, comp_name, team):
     mod = Moderator.query.filter_by(username=mod_name).first()
     comp = Competition.query.filter_by(name=comp_name).first()
     
@@ -81,20 +81,30 @@ def add_team(mod_name, comp_name, team_name, students):
             print(f'Competition: {comp_name} not found!')
             return None
         else:
+            """
             team = find_team(team_name, students)
 
             if not team:
                 team = create_team(team_name, students)
-            
-            try:
-                comp.teams.append(team)
-                team.competitions.append(comp)
-                db.session.add(comp)
-                db.session.add(team)
-                db.session.commit()
-                print(f'{team_name} added to {comp_name}!')
-                return comp
-            except Exception as e:
-                db.session.rollback()
-                print(f'Something went wrong!')
+            """
+            if not team:
+                print(f'Team was not created!')
                 return None
+            else:
+                return comp.add_team(team)
+                """
+                comp_team = CompetitionTeam(comp_id=comp.id, team_id=team.id)
+                try:
+                    comp.teams.append(team)
+                    team.competitions.append(comp)
+                    db.session.add(comp)
+                    db.session.add(team)
+                    db.session.commit()
+                    print(f'{team_name} added to {comp_name}!')
+                    return comp_team
+                except Exception as e:
+                    db.session.rollback()
+                    print(f'Something went wrong!')
+                    return None
+                """
+                

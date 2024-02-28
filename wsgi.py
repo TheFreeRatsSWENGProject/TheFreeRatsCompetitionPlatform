@@ -25,12 +25,13 @@ def initialize():
     stud3 = create_student('stud3', 'stud3pass')
     stud4 = create_student('stud4', 'stud4pass')
     stud5 = create_student('stud5', 'stud5pass')
+    stud6 = create_student('stud6', 'stud6pass')
     #ranking = create_ranking(bob.id)
     mod1 = create_moderator('mod1', 'mod1pass')
     mod2 = create_moderator('mod2', 'mod2pass')
     mod3 = create_moderator('mod3', 'mod3pass')
     #bill = create_admin('bill', 'billpass', 1)
-    Runtime = create_competition('RunTime', '09-02-2024', 'CSL', 'mod1')
+    Runtime = create_competition('Runtime', '09-02-2024', 'CSL', 'mod1')
 
     #participant = register_student('bob', 'RunTime')
     #host = join_comp('rob', 'RunTime')
@@ -64,7 +65,7 @@ def list_students_command(format):
         print(get_all_students_json())
 """
 @student_cli.command("register", help="Registers student for a competition")
-@click.argument("username", default="stud")
+@click.argument("username", default="stud1")
 @click.argument("comp_name", default="Runtime")
 def register_student_command(username, comp_name):
     register_student(username, comp_name)
@@ -75,7 +76,7 @@ def display_student_info_command(username):
     print(display_student_info(username))
 
 @student_cli.command("notifications", help="Gets all notifications")
-@click.argument("username", default="stud")
+@click.argument("username", default="stud1")
 def display_notifications_command(username):
     print(display_notifications(username))
 
@@ -94,12 +95,24 @@ mod_cli = AppGroup("mod", help="Moderator commands")
 def create_moderator_command(username, password):
     mod = create_moderator(username, password)
 
-@mod_cli.command("add", help="Adds a moderator to a competition")
+@mod_cli.command("addMod", help="Adds a moderator to a competition")
 @click.argument("mod1_name", default="mod1")
 @click.argument("comp_name", default="Runtime")
 @click.argument("mod2_name", default="mod2")
 def add_mod_to_comp_command(mod1_name, comp_name, mod2_name):
     mod = add_mod(mod1_name, comp_name, mod2_name)
+
+@mod_cli.command("addTeam", help="Adds a team to a competition")
+@click.argument("mod_name", default="mod1")
+@click.argument("comp_name", default="Runtime")
+@click.argument("team_name", default="Coders")
+@click.argument("student1", default="stud1")
+@click.argument("student2", default="stud2")
+@click.argument("student3", default="stud3")
+def add_mod_to_comp_command(mod_name, comp_name, team_name, student1, student2, student3):
+    students = [student1, student2, student3]
+    team = find_team(team_name, students)
+    comp = add_team(mod_name, comp_name, team)
 """
 @host_cli.command("add-results", help="Adds results for a student in a competition")
 @click.argument("host_username", default="rob")

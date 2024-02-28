@@ -1,12 +1,13 @@
 from App.database import db
-from App.models import Team, Competition
+from App.models import Team, Competition, Student
 
 def create_team(team_name, students):
     team = Team(name=team_name)
-    try:
-        for s in students:
-            stud = Student.query.filter_by(username=stud.username).first()
+    for s in students:
+        stud = Student.query.filter_by(username=s).first()
+        if stud:
             team.add_student(stud)
+    try:
         db.session.add(team)
         db.session.commit()
         print(f'New Team: {team_name} created!')
@@ -35,9 +36,13 @@ def get_all_teams_json():
     
 def find_team(team_name, students):
     teams = Team.query.filter_by(name=team_name).all()
-
+    
     for team in teams:
-        if set(team.students) == set(students):
+        team_stud = []
+        for stud in team.students:
+            team_stud.append(stud.username)
+        
+        if set(team_stud) == set(students):
             return team
     
-    return None
+    return create_team(team_name, students)

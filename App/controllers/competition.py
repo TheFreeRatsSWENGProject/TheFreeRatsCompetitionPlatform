@@ -49,8 +49,6 @@ def get_all_competitions_json():
         return [comp.get_json() for comp in competitions]
 
 
-
-
 #still needs adjusting (add_results function)
 """def add_results(user_id, comp_id, rank):
     Comp = Competition.query.get(comp_id)
