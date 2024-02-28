@@ -1,6 +1,5 @@
-#from App.controllers.ranking import create_ranking
+from App.database import db#from App.controllers.ranking import create_ranking
 from App.models import Student#, Competition, Ranking, competition_student
-from App.database import db
 
 def create_student(username, password):
     student = get_student_by_username(username)
@@ -12,7 +11,6 @@ def create_student(username, password):
     try:
         db.session.add(newStudent)
         db.session.commit()
-        #create_ranking(newStudent.id)
         print(f'New Student: {username} created!')
         return newStudent
     except Exception as e:
@@ -52,6 +50,7 @@ def update_student(id, username):
     print("ID: {id} does not exist!")
     return None
 
+"""
 def register_student(username, competition_name):
   student = get_student_by_username(username)
   if student:
@@ -64,7 +63,7 @@ def register_student(username, competition_name):
   else:
     print(f'{username} was not found')
     return None
-
+"""
 def display_student_info(username):
     student = get_student_by_username(username)
 
@@ -72,6 +71,7 @@ def display_student_info(username):
         print(f'{username} does not exist!')
         return None
     else:
+        """
         ranking = Ranking.query.filter_by(student_id=student.id).first()
         if ranking:
             profile_info = {
@@ -85,6 +85,8 @@ def display_student_info(username):
                 "participated_competitions": [comp.name for comp in student.competitions]
             }
         return profile_info
+        """
+        return student.get_json()
 
 def display_notifications(username):
     student = get_student_by_username(username)
@@ -93,8 +95,8 @@ def display_notifications(username):
         print(f'{username} does not exist!')
         return None
     else:
-        return {"notifications":[notification.get_json() for notification in student.notifications]}
-
+        return {"notifications":[notification.to_Dict() for notification in student.notifications]}
+"""
 def get_notifications(username):
     student = get_student_by_username(username)
 
@@ -103,3 +105,4 @@ def get_notifications(username):
         return None
     else:
         return student.notifications
+"""

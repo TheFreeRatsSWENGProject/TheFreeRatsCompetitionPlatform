@@ -1,7 +1,7 @@
 #from App.controllers.ranking import update_rankings
 #from App.models import Host, Competition, Student, Ranking
 #from App.models.competition_student import *
-from App.database import db
+#from App.database import db
 #from App.controllers import Ranking
 
 def create_host(username, password, host_id):

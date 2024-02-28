@@ -1,6 +1,6 @@
 import click, pytest, sys
 from flask import Flask
-from datetime import datetime
+from datetime import datetime, date
 
 from flask.cli import with_appcontext, AppGroup
 
@@ -20,11 +20,18 @@ def initialize():
     db.drop_all()
     db.create_all()
 
-    bob = create_student('bob', 'bobpass')
+    stud1 = create_student('stud1', 'stud1pass')
+    stud2 = create_student('stud2', 'stud2pass')
+    stud3 = create_student('stud3', 'stud3pass')
+    stud4 = create_student('stud4', 'stud4pass')
+    stud5 = create_student('stud5', 'stud5pass')
     #ranking = create_ranking(bob.id)
-    #rob = create_host('rob', 'robpass', 1)
+    mod1 = create_moderator('mod1', 'mod1pass')
+    mod2 = create_moderator('mod2', 'mod2pass')
+    mod3 = create_moderator('mod3', 'mod3pass')
     #bill = create_admin('bill', 'billpass', 1)
-    #RunTime = create_competition('RunTime', 1)
+    Runtime = create_competition('RunTime', '09-02-2024', 'CSL', 'mod1')
+
     #participant = register_student('bob', 'RunTime')
     #host = join_comp('rob', 'RunTime')
 
@@ -37,16 +44,14 @@ Student Commands
 student_cli = AppGroup("student", help="Student commands") 
 
 @student_cli.command("create", help="Creates a student")
-@click.argument("username", default="bob")
-@click.argument("password", default="bobpass")
+@click.argument("username", default="stud1")
+@click.argument("password", default="stud1pass")
 def create_student_command(username, password):
     student = create_student(username, password)
-    if student:
-        ranking = create_ranking(student.id)
 
 @student_cli.command("update", help="Updates a student's username")
 @click.argument("id", default="1")
-@click.argument("username", default="bobby")
+@click.argument("username", default="stud1")
 def update_student_command(id, username):
     student = update_student(id, username)
 
@@ -57,20 +62,20 @@ def list_students_command(format):
         print(get_all_students())
     else:
         print(get_all_students_json())
-
+"""
 @student_cli.command("register", help="Registers student for a competition")
-@click.argument("username", default="bob")
-@click.argument("comp_name", default="RunTime")
+@click.argument("username", default="stud")
+@click.argument("comp_name", default="Runtime")
 def register_student_command(username, comp_name):
     register_student(username, comp_name)
-
+"""
 @student_cli.command("display", help="Displays student profile")
-@click.argument("username", default="bob")
+@click.argument("username", default="stud1")
 def display_student_info_command(username):
     print(display_student_info(username))
 
 @student_cli.command("notifications", help="Gets all notifications")
-@click.argument("username", default="bob")
+@click.argument("username", default="stud")
 def display_notifications_command(username):
     print(display_notifications(username))
 
@@ -78,19 +83,35 @@ app.cli.add_command(student_cli)
 
 
 '''
-Admin Commands
+Moderator Commands
 '''
 
-admin_cli = AppGroup("admin", help="Admin commands") 
+mod_cli = AppGroup("mod", help="Moderator commands") 
 
-@admin_cli.command("create", help="Creates an admin")
-@click.argument("username", default="bill")
-@click.argument("password", default="billpass")
-@click.argument("staff_id", default="1")
-def create_admin_command(username, password, staff_id):
-    admin = create_admin(username, password,staff_id)
+@mod_cli.command("create", help="Creates a moderator")
+@click.argument("username", default="mod1")
+@click.argument("password", default="mod1pass")
+def create_moderator_command(username, password):
+    mod = create_moderator(username, password)
 
-app.cli.add_command(admin_cli)
+@mod_cli.command("add", help="Adds a moderator to a competition")
+@click.argument("mod1_name", default="mod1")
+@click.argument("comp_name", default="Runtime")
+@click.argument("mod2_name", default="mod2")
+def add_mod_to_comp_command(mod1_name, comp_name, mod2_name):
+    mod = add_mod(mod1_name, comp_name, mod2_name)
+"""
+@host_cli.command("add-results", help="Adds results for a student in a competition")
+@click.argument("host_username", default="rob")
+@click.argument("student_username", default="bob")
+@click.argument("comp_name", default="RunTime")
+@click.argument("score", default="10")
+def add_results_command(host_username, student_username, comp_name, score):
+    add_results(host_username, student_username, comp_name, score)
+    update_rankings()
+"""
+
+app.cli.add_command(mod_cli)
 
 
 '''
@@ -100,13 +121,15 @@ Competition commands
 comp_cli = AppGroup("comp", help = "Competition commands")   
 
 @comp_cli.command("create", help = "Creates a competition")
-@click.argument("name", default = "RunTime")
-@click.argument("staff_id", default = "1")
-def create_competition_command(name, staff_id):
-    comp = create_competition(name, staff_id)
+@click.argument("name", default = "Runtime")
+@click.argument("date", default = date.today())
+@click.argument("location", default = "CSL")
+@click.argument("mod_name", default = "mod1")
+def create_competition_command(name, date, location, mod_name):
+    comp = create_competition(name, date, location, mod_name)
 
 @comp_cli.command("details", help = "Displays competition details")
-@click.argument("name", default = "RunTime")
+@click.argument("name", default = "Runtime")
 def display_competition_details_command(name):
     comp = get_competition_by_name(name)
     print(comp.get_json())
@@ -118,38 +141,7 @@ def list_competition_command():
 
 app.cli.add_command(comp_cli)
 
-
-'''
-Host commands
-'''
-
-host_cli = AppGroup('host', help = "Host commands")
-
-@host_cli.command("create", help="Creates a host")
-@click.argument("username", default="rob")
-@click.argument("password", default="robpass")
-@click.argument("host_id", default="1")
-def create_host_command(username, password, host_id):
-    host = create_host(username, password, host_id)
-
-@host_cli.command("join", help="Adds a host to a competition")
-@click.argument("username", default="rob")
-@click.argument("comp_name", default="RunTime")
-def join_comp_command(username, comp_name):
-    join_comp(username, comp_name)
-
-@host_cli.command("add-results", help="Adds results for a student in a competition")
-@click.argument("host_username", default="rob")
-@click.argument("student_username", default="bob")
-@click.argument("comp_name", default="RunTime")
-@click.argument("score", default="10")
-def add_results_command(host_username, student_username, comp_name, score):
-    add_results(host_username, student_username, comp_name, score)
-    update_rankings()
-
-app.cli.add_command(host_cli)
-
-
+"""
 '''
 Ranking commands
 '''
@@ -160,7 +152,7 @@ def display_rankings__command():
     print(display_rankings())
 
 app.cli.add_command(ranking_cli)
-
+"""
 
 '''
 Test Commands

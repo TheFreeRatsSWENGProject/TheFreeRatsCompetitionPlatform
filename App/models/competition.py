@@ -1,5 +1,6 @@
 from App.database import db
 from datetime import datetime
+from .competition_moderator import *
 
 class Competition(db.Model):
     __tablename__='competition'
@@ -18,26 +19,23 @@ class Competition(db.Model):
         self.moderators = []
         self.teams = []
     
-    """
-    def add_admin(self, admin):
-        for a in self.admins:
-            if a.id == admin.id:
-                print("Admin already added!")
+    def add_mod(self, mod):
+        for m in self.moderators:
+            if m.id == mod.id:
+                print(f'Moderator already added to {self.name}!')
                 return None
         
-        comp_admin = CompetitionAdmin(comp_id=self.id, admin_id=admin.admin_id)
+        comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
         try:
-            self.admins.append(admin)
-            admin.competitions.append(self)
+            self.moderators.append(mod)
+            mod.competitions.append(self)
             db.session.commit()
-            print(f'{admin.username} was added to {self.name}!')
-            return comp_admin
+            print(f'{mod.username} was added to {self.name}!')
+            return comp_mod
         except Exception as e:
             db.session.rollback()
             print("Something went wrong!")
             return None
-    """
-
 
     def get_json(self):
         return {

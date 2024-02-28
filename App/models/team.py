@@ -1,4 +1,5 @@
 from App.database import db
+from .student_team import *
 
 class Team(db.Model):
     __tablename__ = 'team'
@@ -11,6 +12,24 @@ class Team(db.Model):
     def __init__(self, name):
         self.name = name
         self.students = []
+
+    def add_student(self, stud):
+        for s in self.students:
+            if s.username == stud.username:
+                print(f'{stud.username} is already a member of {self.name}')
+                return None
+        
+        stud_team = StudentTeam(student_id=stud.id, team_id=self.id)
+        try:
+            self.students.append(stud)
+            stud.teams.append(self)
+            db.session.commit()
+            print(f'{stud.username} was added to {self.name}!')
+            return stud_team
+        except Exception as e:
+            db.session.rollback()
+            print("Something went wrong!")
+            return None
 
     def get_json(self):
         return {
