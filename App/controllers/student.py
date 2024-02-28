@@ -130,11 +130,11 @@ def update_rankings():
         if student.prev_rank == 0:
             message = f'RANK : {student.curr_rank}. Congratulations on your first rank!'
         elif student.curr_rank == student.prev_rank:
-            message = f'RANK : {student.curr_rank}. Your rank has remained at {student.curr_rank}'
+            message = f'RANK : {student.curr_rank}. Well done! You retained your rank.'
         elif student.curr_rank < student.prev_rank:
-            message = f'RANK : {student.curr_rank}. Congratulations your rank has went up to {student.curr_rank}'
+            message = f'RANK : {student.curr_rank}. Congratulations! Your rank has went up.'
         else:
-            message = f'RANK : {student.curr_rank}. Your rank has went down to {student.curr_rank}'
+            message = f'RANK : {student.curr_rank}. Oh on! Your rank has went down.'
         student.prev_rank = student.curr_rank
         notification = Notification(student.id, message)
         student.notifications.append(notification)
