@@ -31,7 +31,7 @@ def initialize():
     mod2 = create_moderator('mod2', 'mod2pass')
     mod3 = create_moderator('mod3', 'mod3pass')
     #bill = create_admin('bill', 'billpass', 1)
-    Runtime = create_competition('Runtime', '09-02-2024', 'CSL', 'mod1')
+    Runtime = create_competition('mod1', 'Runtime', '09-02-2024', 'CSL', 1, 25)
 
     #participant = register_student('bob', 'RunTime')
     #host = join_comp('rob', 'RunTime')
@@ -118,10 +118,23 @@ def add_mod_to_comp_command(mod_name, comp_name, team_name, student1, student2, 
 @click.argument("mod_name", default="mod1")
 @click.argument("comp_name", default="Runtime")
 @click.argument("team_name", default="Coders")
-@click.argument("score", default="10")
+@click.argument("score", default=10)
 def add_results_command(mod_name, comp_name, team_name, score):
     comp_team = add_results(mod_name, comp_name, team_name, score)
     #update_rankings()
+
+@mod_cli.command("confirm", help="Confirms results for all teams in a competition")
+@click.argument("mod_name", default="mod1")
+@click.argument("comp_name", default="Runtime")
+def update_rankings_command(mod_name, comp_name):
+    update_ratings(mod_name, comp_name)
+    display_rankings()
+
+@mod_cli.command("rankings", help="Displays overall rankings")
+#@click.argument("mod_name", default="mod1")
+#@click.argument("comp_name", default="Runtime")
+def display_rankings_command():
+    print(display_rankings())
 
 app.cli.add_command(mod_cli)
 
@@ -133,12 +146,14 @@ Competition commands
 comp_cli = AppGroup("comp", help = "Competition commands")   
 
 @comp_cli.command("create", help = "Creates a competition")
+@click.argument("mod_name", default = "mod1")
 @click.argument("name", default = "Runtime")
 @click.argument("date", default = date.today())
 @click.argument("location", default = "CSL")
-@click.argument("mod_name", default = "mod1")
-def create_competition_command(name, date, location, mod_name):
-    comp = create_competition(name, date, location, mod_name)
+@click.argument("level", default = 1)
+@click.argument("max_score", default = 25)
+def create_competition_command(mod_name, name, date, location, level, max_score):
+    comp = create_competition(mod_name, name, date, location, level, max_score)
 
 @comp_cli.command("details", help = "Displays competition details")
 @click.argument("name", default = "Runtime")

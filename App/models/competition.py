@@ -10,13 +10,17 @@ class Competition(db.Model):
     name =  db.Column(db.String, nullable=False, unique=True)
     date = db.Column(db.DateTime, default= datetime.utcnow)
     location = db.Column(db.String(120), nullable=False)
+    level = db.Column(db.Float, default=1)
+    max_score = db.Column(db.Integer, default=25)
     moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
     teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
 
-    def __init__(self, name, date, location):
+    def __init__(self, name, date, location, level, max_score):
         self.name = name
         self.date = date
         self.location = location
+        self.level = level
+        self.max_score = max_score
         self.moderators = []
         self.teams = []
     
@@ -62,6 +66,8 @@ class Competition(db.Model):
             "name": self.name,
             "date": self.date.strftime("%d-%m-%Y"),
             "location": self.location,
+            "level" : self.level,
+            "max_score" : self.max_score,
             "moderators": [mod.username for mod in self.moderators],
             "teams": [team.name for team in self.teams]
         }
@@ -72,6 +78,8 @@ class Competition(db.Model):
             "Name": self.name,
             "Date": self.date,
             "Location": self.location,
+            "Level" : self.level,
+            "Max Score" : self.max_score,
             "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }

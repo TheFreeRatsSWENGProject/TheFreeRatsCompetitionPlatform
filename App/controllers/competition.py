@@ -2,7 +2,7 @@ from App.database import db
 from App.models import Competition, Moderator, CompetitionTeam, Team#, Student, Admin, competition_student
 from datetime import datetime
 
-def create_competition(comp_name, comp_date, comp_location, mod_name):
+def create_competition(mod_name, comp_name, date, location, level, max_score):
     comp = get_competition_by_name(comp_name)
     if comp:
         print(f'{name} already exists!')
@@ -10,7 +10,7 @@ def create_competition(comp_name, comp_date, comp_location, mod_name):
     
     mod = Moderator.query.filter_by(username=mod_name).first()
     if mod:
-        newComp = Competition(name=comp_name, date=datetime.strptime(comp_date, "%d-%m-%Y"), location=comp_location)
+        newComp = Competition(name=comp_name, date=datetime.strptime(date, "%d-%m-%Y"), location=location, level=level, max_score=max_score)
         try:
             newComp.add_mod(mod)
             db.session.add(newComp)
@@ -69,7 +69,7 @@ def display_competition_results(name):
                 curr_high = comp_team.points_earned
 
             team = Team.query.filter_by(id=comp_team.team_id).first()
-            leaderboard.append({"team": team.name, "score":comp_team.points_earned})
+            leaderboard.append({"placement": curr_rank, "team": team.name, "score":comp_team.points_earned})
             count += 1
         
         return leaderboard

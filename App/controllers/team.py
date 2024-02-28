@@ -7,6 +7,8 @@ def create_team(team_name, students):
         stud = Student.query.filter_by(username=s).first()
         if stud:
             team.add_student(stud)
+        else:
+            print(f'{s} was not found!')
     try:
         db.session.add(team)
         db.session.commit()

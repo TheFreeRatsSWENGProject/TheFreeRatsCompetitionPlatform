@@ -1,3 +1,4 @@
+"""
 #from App.models import Student, Ranking, Notification, competition_student
 from App.database import db
 
@@ -70,3 +71,4 @@ def display_rankings():
             leaderboard.append({"student": student.username, "ranking":ranking.get_json()})
             count += 1
         return leaderboard
+"""

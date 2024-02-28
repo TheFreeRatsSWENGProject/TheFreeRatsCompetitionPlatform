@@ -108,6 +108,7 @@ def add_results(mod_name, comp_name, team_name, score):
 
                 if comp_team:
                     comp_team.points_earned = score
+                    comp_team.rating_score = (score/comp.max_score) * 20 * comp.level
                     try:
                         db.session.add(comp_team)
                         db.session.commit()
@@ -117,3 +118,36 @@ def add_results(mod_name, comp_name, team_name, score):
                         db.session.rollback()
                         print("Something went wrong!")
                         return None
+                #additional validation needed here
+
+
+def update_ratings(mod_name, comp_name):
+    mod = Moderator.query.filter_by(username=mod_name).first()
+    comp = Competition.query.filter_by(name=comp_name).first()
+
+    if not mod:
+        print(f'{mod_name} was not found!')
+        return None
+    elif not comp:
+        print(f'{comp_name} was not found!')
+        return None
+    elif mod not in comp.moderators:
+        print(f'{mod_name} is not authorized to add results for {comp_name}!')
+        return None
+    else:
+        comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
+
+        for comp_team in comp_teams:
+            team = Team.query.filter_by(id=comp_team.team_id).first()
+
+            for stud in team.students:
+                stud.rating_score = (stud.rating_score*stud.comp_count + comp_team.rating_score)/(stud.comp_count+1)
+                stud.comp_count += 1
+                try:
+                    db.session.add(stud)
+                    db.session.commit()
+                except Exception as e:
+                    db.session.rollback()
+
+        print("Results finalized!")
+        return True

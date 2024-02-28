@@ -106,3 +106,32 @@ def get_notifications(username):
     else:
         return student.notifications
 """
+
+def display_rankings():
+    students = get_all_students()
+
+    students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+
+    leaderboard = []
+    count = 1
+    curr_high = students[0].rating_score
+    curr_rank = 1
+        
+    for student in students:
+        if curr_high != student.rating_score:
+            curr_rank = count
+            curr_high = student.rating_score
+
+        #team = Team.query.filter_by(id=comp_team.team_id).first()
+        leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+        count += 1
+        
+        student.curr_rank = curr_rank
+        
+        try:
+            db.session.add(student)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+
+    return leaderboard
