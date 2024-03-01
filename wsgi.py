@@ -68,6 +68,8 @@ def initialize():
     add_team('mod2', 'comp2', team)
     add_results('mod2', 'comp2', "C", 12)
 
+    update_ratings('mod2', 'comp2')
+    update_rankings()
     #participant = register_student('bob', 'RunTime')
     #host = join_comp('rob', 'RunTime')
 

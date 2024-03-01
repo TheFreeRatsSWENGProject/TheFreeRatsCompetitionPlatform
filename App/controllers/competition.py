@@ -1,5 +1,5 @@
 from App.database import db
-from App.models import Competition, Moderator, CompetitionTeam, Team#, Student, Admin, competition_student
+from App.models import Competition, Moderator, CompetitionTeam, Team, Student#, Student, Admin, competition_student
 from datetime import datetime
 
 def create_competition(mod_name, comp_name, date, location, level, max_score):
@@ -69,7 +69,7 @@ def display_competition_results(name):
                 curr_high = comp_team.points_earned
 
             team = Team.query.filter_by(id=comp_team.team_id).first()
-            leaderboard.append({"placement": curr_rank, "team": team.name, "score":comp_team.points_earned})
+            leaderboard.append({"placement": curr_rank, "team": team.name, "members" : [student.username for student in team.students], "score":comp_team.points_earned})
             count += 1
         
         return leaderboard
