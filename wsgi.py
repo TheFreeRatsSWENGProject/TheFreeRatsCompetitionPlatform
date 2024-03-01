@@ -29,6 +29,7 @@ def initialize():
     stud7 = create_student('stud7', 'stud7pass')
     stud8 = create_student('stud8', 'stud8pass')
     stud9 = create_student('stud9', 'stud9pass')
+    stud10 = create_student('stud10', 'stud10pass')
     #ranking = create_ranking(bob.id)
     mod1 = create_moderator('mod1', 'mod1pass')
     mod2 = create_moderator('mod2', 'mod2pass')
@@ -51,12 +52,12 @@ def initialize():
     add_team('mod1', 'comp1', team)
     add_results('mod1', 'comp1', "C", 12)
 
-    """
-    students = ["stud1", "stud4", "stud7"]
+    
+    students = ["stud10", "stud4", "stud7"]
     team = find_team("A", students)
     add_team('mod2', 'comp2', team)
     add_results('mod2', 'comp2', "A", 10)
-    """
+    
     students = ["stud2", "stud5", "stud8"]
     team = find_team("B", students)
     add_team('mod2', 'comp2', team)
@@ -131,15 +132,15 @@ def create_moderator_command(username, password):
 
 @mod_cli.command("addMod", help="Adds a moderator to a competition")
 @click.argument("mod1_name", default="mod1")
-@click.argument("comp_name", default="Runtime")
+@click.argument("comp_name", default="comp1")
 @click.argument("mod2_name", default="mod2")
 def add_mod_to_comp_command(mod1_name, comp_name, mod2_name):
     mod = add_mod(mod1_name, comp_name, mod2_name)
 
 @mod_cli.command("addTeam", help="Adds a team to a competition")
 @click.argument("mod_name", default="mod1")
-@click.argument("comp_name", default="Runtime")
-@click.argument("team_name", default="Coders")
+@click.argument("comp_name", default="comp1")
+@click.argument("team_name", default="A")
 @click.argument("student1", default="stud1")
 @click.argument("student2", default="stud2")
 @click.argument("student3", default="stud3")
@@ -150,8 +151,8 @@ def add_team_to_comp_command(mod_name, comp_name, team_name, student1, student2,
 
 @mod_cli.command("addResults", help="Adds results for a team in a competition")
 @click.argument("mod_name", default="mod1")
-@click.argument("comp_name", default="Runtime")
-@click.argument("team_name", default="Coders")
+@click.argument("comp_name", default="comp1")
+@click.argument("team_name", default="A")
 @click.argument("score", default=10)
 def add_results_command(mod_name, comp_name, team_name, score):
     comp_team = add_results(mod_name, comp_name, team_name, score)
@@ -159,7 +160,7 @@ def add_results_command(mod_name, comp_name, team_name, score):
 
 @mod_cli.command("confirm", help="Confirms results for all teams in a competition")
 @click.argument("mod_name", default="mod1")
-@click.argument("comp_name", default="Runtime")
+@click.argument("comp_name", default="comp1")
 def update_rankings_command(mod_name, comp_name):
     update_ratings(mod_name, comp_name)
     update_rankings()
@@ -181,7 +182,7 @@ comp_cli = AppGroup("comp", help = "Competition commands")
 
 @comp_cli.command("create", help = "Creates a competition")
 @click.argument("mod_name", default = "mod1")
-@click.argument("name", default = "Runtime")
+@click.argument("name", default = "comp1")
 @click.argument("date", default = date.today())
 @click.argument("location", default = "CSL")
 @click.argument("level", default = 1)
@@ -190,7 +191,7 @@ def create_competition_command(mod_name, name, date, location, level, max_score)
     comp = create_competition(mod_name, name, date, location, level, max_score)
 
 @comp_cli.command("details", help = "Displays competition details")
-@click.argument("name", default = "Runtime")
+@click.argument("name", default = "comp1")
 def display_competition_details_command(name):
     comp = get_competition_by_name(name)
     print(comp.get_json())
@@ -200,7 +201,7 @@ def list_competition_command():
     print(get_all_competitions_json())
 
 @comp_cli.command("results", help = "displays competition results")
-@click.argument("name", default = "Runtime")
+@click.argument("name", default = "comp1")
 def display_competition_results_command(name):
     print(display_competition_results(name))
 
