@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
+from App.models import db
+from App.controllers import *
+
 
 from.index import index_views
 
@@ -72,4 +75,16 @@ def user_login_api():
 def identify_user_action():
     return jsonify({'message': f"username: {jwt_current_user.username}, id : {jwt_current_user.id}"})
 
+
+@auth_views.route('/login')
+def login():
+
+    return render_template('login.html')
+
+@auth_views.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        create_student(request.form['username'], request.form['password'])
+        return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
+    return render_template('signup.html')
 
