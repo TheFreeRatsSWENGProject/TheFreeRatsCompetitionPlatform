@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
-{% block title %}User Profile{% endblock %}
-{% block page %}User Profile{% endblock %}
+{% block title %}Profile{% endblock %}
+{% block page %}Profile{% endblock %}
 
 {{ super() }}
 
@@ -23,10 +23,11 @@
 }
 
 </style>
-    <h1>Student Profile</h1>
-    <img src="{{ url_for('static', filename='images/ProfilePicture.png') }}" alt="Student Photo">
 
-    <p>Name: {{ student.username }}</p>
+    <h1>Profile</h1>
+    <img src="{{ url_for('static', filename='defaultProfilePicture.png') }}" alt="Student Photo" width="300">
+
+    <p>Name: {{student.username}}</p>
     <p>Competitions Participated in:</p>
     <ul>
         {% for competition in competitions %}
