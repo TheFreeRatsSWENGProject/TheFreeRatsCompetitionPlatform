@@ -6,10 +6,11 @@ index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
 @index_views.route('/', methods=['GET'])
 def index_page():
-    return render_template('index.html', users=get_all_students(),get_ranking=get_ranking,display_rankings=display_rankings,competitions=get_all_competitions())
+    return render_template('index.html', students=get_all_students(), competitions=get_all_competitions())
 
 @index_views.route('/init', methods=['GET'])
 def init():
+    """
     db.drop_all()
     db.create_all()
     create_student('bob', 'bobpass')
@@ -37,6 +38,51 @@ def init():
     add_results('admin3', 'bob', "RunTime3",5)
     add_results('admin3', 'alice', "RunTime3",10)
     add_results('admin3', 'charlie', "RunTime3",15)
+    """
+    db.drop_all()
+    db.create_all()
+
+    stud1 = create_student('stud1', 'stud1pass')
+    stud2 = create_student('stud2', 'stud2pass')
+    stud3 = create_student('stud3', 'stud3pass')
+    stud4 = create_student('stud4', 'stud4pass')
+    stud5 = create_student('stud5', 'stud5pass')
+    stud6 = create_student('stud6', 'stud6pass')
+    stud7 = create_student('stud7', 'stud7pass')
+    stud8 = create_student('stud8', 'stud8pass')
+    stud9 = create_student('stud9', 'stud9pass')
+    stud10 = create_student('stud10', 'stud10pass')
+    mod1 = create_moderator('mod1', 'mod1pass')
+    mod2 = create_moderator('mod2', 'mod2pass')
+    comp1 = create_competition('mod1', 'comp1', '09-02-2024', 'CSL', 1, 25)
+    comp2 = create_competition('mod2', 'comp2', '09-02-2024', 'CSL', 2, 20)
+    """
+    students = ["stud1", "stud2", "stud3"]
+    add_team('mod1', 'comp1', "A", students)
+    add_results('mod1', 'comp1', "A", 16)
+    """
+    students = ["stud4", "stud5", "stud6"]
+    add_team('mod1', 'comp1', "B", students)
+    add_results('mod1', 'comp1', "B", 15)
+
+    students = ["stud7", "stud8", "stud9"]
+    add_team('mod1', 'comp1', "C", students)
+    add_results('mod1', 'comp1', "C", 12)
+
+    students = ["stud10", "stud4", "stud7"]
+    add_team('mod2', 'comp2', "A", students)
+    add_results('mod2', 'comp2', "A", 10)
+    
+    students = ["stud2", "stud5", "stud8"]
+    add_team('mod2', 'comp2', "B", students)
+    add_results('mod2', 'comp2', "B", 15)
+
+    students = ["stud3", "stud6", "stud9"]
+    add_team('mod2', 'comp2', "C", students)
+    add_results('mod2', 'comp2', "C", 12)
+
+    update_ratings('mod2', 'comp2')
+    update_rankings()
 
     return jsonify(message='The Database has been successfully initialized!')
 
@@ -52,31 +98,32 @@ def health():
 #def Student_Profile(user_id):
  #   return render_template('Student_Profile.html', user_id=user_id)
 
+@index_views.route('/student_profile/<int:id>')
+def student_profile(id):
+    student = get_student(id)
 
-
-@index_views.route('/Student_Profile/<int:user_id>')
-def Student_Profile(user_id):
-    user =get_student(user_id)
-
-    if not user:
+    if not student:
         return render_template('404.html')
+    
+    profile_info = display_student_info(student.username)
+    competitions = profile_info['competitions']
+    """
     competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
     ranking = Ranking.query.filter_by(student_id=user_id).first()
     notifications= get_notifications(user.username)
+    """
 
-    return render_template('Student_Profile.html', user=user, competitions=competitions, ranking=ranking, notifications=notifications)
+    return render_template('Student_Profile.html', student=student, competitions=competitions)
 
-
-@index_views.route('/competition/<string:competition_name>', methods=['GET'])
-def Competition_Details(competition_name):
-    competition = get_competition_by_name(competition_name)
+@index_views.route('/competition/<string:name>', methods=['GET'])
+def competition_details(name):
+    competition = get_competition_by_name(name)
     if not competition:
         return render_template('404.html')
 
-    participants = get_participants(competition_name)
-    return render_template('Competition_Details.html', competition=competition, participants=participants)
-
-
+    #teams = get_participants(competition_name)
+    return render_template('Competition_Details.html', competition=competition)
+"""
 @index_views.route('/register_competition', methods=['POST'])
 def Register_Competition():
     username = request.form.get('username')
@@ -87,28 +134,26 @@ def Register_Competition():
         return f'Successfully registered {username} for {competition_name}'
     else:
         return 'Registration failed'
+"""
+@index_views.route('/student_ranking/<int:id>')
+def student_rank(id):
+    student =get_student(id)
 
-
-@index_views.route('/Student_Ranking/<int:user_id>')
-def Student_Rankk(user_id):
-    user =get_student(user_id)
-
-    if not user:
+    if not student:
         return render_template('404.html')
+    """
     competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
     ranking = Ranking.query.filter_by(student_id=user_id).first()
 
     ranking= ranking.curr_ranking
+    """
+    return jsonify(student.curr_rank) 
 
-    return jsonify(ranking) 
-
-
-@index_views.route('/api/admin', methods=['POST'])
-def create_adminV():
+@index_views.route('/api/moderator', methods=['POST'])
+def create_moderator():
     data = request.json
-    admin = create_admin(data['username'], data['password'], data['staff_id'])
-    if admin:
-        return jsonify({'message': f"admin {admin.username} created"})
+    mod = create_moderator(data['username'], data['password'])
+    if mod:
+        return jsonify({'message': f"Moderator: {mod.username} created!"})
     else:
-        return jsonify({'message': f"Failed to create admin"})
-
+        return jsonify({'message': "Failed to create moderator!"})

@@ -26,16 +26,16 @@
     <h1>Student Profile</h1>
     <img src="{{ url_for('static', filename='images/ProfilePicture.png') }}" alt="Student Photo">
 
-    <p>Name: {{ user.username }}</p>
+    <p>Name: {{ student.username }}</p>
     <p>Competitions Participated in:</p>
     <ul>
         {% for competition in competitions %}
-            <li>{{ competition.name }}</li>
+            <li>{{ competition}}</li>
         {% endfor %}
     </ul>
-    <p>Total Points: {{ ranking.total_points|default('N/A') }}</p>
-    <p>Overall Ranking: {{ ranking.curr_ranking|default('N/A') }}</p>
-
+    <p>Total Points: {{ student.rating_score|default('N/A') }}</p>
+    <p>Overall Ranking: {{ student.curr_rank|default('N/A') }}</p>
+    <!---
     <div class="notifications">
         <h5>Notifications:</h5>
         <ul>
@@ -44,4 +44,5 @@
             {% endfor %}
         </ul>
     </div>
+    -->
 {% endblock %}

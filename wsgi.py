@@ -47,7 +47,6 @@ def initialize():
     add_team('mod1', 'comp1', "C", students)
     add_results('mod1', 'comp1', "C", 12)
 
-    
     students = ["stud10", "stud4", "stud7"]
     add_team('mod2', 'comp2', "A", students)
     add_results('mod2', 'comp2', "A", 10)

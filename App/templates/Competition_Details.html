@@ -27,22 +27,15 @@
 </style>
 
 <center>
-    <h1>{{ competition.name }}</h1>
+    <h1>{{competition.name}}</h1>
 </center>
 
-<h3>Participants</h3>
+<h3>Teams</h3>
 
-<ul class="participants">
-    {% for participant in participants %}
-        <li>{{ participant.username }}</li>
+<ul class="teams">
+    {% for team in competition.teams %}
+        <li>{{team.name}}</li>
     {% endfor %}
 </ul>
 
-<h4 class="Register">Register for Competition</h4>
-<form action="{{ url_for('index_views.Register_Competition') }}" method="post">
-    <input type="hidden" name="competition_name" value="{{ competition.name }}">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <button type="submit">Register</button>
-</form>
 {% endblock %}
