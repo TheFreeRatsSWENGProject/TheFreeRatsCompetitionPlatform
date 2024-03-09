@@ -1,5 +1,5 @@
-from App.database import db#from App.controllers.ranking import create_ranking
-from App.models import Student, Competition, Notification#, Ranking, competition_student
+from App.database import db
+from App.models import Student, Competition, Notification, CompetitionTeam
 
 def create_student(username, password):
     student = get_student_by_username(username)
@@ -50,20 +50,6 @@ def update_student(id, username):
     print("ID: {id} does not exist!")
     return None
 
-"""
-def register_student(username, competition_name):
-  student = get_student_by_username(username)
-  if student:
-    competition = Competition.query.filter_by(name=competition_name).first()
-    if competition:
-      return student.participate_in_competition(competition)
-    else:
-      print(f'{competition_name} was not found')
-      return None
-  else:
-    print(f'{username} was not found')
-    return None
-"""
 def display_student_info(username):
     student = get_student_by_username(username)
 
@@ -71,22 +57,20 @@ def display_student_info(username):
         print(f'{username} does not exist!')
         return None
     else:
-        """
-        ranking = Ranking.query.filter_by(student_id=student.id).first()
-        if ranking:
-            profile_info = {
-                "profile": student.get_json(),
-                "ranking": ranking.get_json(),
-                "participated_competitions": [comp.name for comp in student.competitions]
-            }
-        else:
-            profile_info = {
-                "profile": student.get_json(),
-                "participated_competitions": [comp.name for comp in student.competitions]
-            }
+        competitions = []
+        
+        for team in student.teams:
+            team_comps = CompetitionTeam.query.filter_by(team_id=team.id).all()
+            for comp_team in team_comps:
+                comp = Competition.query.filter_by(id=comp_team.comp_id).first()
+                competitions.append(comp.name)
+
+        profile_info = {
+            "profile" : student.get_json(),
+            "competitions" : competitions
+        }
+
         return profile_info
-        """
-        return student.get_json()
 
 def display_notifications(username):
     student = get_student_by_username(username)
@@ -96,16 +80,6 @@ def display_notifications(username):
         return None
     else:
         return {"notifications":[notification.to_Dict() for notification in student.notifications]}
-"""
-def get_notifications(username):
-    student = get_student_by_username(username)
-
-    if not student:
-        print(f'{username} does not exist!')
-        return None
-    else:
-        return student.notifications
-"""
 
 def update_rankings():
     students = get_all_students()
@@ -122,7 +96,6 @@ def update_rankings():
             curr_rank = count
             curr_high = student.rating_score
 
-        #team = Team.query.filter_by(id=comp_team.team_id).first()
         if student.comp_count != 0:
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
             count += 1

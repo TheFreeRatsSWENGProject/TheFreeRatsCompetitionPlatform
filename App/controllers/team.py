@@ -1,5 +1,5 @@
 from App.database import db
-from App.models import Team, Competition, Student
+from App.models import Team, Competition, Student, Moderator
 
 def create_team(team_name, students):
     team = Team(name=team_name)
@@ -46,5 +46,42 @@ def find_team(team_name, students):
         
         if set(team_stud) == set(students):
             return team
+
+    return None
+
+def add_team(mod_name, comp_name, team_name, students):
+    mod = Moderator.query.filter_by(username=mod_name).first()
+    comp = Competition.query.filter_by(name=comp_name).first()
     
-    return create_team(team_name, students)
+    if not mod:
+        print(f'Moderator: {mod_name} not found!')
+        return None
+    elif not comp:
+        print(f'Competition: {comp_name} not found!')
+        return None
+    elif comp.confirm:
+        print(f'Results for {comp_name} has already been finalized!')
+        return None
+    elif mod not in comp.moderators:
+        print(f'{mod_name} is not authorized to add teams for {comp_name}!')
+        return None
+    else:
+        team = find_team(team_name, students)
+
+        if team:
+            return comp.add_team(team)
+        
+        comp_students = []
+        
+        for team in comp.teams:
+            for stud in team.students:
+                comp_students.append(stud.username)
+        
+        for stud in students:
+            if stud in comp_students:
+                print(f'{stud} is already registered for {comp_name}!')
+                print(f'Team was not created!')
+                return None
+        
+        team = create_team(team_name, students)
+        return comp.add_team(team)

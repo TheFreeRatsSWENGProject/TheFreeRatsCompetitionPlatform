@@ -29,14 +29,7 @@ def get_competition_by_name(name):
 
 def get_competition(id):
     return Competition.query.get(id)
-"""
-def get_participants(name):
-    comp = get_competition_by_name(name)
 
-    if comp:
-        return comp.participants
-    return None
-"""
 def get_all_competitions():
     return Competition.query.all()
 
@@ -73,30 +66,3 @@ def display_competition_results(name):
             count += 1
         
         return leaderboard
-
-
-#still needs adjusting (add_results function)
-"""def add_results(user_id, comp_id, rank):
-    Comp = Competition.query.get(comp_id)
-    user = User.query.get(user_id)
-          
-    if user and Comp:
-        compParticipant = UserCompetition(user_id = user.id, comp_id = Comp.id, rank=rank)
-
-        try:
-            db.session.add(compParticipant)
-            db.session.commit 
-            print("successfully added user to comp")
-            return True
-        except Exception as e:
-            db.session.rollback()
-            print("error adding to comp")
-            return False
-        return False
-
-def get_competition_students(comp_id):
-    comp = get_competition(comp_id)
-
-    if comp:
-        return [Student.query.get(student_id) for student in comp.participants]
-    return []"""

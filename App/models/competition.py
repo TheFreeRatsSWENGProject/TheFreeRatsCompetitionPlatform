@@ -12,6 +12,7 @@ class Competition(db.Model):
     location = db.Column(db.String(120), nullable=False)
     level = db.Column(db.Float, default=1)
     max_score = db.Column(db.Integer, default=25)
+    confirm = db.Column(db.Boolean, default=False)
     moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
     teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
 

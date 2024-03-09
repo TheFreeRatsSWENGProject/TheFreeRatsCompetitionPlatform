@@ -18,28 +18,7 @@ class Student(User):
         self.curr_rank = 0
         self.prev_rank = 0
         self.teams = []
-        #self.participations = []
         self.notifications = []
-    
-    """
-    def participate_in_competition(self, competition):
-      for comp in self.competitions:
-        if (comp.id == competition.id):
-          print(f'{self.username} is already registered for {competition.name}!')
-          return None
-
-      comp_student = CompetitionStudent(student_id=self.id, competition_id=competition.id)
-      try:
-        self.competitions.append(competition)
-        competition.participants.append(self)
-        db.session.commit()
-        print(f'{self.username} was registered for {competition.name}')
-        return comp_student
-      except Exception as e:
-        db.session.rollback()
-        print("Something went wrong!")
-        return None
-    """
 
     def add_notification(self, notification):
         if notification:

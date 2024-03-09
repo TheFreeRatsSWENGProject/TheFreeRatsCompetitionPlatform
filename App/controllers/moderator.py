@@ -68,24 +68,6 @@ def add_mod(mod1_name, comp_name, mod2_name):
                 return None
             else:
                 return comp.add_mod(mod2)
-
-def add_team(mod_name, comp_name, team):
-    mod = Moderator.query.filter_by(username=mod_name).first()
-    comp = Competition.query.filter_by(name=comp_name).first()
-    
-    if not mod:
-        print(f'Moderator: {mod_name} not found!')
-        return None
-    else:
-        if not comp:
-            print(f'Competition: {comp_name} not found!')
-            return None
-        else:
-            if not team:
-                print(f'Team was not created!')
-                return None
-            else:
-                return comp.add_team(team)
                 
 def add_results(mod_name, comp_name, team_name, score):
     mod = Moderator.query.filter_by(username=mod_name).first()
@@ -98,6 +80,9 @@ def add_results(mod_name, comp_name, team_name, score):
     else:
         if not comp:
             print(f'{comp_name} was not found!')
+            return None
+        elif comp.confirm:
+            print(f'Results for {comp_name} have already been finalized!')
             return None
         elif mod not in comp.moderators:
             print(f'{mod_name} is not authorized to add results for {comp_name}!')
@@ -118,7 +103,6 @@ def add_results(mod_name, comp_name, team_name, score):
                         db.session.rollback()
                         print("Something went wrong!")
                         return None
-                #additional validation needed here
 
 
 def update_ratings(mod_name, comp_name):
@@ -130,6 +114,9 @@ def update_ratings(mod_name, comp_name):
         return None
     elif not comp:
         print(f'{comp_name} was not found!')
+        return None
+    elif comp.confirm:
+        print(f'Results for {comp_name} has already been included!')
         return None
     elif mod not in comp.moderators:
         print(f'{mod_name} is not authorized to add results for {comp_name}!')
@@ -149,5 +136,6 @@ def update_ratings(mod_name, comp_name):
                 except Exception as e:
                     db.session.rollback()
 
+        comp.confirm = True
         print("Results finalized!")
         return True
