@@ -57,7 +57,7 @@
                     <tbody>
                         {% for competition in competitions %}
                             <tr>
-                                <td><a href="{{ url_for('index_views.competition_details', name=competition.name) }}">{{competition.name}}</a></td>
+                                <td><a href="{{url_for('index_views.competition_details', name=competition.name)}}">{{competition.name}}</a></td>
                                 <!-- Add more columns as needed -->
                             </tr>
                         {% endfor %}
