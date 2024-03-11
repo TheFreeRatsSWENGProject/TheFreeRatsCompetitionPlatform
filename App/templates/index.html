@@ -36,7 +36,7 @@
                     <tbody>
                         {% for student in students %}
                             <tr>
-                                <td><a href="{{ url_for('index_views.student_profile', id=student.id) }}">{{ student.username}}</a></td>
+                                <td><a href="{{url_for('index_views.student_profile', id=student.id)}}">{{ student.username}}</a></td>
                                 <td>{{student.rating_score}}</td>
                                 <td>{{student.curr_rank}}</td>
                             </tr>

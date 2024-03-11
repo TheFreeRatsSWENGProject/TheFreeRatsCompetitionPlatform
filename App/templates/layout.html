@@ -13,34 +13,18 @@
 
   </head>
   <body>
-    <nav class="purple">
+    <nav class="black">
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left">
                 <li><a href="/">Home</a></li>
-                <li><a href="/users">Users Jinja</a></li>
-                <li><a href="/static/users">Users JS</a></li>
             </ul>
         </div>
       </div>
     </nav>
-    
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <nav class="white black-text" style="padding: 10px">
-        <div class="nav-wrapper">
-            <ul class="flashes">
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-      </nav>
-      {% endif %}
-    {% endwith %}
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
+    {% block content %}{% endblock %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </body>

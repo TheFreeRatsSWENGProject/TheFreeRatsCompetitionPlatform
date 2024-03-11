@@ -22,20 +22,135 @@
     margin-bottom: 15px; 
 }
 
+h1 {
+    padding: 2vw 0vw 0vw 2vw;
+    margin: 0vw;
+}
+
+.profile-info {
+    width: 100%;
+    padding: 2vw;
+    display: flex;
+}
+
+.student-info {
+    width: 30%;
+    outline-style: solid;
+}
+
+#student-image {
+    padding: 0vw;
+}
+
+#student-username {
+    text-align: center;
+    padding: 0vw;
+    font-size: 3vw;
+}
+
+.results-info {
+    width: 70%;
+    height: 20vw;
+}
+
+.ranking-info {
+    display: flex;
+}
+
+.rank {
+    width: 50%;
+    outline-style: solid;
+    margin-left: 7vw;
+    margin-right: 7vw;
+    text-align: center;
+    font-size: 2vw;
+}
+
+.rating-points {
+    width: 50%;
+    outline-style: solid;
+    margin-left: 7vw;
+    margin-right: 7vw;
+    text-align: center;
+    font-size: 2vw;
+}
+
+.competition-list {
+    width: 95%;
+    margin-top: 2vw;
+    margin-left: 2vw;
+    padding: 0vw;
+    outline-style: solid;
+    font-size: 2vw;
+    overflow-y: scroll;
+    height: 20vw;
+}
+
+.competition-list li {
+    display: flex;
+    padding: 0vw 0vw 0vw 2vw;
+    margin: 0vw 4vw 2vw 4vw;
+    font-size: 1.5vw;
+    outline-style: solid;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+    .profile-info {
+        display: block;
+    }
+}
 </style>
-
+    
+<div>
     <h1>Profile</h1>
-    <img src="{{ url_for('static', filename='defaultProfilePicture.png') }}" alt="Student Photo" width="300">
+</div>
+<div class="profile-info">
+    <div class="student-info">
+        <div id="student-image">
+            <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Student Photo" width="80%"></center>
+        </div>
+        <div id="student-username">
+            <p>{{student.username}}</p>
+        </div> 
+    </div>
 
-    <p>Name: {{student.username}}</p>
-    <p>Competitions Participated in:</p>
-    <ul>
-        {% for competition in competitions %}
-            <li>{{ competition}}</li>
-        {% endfor %}
-    </ul>
-    <p>Total Points: {{ student.rating_score|default('N/A') }}</p>
-    <p>Overall Ranking: {{ student.curr_rank|default('N/A') }}</p>
+    <div class="results-info">
+        <span class="ranking-info">
+            <div class="rank">
+                <p>Rank</p>
+                <p>{{student.curr_rank|default('N/A')}}</p>
+            </div>
+            <div class="rating-points">
+                <p>Rating Score</p>
+                <p>{{student.rating_score|default('N/A')}}</p>
+            </div>
+        </span>
+        <div class="competition-list">
+            <center><p>Your Participations</p></center>
+            <ul>
+                {% for competition in competitions %}
+                    <li>
+                        <div style="width: 50%; text-align: left;">
+                            <p>{{competition}}</p>
+                        </div>
+                        <div style="width: 50%; text-align: right;">
+                            <button type="button" style="margin: 20px;">Details</button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+    
     <!---
     <div class="notifications">
         <h5>Notifications:</h5>
