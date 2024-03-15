@@ -103,7 +103,41 @@ h1 {
     background-image: linear-gradient(#61677A, #000000);
 }
 
+.sidepanel {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #000000;
+  overflow-x: hidden;
+  padding-top: 3vw;
+  transition: 0.5s;
+}
+
+.sidepanel .closebtn {
+  position: absolute;
+  top: 0;
+  right: 2vw;
+  font-size: 3vw;
+  margin-left: 2vw;
+}
+
+.openbtn {
+  font-size: 2vw;
+  cursor: pointer;
+  background-color: #000000;
+  color: white;
+  padding: 2vw 3vw;
+  border: none;
+}
+
 @media only screen and (max-width: 700px) {
+    .headers {
+        display: block;
+    }
+
     h1 {
         text-align: center;
     }
@@ -155,8 +189,14 @@ h1 {
 }
 </style>
     
-<div>
-    <h1>Profile</h1>
+<div class="headers">
+    <div>
+        <h1>Profile</h1>
+    </div>
+    <div id="mySidePanel" class="sidepanel">
+        
+    </div>
+    <button class="openbtn" onclick="openNav()">Notifications</button>
 </div>
 <div class="profile-info">
     <div class="student-info">

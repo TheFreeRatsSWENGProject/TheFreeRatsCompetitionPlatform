@@ -64,6 +64,27 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="moderators-table">
+                <h4>Moderators</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for moderator in moderators %}
+                            <tr>
+                                <td><a href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">{{moderator.username}}</a></td>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 

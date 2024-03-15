@@ -19,4 +19,12 @@ async function main(){
     loadTable(users);
 }
 
+function openNav(){
+    document.getElementById("mySidepanel").style.width = "20vw";
+}
+  
+function closeNav(){
+    document.getElementById("mySidepanel").style.width = "0";
+}
+
 main();
