@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
+from App.models import db
+from App.controllers import *
+
 
 from.index import index_views
 
@@ -12,24 +15,29 @@ auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 Page/Action Routes
 '''
 
+
+
+
 @auth_views.route('/users', methods=['GET'])
 def get_user_page():
     users = get_all_users()
     return render_template('users.html', users=users)
+
 
 @auth_views.route('/identify', methods=['GET'])
 @login_required
 def identify_page():
     return jsonify({'message': f"username: {current_user.username}, id : {current_user.id}"})
 
-@auth_views.route('/login', methods=['POST'])
+
+""" @auth_views.route('/login', methods=['POST'])
 def login_action():
     data = request.form
     user = login(data['username'], data['password'])
     if user:
         login_user(user)
         return 'user logged in!'
-    return 'bad username or password given', 401
+    return 'bad username or password given', 401 """
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():
@@ -68,3 +76,16 @@ def identify_user_action():
     return jsonify({'message': f"username: {jwt_current_user.username}, id : {jwt_current_user.id}"})
 
 
+@auth_views.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if get_student_by_username(request.form['username'])!= "":
+            return render_template('index.html', users=get_all_students(), get_ranking=display_rankings, display_rankings=display_rankings, competitions=get_all_competitions())
+    return render_template('login.html')
+
+@auth_views.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        create_student(request.form['username'], request.form['password'])
+        return render_template('index.html', users=get_all_students(), get_ranking=display_rankings, display_rankings=display_rankings, competitions=get_all_competitions())
+    return render_template('signup.html')
