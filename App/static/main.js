@@ -20,11 +20,11 @@ async function main(){
 }
 
 function openNav(){
-    document.getElementById("mySidepanel").style.width = "20vw";
+    document.getElementById("sidepanel").style.width = "25vw";
 }
   
 function closeNav(){
-    document.getElementById("mySidepanel").style.width = "0";
+    document.getElementById("sidepanel").style.width = "0";
 }
 
 main();

@@ -34,11 +34,11 @@ def initialize():
     mod2 = create_moderator('mod2', 'mod2pass')
     comp1 = create_competition('mod1', 'comp1', '09-02-2024', 'CSL', 1, 25)
     comp2 = create_competition('mod2', 'comp2', '09-02-2024', 'CSL', 2, 20)
-    """
+    
     students = ["stud1", "stud2", "stud3"]
     add_team('mod1', 'comp1', "A", students)
     add_results('mod1', 'comp1', "A", 16)
-    """
+    
     students = ["stud4", "stud5", "stud6"]
     add_team('mod1', 'comp1', "B", students)
     add_results('mod1', 'comp1', "B", 15)
@@ -59,6 +59,9 @@ def initialize():
     add_team('mod2', 'comp2', "C", students)
     add_results('mod2', 'comp2', "C", 12)
 
+    update_ratings('mod1', 'comp1')
+    update_rankings()
+    
     update_ratings('mod2', 'comp2')
     update_rankings()
 
