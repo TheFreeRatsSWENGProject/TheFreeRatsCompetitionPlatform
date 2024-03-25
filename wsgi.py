@@ -125,6 +125,7 @@ def create_moderator_command(username, password):
 def add_mod_to_comp_command(mod1_name, comp_name, mod2_name):
     mod = add_mod(mod1_name, comp_name, mod2_name)
 
+"""
 @mod_cli.command("addTeam", help="Adds a team to a competition")
 @click.argument("mod_name", default="mod1")
 @click.argument("comp_name", default="comp1")
@@ -135,14 +136,22 @@ def add_mod_to_comp_command(mod1_name, comp_name, mod2_name):
 def add_team_to_comp_command(mod_name, comp_name, team_name, student1, student2, student3):
     students = [student1, student2, student3]
     comp = add_team(mod_name, comp_name, team_name, students)
+"""
 
 @mod_cli.command("addResults", help="Adds results for a team in a competition")
 @click.argument("mod_name", default="mod1")
 @click.argument("comp_name", default="comp1")
 @click.argument("team_name", default="A")
+@click.argument("student1", default="stud1")
+@click.argument("student2", default="stud2")
+@click.argument("student3", default="stud3")
 @click.argument("score", default=10)
-def add_results_command(mod_name, comp_name, team_name, score):
-    comp_team = add_results(mod_name, comp_name, team_name, score)
+def add_results_command(mod_name, comp_name, team_name, student1, student2, student3, score):
+    students = [student1, student2, student3]
+    comp = add_team(mod_name, comp_name, team_name, students)
+
+    if comp:
+        comp_team = add_results(mod_name, comp_name, team_name, score)
 
 @mod_cli.command("confirm", help="Confirms results for all teams in a competition")
 @click.argument("mod_name", default="mod1")
@@ -167,7 +176,7 @@ comp_cli = AppGroup("comp", help = "Competition commands")
 @comp_cli.command("create", help = "Creates a competition")
 @click.argument("mod_name", default = "mod1")
 @click.argument("name", default = "comp1")
-@click.argument("date", default = date.today())
+@click.argument("date", default = "09-02-2024")
 @click.argument("location", default = "CSL")
 @click.argument("level", default = 1)
 @click.argument("max_score", default = 25)
