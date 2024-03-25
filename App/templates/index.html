@@ -45,8 +45,10 @@
                 </table>
             </div>
 
+
             <div class="competitions-table">
                 <h4>Competitions</h4>
+                <button>View All Competitions</button>
                 <table class="table">
                     <thead>
                         <tr>
@@ -57,7 +59,7 @@
                     <tbody>
                         {% for competition in competitions %}
                             <tr>
-                                <td><a href="{{url_for('index_views.competition_details', name=competition.name)}}">{{competition.name}}</a></td>
+                                <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
                                 <!-- Add more columns as needed -->
                             </tr>
                         {% endfor %}
