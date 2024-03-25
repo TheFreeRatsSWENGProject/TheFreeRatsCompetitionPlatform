@@ -12,7 +12,8 @@ comp_views = Blueprint('comp_views', __name__, template_folder='../templates')
 @comp_views.route('/competitions', methods=['GET'])
 def get_competitons():
     competitions = get_all_competitions_json()
-    return (jsonify(competitions),200) 
+    return render_template('competitions.html', competitions=get_all_competitions())
+    #return (jsonify(competitions),200) 
 
 ##add new competition to the db
 @comp_views.route('/competitions', methods=['POST'])
@@ -31,12 +32,23 @@ def add_comp_moderator():
         return (jsonify({'message': f"user added to competition"}),201)
     return (jsonify({'error': f"error adding user to competition"}),500)
 """
-@comp_views.route('/competitions/<int:id>', methods=['GET'])
-def get_competition(id):
-    competition = get_competition(id)
+@comp_views.route('/competitions/<string:name>', methods=['GET'])
+def get_competition(name):
+    competition = get_competition_by_name(name)
     if not competition:
-        return jsonify({'error': 'Competition not found!'}), 404 
-    return (jsonify(competition.toDict()),200)
+        return render_template('404.html')
+
+    #teams = get_participants(competition_name)
+    return render_template('Competition_Details.html', competition=competition)
+
+""" @index_views.route('/competition/<string:name>', methods=['GET'])
+def competition_details(name):
+    competition = get_competition_by_name(name)
+    if not competition:
+        return render_template('404.html')
+
+    #teams = get_participants(competition_name)
+    return render_template('Competition_Details.html', competition=competition) """
 
 @comp_views.route('/competitions/results', methods=['POST'])
 def add_comp_results():
