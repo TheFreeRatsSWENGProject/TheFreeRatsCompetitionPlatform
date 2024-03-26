@@ -19,13 +19,13 @@ class UnitTests(unittest.TestCase):
         assert user.username == "user1"
 
     def test_hashed_password(self):
-        password = "mypass"
+        password = "user1pass"
         hashed = generate_password_hash(password, method='sha256')
         user = User("user1", password)
         assert user.password != password
 
     def test_check_password(self):
-        password = "mypass"
+        password = "user1pass"
         user = User("user1", password)
         assert user.check_password(password)
 
