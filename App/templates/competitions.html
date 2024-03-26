@@ -18,13 +18,22 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <!-- Add more columns as needed -->
+                <th>Date</th>
+                <th>Location</th>
+                <th>Level</th>
+                <th>Max Score</th>
+                <th>Moderators</th>
             </tr>
         </thead>
         <tbody>
             {% for competition in competitions %}
                 <tr>
                     <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
+                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.date}}</a></td>
+                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.location}}</a></td>
+                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.level}}</a></td>
+                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.max_score}}</a></td>
+                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.moderators}}</a></td>
                     <!-- Add more columns as needed -->
                 </tr>
             {% endfor %}
