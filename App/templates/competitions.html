@@ -29,12 +29,11 @@
             {% for competition in competitions %}
                 <tr>
                     <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.date}}</a></td>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.location}}</a></td>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.level}}</a></td>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.max_score}}</a></td>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.moderators}}</a></td>
-                    <!-- Add more columns as needed -->
+                    <td>{{competition.date}}</a></td>
+                    <td>{{competition.location}}</a></td>
+                    <td>{{competition.level}}</a></td>
+                    <td>{{competition.max_score}}</a></td>
+                    <td>{{competition.moderators}}</a></td>
                 </tr>
             {% endfor %}
         </tbody>
