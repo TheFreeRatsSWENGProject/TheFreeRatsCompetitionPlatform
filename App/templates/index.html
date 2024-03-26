@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Homepage{% endblock %}
-{% block page %}Code Comp{% endblock %}
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
@@ -19,7 +19,7 @@
     }
 </style>
 
-<center>    <h2>UWI Competitions Platform</h2> </center>
+<center>    <h2>The Facilitators Competition Platform</h2> </center>
 
     <div class="container">
         <div class="tables-container">
@@ -29,24 +29,26 @@
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <th>Total Points</th>
+                            <th>Rating Score</th>
                             <th>Overall Rank</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for user in users %}
+                        {% for student in students %}
                             <tr>
-                                <td><a href="{{ url_for('index_views.Student_Profile', user_id=user.id) }}">{{ user.username  }}</a></td>
-                                <td>{{ get_ranking(user.id).total_points }}</td>
-                                <td>{{ get_ranking(user.id).curr_ranking }}</td>
+                                <td><a href="{{url_for('index_views.student_profile', id=student.id)}}">{{ student.username}}</a></td>
+                                <td>{{student.rating_score}}</td>
+                                <td>{{student.curr_rank}}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
 
+
             <div class="competitions-table">
                 <h4>Competitions</h4>
+                <button>View All Competitions</button>
                 <table class="table">
                     <thead>
                         <tr>
@@ -57,7 +59,7 @@
                     <tbody>
                         {% for competition in competitions %}
                             <tr>
-                                <td><a href="{{ url_for('index_views.Competition_Details', competition_name=competition.name) }}">{{ competition.name }}</a></td>
+                                <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
                                 <!-- Add more columns as needed -->
                             </tr>
                         {% endfor %}
@@ -68,6 +70,5 @@
     </div>
 
     <a href="{{ url_for('auth_views.login') }}" class="login-link">Log Out</a>
-
  
 {% endblock %}
