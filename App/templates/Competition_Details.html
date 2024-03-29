@@ -8,21 +8,6 @@
 {% block content %}
 
 <style>
-    .participants {
-        list-style-type: none;
-        padding: 10px;
-    }
-
-    .participants li {
-        border-bottom: 1px solid #2c1f1f;  
-        padding: 8px;
-        margin: 0;
-    }
-    
-    .Register {
-        box-shadow: darkblue;
-    }
-
 
 </style>
 
@@ -34,7 +19,13 @@
 
 <ul class="teams">
     {% for team in competition.teams %}
-        <li>{{team.name}}</li>
+        <li>{{team.id}} {{team.name}} {{team.students}}</li>
+    {% endfor %}
+</ul>
+
+<ul class="team_members">
+    {% for students in team.students %}
+        <li>{{students.rating_score}}</li>
     {% endfor %}
 </ul>
 
