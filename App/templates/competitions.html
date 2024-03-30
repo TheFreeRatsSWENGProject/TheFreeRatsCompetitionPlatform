@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Competitions{% endblock %}
-{% block page %}Code Comp{% endblock %}
+{% block page %}Competitions{% endblock %}
 
 {{ super() }}
 
@@ -8,36 +8,77 @@
 
 <style>
 
+    *{
+        /* margin: 0px; */
+        padding: 0px;
+        box-sizing: border-box;
+        /* font-family: sans-serif; */
+    }
+
+    .competitions-card{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        /* margin-top: 100px; */
+    }
+
+    .card{
+        width: 325px;
+        /* background-color: #f0f0f0; */
+        /* border: 1px solid #ccc; */
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        margin: 20px;
+        padding: 16px;
+        color: black;
+        transition: box-shadow 0.3s;
+       /*  font-size: 28px;
+        margin-bottom: 8px; */
+    }
+
+    .card:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .card a {
+        text-decoration: none;
+        color: black;
+        display: block;
+    }
+
+/*     .card p{
+        color: #666;
+        font-size: 15px;
+        line-height: 1.3;
+    } */
+
 </style>
 
 <center>    <h2>UWI Competitions Platform</h2> </center>
+
+<div class="competitions-card">
+
     
-<div class="competitions-table">
-    <h4>Competitions</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Level</th>
-                <th>Max Score</th>
-                <th>Moderators</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for competition in competitions %}
-                <tr>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
-                    <td>{{competition.date}}</a></td>
-                    <td>{{competition.location}}</a></td>
-                    <td>{{competition.level}}</a></td>
-                    <td>{{competition.max_score}}</a></td>
-                    <td>{{competition.moderators}}</a></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% for competition in competitions %}
+        
+        <div class="card">
+
+            <a href="{{url_for('comp_views.get_competition', name=competition.name)}}">
+                <h3>{{competition.name}}</h3>
+
+                <p><strong>Date: </strong>{{competition.date}}</p>
+                <p><strong>Location: </strong>{{competition.location}}</p>
+                <p><strong>Level: </strong>{{competition.level}}</p>
+                <p><strong>Max Score: </strong>{{competition.max_score}}</p>
+                <p><strong>Moderators: </strong>{{competition.moderators}}</p>
+            </a>
+
+            <!-- <a href="{{url_for('comp_views.get_competition', name=competition.name)}}">View More</a> -->
+        </div>
+
+    {% endfor %}
+
 </div>
  
 {% endblock %}
