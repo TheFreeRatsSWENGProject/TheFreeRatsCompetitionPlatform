@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Competitions{% endblock %}
+{% block page %}Code Comp{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+
+<style>
+
+</style>
+
+<center>    <h2>UWI Competitions Platform</h2> </center>
+    
+<div class="competitions-table">
+    <h4>Competitions</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for competition in competitions %}
+                <tr>
+                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
+                    <!-- Add more columns as needed -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+ 
+{% endblock %}
