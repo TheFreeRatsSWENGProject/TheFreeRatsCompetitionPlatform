@@ -37,10 +37,14 @@ def get_competition(name):
     competition = get_competition_by_name(name)
     if not competition:
         return render_template('404.html')
+    
     team = get_all_teams()
 
     #teams = get_participants(competition_name)
     return render_template('Competition_Details.html', competition=competition, team=team)
+
+    #teams = get_participants(competition_name)
+    #return render_template('Competition_Details.html', competition=competition)
 
 """ @index_views.route('/competition/<string:name>', methods=['GET'])
 def competition_details(name):

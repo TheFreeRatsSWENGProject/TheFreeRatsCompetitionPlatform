@@ -157,3 +157,4 @@ def create_moderator():
         return jsonify({'message': f"Moderator: {mod.username} created!"})
     else:
         return jsonify({'message': "Failed to create moderator!"})
+        #return jsonify({'message': f"Failed to create admin"})
