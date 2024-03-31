@@ -1,0 +1,87 @@
+from App.database import db
+from App.models import Team, Competition, Student, Moderator
+
+def create_team(team_name, students):
+    team = Team(name=team_name)
+    for s in students:
+        stud = Student.query.filter_by(username=s).first()
+        if stud:
+            team.add_student(stud)
+        else:
+            print(f'{s} was not found!')
+    try:
+        db.session.add(team)
+        db.session.commit()
+        print(f'New Team: {team_name} created!')
+        return team
+    except Exception as e:
+        db.session.rollback()
+        print("Something went wrong!")
+        return None
+
+def get_team_by_name(name):
+    return Team.query.filter_by(name=name).first()
+
+def get_team(id):
+    return Team.query.get(id)
+
+def get_all_teams():
+    return Team.query.all()
+
+def get_all_teams_json():
+    teams = Team.query.all()
+
+    if not teams:
+        return []
+    else:
+        return [team.get_json() for team in teams]
+    
+def find_team(team_name, students):
+    teams = Team.query.filter_by(name=team_name).all()
+    
+    for team in teams:
+        team_stud = []
+        for stud in team.students:
+            team_stud.append(stud.username)
+        
+        if set(team_stud) == set(students):
+            return team
+
+    return None
+
+def add_team(mod_name, comp_name, team_name, students):
+    mod = Moderator.query.filter_by(username=mod_name).first()
+    comp = Competition.query.filter_by(name=comp_name).first()
+    
+    if not mod:
+        print(f'Moderator: {mod_name} not found!')
+        return None
+    elif not comp:
+        print(f'Competition: {comp_name} not found!')
+        return None
+    elif comp.confirm:
+        print(f'Results for {comp_name} has already been finalized!')
+        return None
+    elif mod not in comp.moderators:
+        print(f'{mod_name} is not authorized to add teams for {comp_name}!')
+        return None
+    else:
+        team = find_team(team_name, students)
+
+        if team:
+            return comp.add_team(team)
+        
+        comp_students = []
+        
+        for team in comp.teams:
+            for stud in team.students:
+                comp_students.append(stud.username)
+        
+        for stud in students:
+            if stud in comp_students:
+                print(f'{stud} is already registered for {comp_name}!')
+                print(f'Team was not created!')
+                return None
+        
+        team = create_team(team_name, students)
+        return comp.add_team(team)

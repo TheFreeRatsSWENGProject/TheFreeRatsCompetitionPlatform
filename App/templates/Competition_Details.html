@@ -8,41 +8,51 @@
 {% block content %}
 
 <style>
-    .participants {
-        list-style-type: none;
+    .competition-details {
+        margin-top: 20px;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
         padding: 10px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        transition: box-shadow 0.3s;
+        color: black;
     }
 
-    .participants li {
-        border-bottom: 1px solid #2c1f1f;  
-        padding: 8px;
-        margin: 0;
-    }
-    
-    .Register {
-        box-shadow: darkblue;
+    .card:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
 
-
+    .teams li {
+        list-style-type: none;
+    }
 </style>
 
-<center>
-    <h1>{{ competition.name }}</h1>
-</center>
+<div class="container">
+    <center> <h1>{{ competition.name }}</h1> </center>
 
-<h3>Participants</h3>
+    <div class="competition-details">
+        
+        <h3>Teams</h3>
+        
+        {% for team in competition.teams %}
+            
+            <div class="card">
+                <p><strong>Team ID: </strong> {{team.id}}</p>
+                <p><strong>Team Name: </strong> {{team.name}}</p>
+                <p><strong>Students: </strong></p>
+                
+                <ul class="team-members">
+                    {% for student in team.students %}
+                        <li>{{student.username}} {{student.curr_rank}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
-<ul class="participants">
-    {% for participant in participants %}
-        <li>{{ participant.username }}</li>
-    {% endfor %}
-</ul>
-
-<h4 class="Register">Register for Competition</h4>
-<form action="{{ url_for('index_views.Register_Competition') }}" method="post">
-    <input type="hidden" name="competition_name" value="{{ competition.name }}">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <button type="submit">Register</button>
-</form>
 {% endblock %}

@@ -79,14 +79,20 @@ def identify_user_action():
 @auth_views.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        if get_student_by_username(request.form['username'])!= "":
-            return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
+        student = get_student_by_username(request.form['username'])
+        if request.form['username'] == student.username and student.check_password(request.form['password']):
+            return render_template('index.html', students=get_all_students(), competitions=get_all_competitions())
+        #if get_student_by_username(request.form['username'])!= "":
+        #    return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
     return render_template('login.html')
 
 @auth_views.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         create_student(request.form['username'], request.form['password'])
-        return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
+        student = get_student_by_username(request.form['username'])
+        if request.form['username'] == student.username:
+            return render_template('index.html', students=get_all_students(), competitions=get_all_competitions())
     return render_template('signup.html')
-
+    #    return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
+    #return render_template('signup.html')
