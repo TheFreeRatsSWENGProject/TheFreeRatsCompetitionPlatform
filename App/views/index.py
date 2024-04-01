@@ -177,6 +177,7 @@ def create_moderator():
         return jsonify({'message': f"Moderator: {mod.username} created!"})
     else:
         return jsonify({'message': "Failed to create moderator!"})
+<<<<<<< HEAD
 
 @index_views.route('/login')
 def login():
