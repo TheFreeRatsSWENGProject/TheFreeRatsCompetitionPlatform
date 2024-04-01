@@ -22,6 +22,21 @@ def add_new_comp():
     if response:
         return (jsonify({'message': "Competition created!"}), 201)
     return (jsonify({'error': "Error creating competition"}),500)
+
+#create new comp
+@comp_views.route('/createcompetition', methods=['POST'])
+def create_comp():
+    data = request.form
+    response = create_competition('mod1', data['name'], data['date'], data['location'], data['level'], data['max score'])
+    if response:
+        return (jsonify({'message': "Competition created!"}), 201)
+    return (jsonify({'error': "Error creating competition"}),500)
+
+#page to create new comp
+@comp_views.route('/createcompetition', methods=['GET'])
+def create_comp_page():
+    return render_template('competition_creation.html', students=get_all_students(), competitions=get_all_competitions())
+
 """
 @comp_views.route('/competitions/moderator', methods=['POST'])
 def add_comp_moderator():
