@@ -4,7 +4,6 @@ from flask_login import current_user, login_required
 
 from flask_login import login_required, login_user, current_user, logout_user
 
-
 from.index import index_views
 
 from App.controllers import *
@@ -29,8 +28,6 @@ def get_users_action():
 #        return (jsonify({'message': f"user created"}),201)
 #    return (jsonify({'error': f"error creating user"}),500)
 
-
-
 @user_views.route('/host_join', methods=['POST'])
 def join_competition():
     data = request.json
@@ -38,7 +35,6 @@ def join_competition():
     if Hosting is None:
       return jsonify({'message': f"Error"}), 409
     return jsonify({'message': f" {Hosting.username} has joined {Hosting.CompName}"})
-
 
 @user_views.route('/Create_Host', methods=['POST'])
 def create_host_action():
@@ -48,24 +44,20 @@ def create_host_action():
       return jsonify({'message': f"user {data['username']} already exists"}), 409
     return jsonify({'message': f"user {Host.username} created"})
 
-
 @user_views.route('/static/users', methods=['GET'])
 def static_user_page():
   return send_from_directory('static', 'static-user.html')
-
 
 @user_views.route('/tester', methods=['GET'])
 def random_function():
     flash(f"hello user this test has been successful") 
     return "yes"
 
-
 @user_views.route('/all_rankings', methods=['GET'])
 def get_user_rankings():
     users = display_rankings()
     rankings = [u.to_dict() for u in users]
     return jsonify(rankings)
-
 
 @user_views.route('/users/competitions/<int:id>', methods = ['GET'])
 def get_user_comps(id):

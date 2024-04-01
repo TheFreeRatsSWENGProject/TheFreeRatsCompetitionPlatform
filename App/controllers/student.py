@@ -1,6 +1,5 @@
-from App.controllers.ranking import create_ranking
-from App.models import Student, Competition, Ranking, competition_student
 from App.database import db
+from App.models import Student, Competition, Notification, CompetitionTeam
 
 def create_student(username, password):
     student = get_student_by_username(username)
@@ -12,7 +11,6 @@ def create_student(username, password):
     try:
         db.session.add(newStudent)
         db.session.commit()
-        create_ranking(newStudent.id)
         print(f'New Student: {username} created!')
         return newStudent
     except Exception as e:
@@ -52,19 +50,6 @@ def update_student(id, username):
     print("ID: {id} does not exist!")
     return None
 
-def register_student(username, competition_name):
-  student = get_student_by_username(username)
-  if student:
-    competition = Competition.query.filter_by(name=competition_name).first()
-    if competition:
-      return student.participate_in_competition(competition)
-    else:
-      print(f'{competition_name} was not found')
-      return None
-  else:
-    print(f'{username} was not found')
-    return None
-
 def display_student_info(username):
     student = get_student_by_username(username)
 
@@ -72,18 +57,19 @@ def display_student_info(username):
         print(f'{username} does not exist!')
         return None
     else:
-        ranking = Ranking.query.filter_by(student_id=student.id).first()
-        if ranking:
-            profile_info = {
-                "profile": student.get_json(),
-                "ranking": ranking.get_json(),
-                "participated_competitions": [comp.name for comp in student.competitions]
-            }
-        else:
-            profile_info = {
-                "profile": student.get_json(),
-                "participated_competitions": [comp.name for comp in student.competitions]
-            }
+        competitions = []
+        
+        for team in student.teams:
+            team_comps = CompetitionTeam.query.filter_by(team_id=team.id).all()
+            for comp_team in team_comps:
+                comp = Competition.query.filter_by(id=comp_team.comp_id).first()
+                competitions.append(comp.name)
+
+        profile_info = {
+            "profile" : student.get_json(),
+            "competitions" : competitions
+        }
+
         return profile_info
 
 def display_notifications(username):
@@ -93,13 +79,68 @@ def display_notifications(username):
         print(f'{username} does not exist!')
         return None
     else:
-        return {"notifications":[notification.get_json() for notification in student.notifications]}
+        return {"notifications":[notification.to_Dict() for notification in student.notifications]}
 
-def get_notifications(username):
-    student = get_student_by_username(username)
+def update_rankings():
+    students = get_all_students()
 
-    if not student:
-        print(f'{username} does not exist!')
-        return None
-    else:
-        return student.notifications
+    students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+
+    leaderboard = []
+    count = 1
+    curr_high = students[0].rating_score
+    curr_rank = 1
+        
+    for student in students:
+        if curr_high != student.rating_score:
+            curr_rank = count
+            curr_high = student.rating_score
+
+        if student.comp_count != 0:
+            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+            count += 1
+        
+            student.curr_rank = curr_rank
+            if student.prev_rank == 0:
+                message = f'RANK : {student.curr_rank}. Congratulations on your first rank!'
+            elif student.curr_rank == student.prev_rank:
+                message = f'RANK : {student.curr_rank}. Well done! You retained your rank.'
+            elif student.curr_rank < student.prev_rank:
+                message = f'RANK : {student.curr_rank}. Congratulations! Your rank has went up.'
+            else:
+                message = f'RANK : {student.curr_rank}. Oh on! Your rank has went down.'
+            student.prev_rank = student.curr_rank
+            notification = Notification(student.id, message)
+            student.notifications.append(notification)
+
+            try:
+                db.session.add(student)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+
+    return leaderboard
+
+def display_rankings():
+    students = get_all_students()
+
+    students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+
+    leaderboard = []
+    count = 1
+    curr_high = students[0].rating_score
+    curr_rank = 1
+        
+    for student in students:
+        if curr_high != student.rating_score:
+            curr_rank = count
+            curr_high = student.rating_score
+
+        if student.comp_count != 0:
+            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+            count += 1
+
+    print("Rank\tStudent\tRating Score")
+
+    for position in leaderboard:
+        print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')
