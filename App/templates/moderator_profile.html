@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+{% block page %}UWI Competitions Platform{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+
+<style>
+h1 {
+    padding: 2vw 0vw 0vw 2vw;
+    margin: 0vw;
+    color: white;
+}
+
+.profile-info {
+    width: 100%;
+    height: 100%;
+    padding: 2vw;
+    display: flex;
+}
+
+.moderator-info {
+    width: 30%;
+    outline-style: solid;
+    background-image: linear-gradient(#61677A, #000000);
+    color: white;
+}
+
+.moderator-image {
+    padding: 2vw;
+}
+
+.moderator-username {
+    text-align: center;
+    padding: 0vw;
+    font-size: 3vw;
+}
+
+.competitions-info {
+    width: 70%;
+}
+
+.competition-list {
+    width: 90%;
+    margin: 3vw 2vw 2vw 2vw;
+    outline-style: solid;
+    font-size: 2vw;
+    overflow-y: scroll;
+    height: 30vw;
+    color: white;
+    background-image: radial-gradient(#61677A, #000000);
+}
+
+.competition-list li {
+    display: flex;
+    padding-left: 2vw;
+    margin: 2vw;
+    font-size: 1.5vw;
+    outline-style: solid;
+    color: white;
+    background-image: linear-gradient(#61677A, #000000);
+}
+
+@media only screen and (max-width: 700px) {
+    h1 {
+        text-align: center;
+    }
+    
+    .profile-info {
+        display: block;
+    }
+
+    .moderator-info {
+        width: 90%;
+        margin: auto;
+    }
+
+    .moderator-username {
+        font-size: 10vw;
+    }
+
+    .competition-list {
+        font-size: 5vw;
+        height: 50vw;
+        margin-top: 5vw;
+    }
+
+    .competition-list li {
+        font-size: 5vw;
+    }
+}
+</style>
+
+<div>
+    <h1>Profile</h1>
+</div>
+<div class="profile-info">
+    <div class="moderator-info">
+        <div class="moderator-image">
+            <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Moderator Photo" width="80%"></center>
+        </div>
+        <div class="moderator-username">
+            <p>{{moderator.username}}</p>
+        </div> 
+    </div>
+
+    <div class="competition-list">
+        <center><p>Competitions</p></center>
+        <ul>
+            {% for competition in moderator.competitions %}
+                <li>
+                    <div style="width: 90%; text-align: left;">
+                        <p style="margin: 2vw;">{{competition.name}}</p>
+                    </div>
+                    <div style="width: 10%; text-align: right; margin: 2vw;">
+                        <a style="color: white;" href="{{url_for('index_views.competition_details', name=competition.name)}}">Details</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

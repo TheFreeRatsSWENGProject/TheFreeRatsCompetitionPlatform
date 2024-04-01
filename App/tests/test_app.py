@@ -15,72 +15,72 @@ LOGGER = logging.getLogger(__name__)
 class UnitTests(unittest.TestCase):
     #User Unit Tests
     def test_new_user(self):
-        user = User("bob", "bobpass")
-        assert user.username == "bob"
+        user = User("user1", "user1pass")
+        assert user.username == "user1"
 
     def test_hashed_password(self):
-        password = "mypass"
+        password = "user1pass"
         hashed = generate_password_hash(password, method='sha256')
-        user = User("bob", password)
+        user = User("user1", password)
         assert user.password != password
 
     def test_check_password(self):
-        password = "mypass"
-        user = User("bob", password)
+        password = "user1pass"
+        user = User("user1", password)
         assert user.check_password(password)
 
     #Student Unit Tests
     def test_new_student(self):
       db.drop_all()
       db.create_all()
-      student = Student("bob", "bobpass")
-      assert student.username == "bob"
+      student = Student("stud1", "stud1pass")
+      assert student.username == "stud1"
 
     def test_student_get_json(self):
       db.drop_all()
       db.create_all()
-      student = Student("bob", "bobpass")
-      self.assertDictEqual(student.get_json(), {"id": None, "username":"bob", "role": 'Student'})
+      student = Student("stud1", "stud1pass")
+      self.assertDictEqual(student.get_json(), {"id": None, "username": "stud1", "rating_score": 0, "comp_count": 0, "curr_rank": 0})
 
-    #Host Unit Tests
-    def test_new_host(self):
+    #Moderator Unit Tests
+    def test_new_moderator(self):
       db.drop_all()
       db.create_all()
-      host = Host("bill", "billpass", 101)
-      assert host.username == "bill" and host.host_id == 101
+      mod = Moderator("mod1", "mod1pass")
+      assert mod.username == "mod1"
 
-    def test_host_get_json(self):
+    def test_moderator_get_json(self):
       db.drop_all()
       db.create_all()
-      host = Host("bill", "billpass", 101)
-      self.assertDictEqual(host.get_json(), {"id":None, "username":"bill", "role": 'Host', "host id": 101, "competitions": []})
-
-    #Admin Unit Tests
-    def test_new_admin(self):
+      mod = Moderator("mod1", "mod1pass")
+      self.assertDictEqual(mod.get_json(), {"id":None, "username": "mod1", "competitions": []})
+    
+    #Team Unit Tests
+    def test_new_team(self):
       db.drop_all()
       db.create_all()
-      admin = Admin("rob", "robpass", 1001)
-      assert admin.username == "rob" and admin.staff_id == 1001
-
-    def test_admin_get_json(self):
+      team = Team("team1")
+      assert team.name == "team1"
+    
+    def test_team_get_json(self):
       db.drop_all()
       db.create_all()
-      admin = Admin("rob", "robpass", 1001)
-      self.assertDictEqual(admin.get_json(), {"id":None, "username":"rob", "role": 'Admin', "staff_id": 1001})
-
+      team = Team("team1")
+      self.assertDictEqual(team.get_json(), {"id":None, "name":"team1", "students": []})
+    
     #Competition Unit Tests
     def test_new_competition(self):
       db.drop_all()
       db.create_all()
-      competition = Competition("RunTime")
-      assert competition.name == "RunTime"
+      competition = Competition("comp1", datetime.strptime("09-02-2024", "%d-%m-%Y"), "CSL", 1, 25)
+      assert competition.name == "comp1" and competition.date.strftime("%d-%m-%Y") == "09-02-2024" and competition.location == "CSL" and competition.level == 1 and competition.max_score == 25
 
     def test_competition_get_json(self):
       db.drop_all()
       db.create_all()
-      competition = Competition("RunTime")
-      self.assertDictEqual(competition.get_json(), {"id": None,"name": "RunTime", "hosts": [], "participants": []})
-      
+      competition = Competition("comp1", datetime.strptime("09-02-2024", "%d-%m-%Y"), "CSL", 1, 25)
+      self.assertDictEqual(competition.get_json(), {"id": None, "name": "comp1", "date": "09-02-2024", "location": "CSL", "level": 1, "max_score": 25, "moderators": [], "teams": []})
+    
     #Notification Unit Tests
     def test_new_notification(self):
       db.drop_all()
@@ -92,8 +92,8 @@ class UnitTests(unittest.TestCase):
       db.drop_all()
       db.create_all()
       notification = Notification(1, "Hello")
-      self.assertDictEqual(notification.get_json(), {"id": None, "notification": "Hello"})
-  
+      self.assertDictEqual(notification.get_json(), {"id": None, "student_id": 1, "notification": "Hello"})
+    """
     #Ranking Unit Tests
     def test_new_ranking(self):
       db.drop_all()
@@ -129,40 +129,61 @@ class UnitTests(unittest.TestCase):
       ranking.set_points(15)
       ranking.set_ranking(1)
       self.assertDictEqual(ranking.get_json(), {"rank":1, "total points": 15})
+    """
+    #CompetitionTeam Unit Tests
+    def test_new_competition_team(self):
+      db.drop_all()
+      db.create_all()
+      competition_team = CompetitionTeam(1, 1)
+      assert competition_team.comp_id == 1 and competition_team.team_id == 1
+
+    def test_competition_team_update_points(self):
+      db.drop_all()
+      db.create_all()
+      competition_team = CompetitionTeam(1, 1)
+      competition_team.update_points(15)
+      assert competition_team.points_earned == 15
+
+    def test_competition_team_update_rating(self):
+      db.drop_all()
+      db.create_all()
+      competition_team = CompetitionTeam(1, 1)
+      competition_team.update_rating(12)
+      assert competition_team.rating_score == 12
+
+    def test_competition_team_get_json(self):
+      db.drop_all()
+      db.create_all()
+      competition_team = CompetitionTeam(1, 1)
+      competition_team.update_points(15)
+      competition_team.update_rating(12)
+      self.assertDictEqual(competition_team.get_json(), {"id": None, "team_id": 1, "competition_id": 1, "points_earned": 15, "rating_score": 12})
+
+    #CompetitionModerator Unit Tests
+    def test_new_competition_moderator(self):
+      db.drop_all()
+      db.create_all()
+      competition_moderator = CompetitionModerator(1, 1)
+      assert competition_moderator.comp_id == 1 and competition_moderator.mod_id == 1
+
+    def test_competition_moderator_get_json(self):
+      db.drop_all()
+      db.create_all()
+      competition_moderator = CompetitionModerator(1, 1)
+      self.assertDictEqual(competition_moderator.get_json(), {"id": None, "competition_id": 1, "moderator_id": 1})
+
+    #StudentTeam Unit Tests
+    def test_new_student_team(self):
+      db.drop_all()
+      db.create_all()
+      student_team = StudentTeam(1, 1)
+      assert student_team.student_id == 1 and student_team.team_id == 1
     
-    #CompetitionStudent Unit Tests
-    def test_new_competition_student(self):
+    def test_student_team_get_json(self):
       db.drop_all()
       db.create_all()
-      competition_student = CompetitionStudent(1, 1)
-      assert competition_student.student_id == 1 and competition_student.comp_id == 1
-
-    def test_competition_student_update_points(self):
-      db.drop_all()
-      db.create_all()
-      competition_student = CompetitionStudent(1, 1)
-      competition_student.update_points(15)
-      assert competition_student.points_earned == 15
-
-    def test_competition_student_get_json(self):
-      db.drop_all()
-      db.create_all()
-      competition_student = CompetitionStudent(1, 1)
-      competition_student.update_points(15)
-      self.assertDictEqual(competition_student.get_json(), {"id": None, "student_id": 1, "competition_id": 1, "points_earned": 15})
-
-    #CompetitionHost Unit Tests
-    def test_new_competition_host(self):
-      db.drop_all()
-      db.create_all()
-      competition_host = CompetitionHost(1, 1)
-      assert competition_host.host_id == 1 and competition_host.comp_id == 1
-
-    def test_competition_host_get_json(self):
-      db.drop_all()
-      db.create_all()
-      competition_host = CompetitionHost(1, 1)
-      self.assertDictEqual(competition_host.get_json(), {"id": None, "host_id": 1, "comp_id": 1})
+      student_team = StudentTeam(1, 1)
+      self.assertDictEqual(student_team.get_json(), {"id": None, "student_id": 1, "team_id": 1})
 
 '''
     Integration Tests

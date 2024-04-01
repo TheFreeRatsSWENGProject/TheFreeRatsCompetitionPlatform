@@ -24,7 +24,7 @@ class CompetitionTeam(db.Model):
     def get_json(self):
       return {
           "id" : self.id,
-          "student_id" : self.student_id,
+          "team_id" : self.team_id,
           "competition_id" : self.comp_id,
           "points_earned" : self.points_earned,
           "rating_score" : self.rating_score

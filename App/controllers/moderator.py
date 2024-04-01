@@ -2,7 +2,7 @@ from App.database import db
 from App.models import Moderator, Competition, Team, CompetitionTeam
 
 def create_moderator(username, password):
-    mod = get_mod_by_username(username)
+    mod = get_moderator_by_username(username)
     if mod:
         print(f'{username} already exists!')
         return None
@@ -18,16 +18,16 @@ def create_moderator(username, password):
         print(f'Something went wrong creating {username}')
         return None
 
-def get_mod_by_username(username):
+def get_moderator_by_username(username):
     return Moderator.query.filter_by(username=username).first()
 
-def get_mod(id):
+def get_moderator(id):
     return Moderator.query.get(id)
 
-def get_all_mods():
+def get_all_moderators():
     return Moderator.query.all()
 
-def get_all_mods_json():
+def get_all_moderators_json():
     mods = Moderator.query.all()
     if not mods:
         return []
@@ -35,7 +35,7 @@ def get_all_mods_json():
     return mods_json
 
 def update_moderator(id, username):
-    mod = get_mod(id)
+    mod = get_moderator(id)
     if mod:
         mod.username = username
         try:

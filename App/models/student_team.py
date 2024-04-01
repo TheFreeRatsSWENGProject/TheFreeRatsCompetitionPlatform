@@ -13,9 +13,9 @@ class StudentTeam(db.Model):
     
     def get_json(self):
         return {
-            "ID" : self.id,
-            "Student ID" : self.student_id,
-            "Team ID" : self.team_id
+            "id" : self.id,
+            "student_id" : self.student_id,
+            "team_id" : self.team_id
         }
     
     def to_Dict(self):
