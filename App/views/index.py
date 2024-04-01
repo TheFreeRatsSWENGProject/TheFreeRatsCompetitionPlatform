@@ -177,6 +177,7 @@ def create_moderator():
         return jsonify({'message': f"Moderator: {mod.username} created!"})
     else:
         return jsonify({'message': "Failed to create moderator!"})
+<<<<<<< HEAD
 
 @index_views.route('/login')
 def login():
@@ -191,3 +192,6 @@ def signup():
         return render_template('index.html', users=get_all_students(),get_ranking=get_ranking,display_rankings=display_rankings,competitions=get_all_competitions())
     return render_template('signup.html')
 
+=======
+        #return jsonify({'message': f"Failed to create admin"})
+>>>>>>> frontend
