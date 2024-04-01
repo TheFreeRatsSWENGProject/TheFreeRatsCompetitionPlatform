@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}Competition Creation{% endblock %}
+{% block page %}Competition Registration{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<main class="container" style="padding-top: 75px">
+  <form name="addForm" class="card" method="POST" action="/createcompetition">
+    <div class="card-content">
+      <span class="card-title">Create Competitoin</span>
+        <div class="input-field">
+          <input type="text" name="name" placeholder="Enter Comp Name" class="materialize-textarea" required>
+          <label for="name">Competition Name</label>
+        </div>
+        <div class="input-field">
+            <input type="date" name="Comp Date" required>
+            <label for="date">Competition Date</label>
+        </div>
+        <div class="input-field">
+            <input type="text" name="location" placeholder="Enter Comp Location" class="materialize-textarea" required>
+            <label for="location">Competition Location</label>
+        </div>
+        <div class="input-field">
+            <input type="number" name="level" placeholder="Enter Comp Level" min="1" max="5">
+            <label for="level">Competition Level</label>
+            
+        </div>
+        <div class="input-field">
+            <input type="text" name="maxval" placeholder="Enter Max Value" class="materialize-textarea" required>
+            <label for="maxval">Competition Max Value</label>
+          </div>
+
+    </div>
+    <div class="card-actions">
+        <div class="row">
+          <div class="col sm12 m4 offset-m8">
+            <input class="btn blue right" type="submit" value="CREATE" />
+          </div>
+        </div>
+    </div>
+  </form>
+</main>
+
+{% endblock %}
