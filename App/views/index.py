@@ -192,3 +192,6 @@ def signup():
         return render_template('index.html', users=get_all_students(),get_ranking=get_ranking,display_rankings=display_rankings,competitions=get_all_competitions())
     return render_template('signup.html')
 
+=======
+        #return jsonify({'message': f"Failed to create admin"})
+>>>>>>> frontend
