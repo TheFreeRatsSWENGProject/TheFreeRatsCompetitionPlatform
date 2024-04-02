@@ -1,29 +1,24 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-  
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
+
   <body>
+    
     <nav class="black">
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left">
-                <li><a href="/">Home</a></li>
-<<<<<<< HEAD
-=======
-                <!-- <li><a href="/users">Users Jinja</a></li> -->
-                <!-- <li><a href="/static/users">Users JS</a></li> -->
->>>>>>> frontend
+                <li><a href="/">Leaderboard</a></li>
+                <li><a href="/competitions">Competitions</a></li>
             </ul>
         </div>
       </div>

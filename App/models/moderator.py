@@ -23,3 +23,6 @@ class Moderator(User):
             'Username': self.username,
             'Competitions': [comp.name for comp in self.competitions]
         }
+
+    def __repr__(self):
+        return f'{self.username}'

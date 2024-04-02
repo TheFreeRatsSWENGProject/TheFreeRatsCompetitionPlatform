@@ -14,8 +14,7 @@
 }
 
 .notifications ul {
-    list-style-type: none; 
-   /
+    list-style-type: none;
 }
 
 .notifications li {
@@ -30,7 +29,7 @@
 h1 {
     padding: 2vw 0vw 0vw 2vw;
     margin: 0vw;
-    color: white;
+    /*color: white;*/
 }
 
 .profile-info {
@@ -42,8 +41,8 @@ h1 {
 .student-info {
     width: 30%;
     outline-style: solid;
-    background-image: linear-gradient(#61677A, #000000);
-    color: white;
+    /*background-image: linear-gradient(#61677A, #000000);
+    color: white;*/
 }
 
 .student-image {
@@ -72,8 +71,8 @@ h1 {
     margin: auto;
     text-align: center;
     font-size: 2vw;
-    color: white;
-    background-image: linear-gradient(#61677A, #000000);
+    /*color: white;
+    background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .rating-score {
@@ -82,8 +81,8 @@ h1 {
     margin: auto;
     text-align: center;
     font-size: 2vw;
-    color: white;
-    background-image: linear-gradient(#61677A, #000000);
+    /*color: white;
+    background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .competition-list {
@@ -94,8 +93,8 @@ h1 {
     font-size: 2vw;
     overflow-y: scroll;
     height: 20vw;
-    color: white;
-    background-image: radial-gradient(#61677A, #000000);
+    /*color: white;
+    background-image: radial-gradient(#61677A, #000000);*/
 }
 
 .competition-list li {
@@ -104,8 +103,8 @@ h1 {
     margin: 2vw;
     font-size: 1.5vw;
     outline-style: solid;
-    color: white;
-    background-image: linear-gradient(#61677A, #000000);
+    /*color: white;
+    background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .sidepanel {
@@ -273,7 +272,7 @@ h1 {
                             <p style="margin: 2vw;">{{competition}}</p>
                         </div>
                         <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: white;" href="{{url_for('index_views.competition_details', name=competition)}}">Details</a>
+                            <a style="color: black;" href="{{url_for('index_views.competition_details', name=competition)}}">Details</a>
                         </div>
                     </li>
                 {% endfor %}

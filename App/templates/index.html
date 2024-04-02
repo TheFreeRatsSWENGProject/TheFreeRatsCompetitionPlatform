@@ -7,89 +7,81 @@
 {% block content %}
 
 <style>
+
     .tables-container {
         display: flex;
         justify-content: space-between;
     }
 
-    .leaderboard-table,
-    
-    .competitions-table,.leaderboard-table {
-        width: 20%;
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .leaderboard-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .leaderboard-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .leaderboard-table tbody tr:hover {
+        background-color: #ddd;
+    }
+
+    .leaderboard-table tbody tr td a {
+        color: #337ab7;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .leaderboard-table tbody tr td a:hover {
+        text-decoration: underline;
     }
 </style>
 
-<center>    <h2>The Facilitators Competition Platform</h2> </center>
+<center>
+    <h2>The Facilitators Competition Platform</h2>
+</center>
 
-    <div class="container">
-        <div class="tables-container">
-            <div class="leaderboard-table">
+<div class="container">
+    <div class="tables-container">
+        <div class="leaderboard-table">
+            <center>
                 <h4>Leaderboard</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Rating Score</th>
-                            <th>Overall Rank</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for student in students %}
-                            <tr>
-                                <td><a href="{{url_for('index_views.student_profile', id=student.id)}}">{{ student.username}}</a></td>
-                                <td>{{student.rating_score}}</td>
-                                <td>{{student.curr_rank}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-
-            <div class="competitions-table">
-                <h4>Competitions</h4>
-                <button>View All Competitions</button>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <!-- Add more columns as needed -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for competition in competitions %}
-                            <tr>
-                                <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
-                                <!-- Add more columns as needed -->
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="moderators-table">
-                <h4>Moderators</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <!-- Add more columns as needed -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for moderator in moderators %}
-                            <tr>
-                                <td><a href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">{{moderator.username}}</a></td>
-                                <!-- Add more columns as needed -->
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-            </div>
+            </center>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Rating Score</th>
+                        <th>Overall Rank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td><a href="{{url_for('index_views.student_profile', id=student.id)}}">{{ student.username}}</a></td>
+                        <td>{{student.rating_score}}</td>
+                        <td>{{student.curr_rank}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <a href="{{ url_for('auth_views.login') }}" class="login-link">Log Out</a>
+<a href="{{ url_for('auth_views.login') }}" class="login-link">Log Out</a>
  
 {% endblock %}

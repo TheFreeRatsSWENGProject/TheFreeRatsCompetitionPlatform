@@ -65,47 +65,25 @@
         
         <div class="card">
 
-            <a href="{{url_for('comp_views.get_competition', name=competition.name)}}">
+            <a href="{{url_for('comp_views.competition_details', id=competition.id)}}">
                 <h3>{{competition.name}}</h3>
-
-                <p><strong>Date: </strong>{{competition.date}}</p>
-                <p><strong>Location: </strong>{{competition.location}}</p>
-                <p><strong>Level: </strong>{{competition.level}}</p>
-                <p><strong>Max Score: </strong>{{competition.max_score}}</p>
-                <p><strong>Moderators: </strong>{{competition.moderators}}</p>
             </a>
-
-            <!-- <a href="{{url_for('comp_views.get_competition', name=competition.name)}}">View More</a> -->
-        </div>
+            <p><strong>Date: </strong>{{competition.date}}</p>
+            <p><strong>Location: </strong>{{competition.location}}</p>
+            <p><strong>Level: </strong>{{competition.level}}</p>
+            <p><strong>Max Score: </strong>{{competition.max_score}}</p>
+            <p><strong>Moderators: </strong>
+                {% for moderator in competition.moderators %}
+                    <a href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
+                        {{moderator.username}}
+                    </a>
+                {% endfor %}
+            </p> 
+        
+    </div>
 
     {% endfor %}
 
 </div>
  
 {% endblock %}
-
-<!---</style>
-
-<center>    <h2>UWI Competitions Platform</h2> </center>
-    
-<div class="competitions-table">
-    <h4>Competitions</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <!-- Add more columns as needed -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for competition in competitions %}
-                <tr>
-                    <td><a href="{{url_for('comp_views.get_competition', name=competition.name)}}">{{competition.name}}</a></td>
-                    <!-- Add more columns as needed -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
- 
-{% endblock %}--->

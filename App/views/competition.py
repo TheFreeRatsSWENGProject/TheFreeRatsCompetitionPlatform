@@ -23,6 +23,21 @@ def add_new_comp():
     if response:
         return (jsonify({'message': "Competition created!"}), 201)
     return (jsonify({'error': "Error creating competition"}),500)
+
+#create new comp
+@comp_views.route('/createcompetition', methods=['POST'])
+def create_comp():
+    data = request.form
+    response = create_competition('mod1', data['name'], data['date'], data['location'], data['level'], data['max score'])
+    if response:
+        return (jsonify({'message': "Competition created!"}), 201)
+    return (jsonify({'error': "Error creating competition"}),500)
+
+#page to create new comp
+@comp_views.route('/createcompetition', methods=['GET'])
+def create_comp_page():
+    return render_template('competition_creation.html', students=get_all_students(), competitions=get_all_competitions())
+
 """
 @comp_views.route('/competitions/moderator', methods=['POST'])
 def add_comp_moderator():
@@ -32,16 +47,16 @@ def add_comp_moderator():
         return (jsonify({'message': f"user added to competition"}),201)
     return (jsonify({'error': f"error adding user to competition"}),500)
 """
-@comp_views.route('/competitions/<string:name>', methods=['GET'])
-def get_competition(name):
-    competition = get_competition_by_name(name)
+@comp_views.route('/competitions/<int:id>', methods=['GET'])
+def competition_details(id):
+    competition = get_competition(id)
     if not competition:
         return render_template('404.html')
     
-    team = get_all_teams()
+    #team = get_all_teams()
 
     #teams = get_participants(competition_name)
-    return render_template('Competition_Details.html', competition=competition, team=team)
+    return render_template('competition_details.html', competition=competition)#, team=team)
 
     #teams = get_participants(competition_name)
     #return render_template('Competition_Details.html', competition=competition)
