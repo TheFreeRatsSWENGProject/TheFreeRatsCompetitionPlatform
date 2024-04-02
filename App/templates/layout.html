@@ -11,24 +11,20 @@
   </head>
 
   <body>
-    <style>
-      body {
-      background-color: white;
-    }
-    </style>
+    
     <nav class="black">
-      <div class="nav-wrapper container">
-        <a href="/" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-          <li><a href="/">Home</a></li>
-          <li><a href="/competitions">Competitions</a></li>
-        </ul>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left">
+                <li><a href="/">Leaderboard</a></li>
+                <li><a href="/competitions">Competitions</a></li>
+            </ul>
+        </div>
       </div>
     </nav>
 
-    <div class="container">
-      {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{{url_for('static', filename='main.js')}}"></script>

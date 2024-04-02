@@ -34,7 +34,9 @@ def initialize():
     mod2 = create_moderator('mod2', 'mod2pass')
     comp1 = create_competition('mod1', 'comp1', '09-02-2024', 'CSL', 1, 25)
     comp2 = create_competition('mod2', 'comp2', '09-02-2024', 'CSL', 2, 20)
-    
+    mod3 = create_moderator('mod3', 'mod3pass')
+    mod = add_mod('mod1', 'comp1', 'mod3')
+
     students = ["stud1", "stud2", "stud3"]
     add_team('mod1', 'comp1', "team1", students)
     add_results('mod1', 'comp1', "team1", 16)

@@ -6,7 +6,7 @@ index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
 @index_views.route('/', methods=['GET'])
 def index_page():
-    return render_template('index.html', students=get_all_students(), competitions=get_all_competitions(), moderators=get_all_moderators())
+    return render_template('index.html', students=get_all_students())#, competitions=get_all_competitions(), moderators=get_all_moderators())
 
 @index_views.route('/init', methods=['GET'])
 def init():
@@ -54,9 +54,11 @@ def init():
     stud10 = create_student('stud10', 'stud10pass')
     mod1 = create_moderator('mod1', 'mod1pass')
     mod2 = create_moderator('mod2', 'mod2pass')
+    mod3 = create_moderator('mod3', 'mod3pass')
     comp1 = create_competition('mod1', 'comp1', '09-02-2024', 'CSL', 1, 25)
     comp2 = create_competition('mod2', 'comp2', '09-02-2024', 'CSL', 2, 20)
-    
+    mod = add_mod('mod1', 'comp1', 'mod3')
+
     students = ["stud1", "stud2", "stud3"]
     add_team('mod1', 'comp1', "A", students)
     add_results('mod1', 'comp1', "A", 16)
@@ -177,7 +179,6 @@ def create_moderator():
         return jsonify({'message': f"Moderator: {mod.username} created!"})
     else:
         return jsonify({'message': "Failed to create moderator!"})
-<<<<<<< HEAD
 
 @index_views.route('/login')
 def login():
@@ -192,6 +193,3 @@ def signup():
         return render_template('index.html', users=get_all_students(),get_ranking=get_ranking,display_rankings=display_rankings,competitions=get_all_competitions())
     return render_template('signup.html')
 
-=======
-        #return jsonify({'message': f"Failed to create admin"})
->>>>>>> frontend
