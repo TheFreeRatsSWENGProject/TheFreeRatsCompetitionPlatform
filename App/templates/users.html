@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 {% block title %}App Users{% endblock %}
-{% block page %}App Users{% endblock %}
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <div class="row">
+    <center><h2>App Users</h2></center>
+
+  <div class="row">
         <p>
             This is table is renderd on the Server. Flask gets the data from the database and uses jinja templates to dyanmically render this page when a request is sent to <a href="/users">/users</a>.
         </p>

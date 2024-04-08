@@ -1,7 +1,7 @@
 <!-- competition_details.html -->
 {% extends "layout.html" %}
 {% block title %}Competition Details{% endblock %}
-{% block page %}Competition Details{% endblock %}
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
@@ -30,12 +30,14 @@
         list-style-type: none;
     }
 </style>
-
+<center><h2>Competition Details</h2></center>
 <div class="container">
     <center> <h1>{{ competition.name }}</h1> </center>
+    {% if session['user_type'] == 'moderator' %}<!--and competition.name in moderator.competitions-->
     <div>
         <a href="{{ url_for('comp_views.add_competition_results') }}">Add Results</a>
     </div>
+    {% endif %}
     <div class="competition-details">
         
         <h3>Teams</h3>

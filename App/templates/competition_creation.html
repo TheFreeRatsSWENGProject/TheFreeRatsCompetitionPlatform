@@ -1,10 +1,14 @@
 {% extends "layout.html" %}
 {% block title %}Competition Creation{% endblock %}
-{% block page %}Competition Registration{% endblock %}
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
 {% block content %}
+<center>
+  <h2>Competition Registration</h2>
+</center>
+
 <main class="container" style="padding-top: 75px">
   <form name="addForm" class="card" method="POST" action="/createcompetition">
     <div class="card-content">

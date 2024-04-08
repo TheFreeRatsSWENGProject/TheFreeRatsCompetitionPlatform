@@ -1,10 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}Competition Results{% endblock %}
-{% block page %}Competition Results{% endblock %}
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
 {% block content %}
+<center><h2>Competition Results</h2></center>
+
 <main class="container" style="padding-top: 75px">
     <form name="addForm" class="card" method="POST" action="/compresults">
         <div class="card-content">
