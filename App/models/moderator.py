@@ -7,7 +7,7 @@ class Moderator(User):
     competitions = db.relationship('Competition', secondary='competition_moderator', overlaps='moderators', lazy=True)
 
     def __init__(self, username, password):
-        super().__init__(username, password)
+        super().__init__(username, password, 'moderator')
         self.competitions = []
 
     def get_json(self):

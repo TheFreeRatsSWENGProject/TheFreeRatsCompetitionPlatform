@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify
+from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, session
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
 from App.models import db
@@ -8,7 +8,7 @@ index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
 @index_views.route('/leaderboard', methods=['GET'])
 def leaderboard_page():
-    return render_template('leaderboard.html', students=get_all_students(), user=current_user)#, competitions=get_all_competitions(), moderators=get_all_moderators())
+    return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)#, competitions=get_all_competitions(), moderators=get_all_moderators())
 
 @index_views.route('/', methods=['GET'])
 def init():
@@ -91,7 +91,7 @@ def init():
     update_ratings('mod2', 'comp2')
     update_rankings()
 
-    return render_template('leaderboard.html', students=get_all_students(), user=current_user)
+    return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)
     """
 @index_views.route('/health', methods=['GET'])
 def health_check():
@@ -105,6 +105,20 @@ def health():
 #def Student_Profile(user_id):
  #   return render_template('Student_Profile.html', user_id=user_id)
 """
+
+@index_views.route('/profile')
+def profile():
+    user_type = session['user_type']
+    id = current_user.get_id()
+    
+    if user_type == 'moderator':
+        template = moderator_profile(id)
+
+    if user_type == 'student':
+        template = student_profile(id)
+
+    return template
+
 @index_views.route('/student_profile/<int:id>')
 def student_profile(id):
     student = get_student(id)
@@ -122,8 +136,25 @@ def student_profile(id):
 
     return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
 
+@index_views.route('/student_profile/<string:name>')
+def student_profile_by_name(name):
+    student = get_student_by_username(name)
+
+    if not student:
+        return render_template('404.html')
+    
+    profile_info = display_student_info(student.username)
+    competitions = profile_info['competitions']
+    """
+    competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
+    ranking = Ranking.query.filter_by(student_id=user_id).first()
+    notifications= get_notifications(user.username)
+    """
+
+    return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
+
 @index_views.route('/moderator_profile/<int:id>')
-def moderator_profile(id):
+def moderator_profile(id):   
     moderator = get_moderator(id)
 
     if not moderator:

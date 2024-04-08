@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
+from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for, session
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import current_user, login_required
 #from datetime import datetime
@@ -77,7 +77,7 @@ def competition_details(name):
     return render_template('competition_details.html', competition=competition)
 """
 @comp_views.route('/competition/<string:name>', methods=['GET'])
-def competition_details_name(name):
+def competition_details_by_name(name):
     competition = get_competition_by_name(name)
     if not competition:
         return render_template('404.html')

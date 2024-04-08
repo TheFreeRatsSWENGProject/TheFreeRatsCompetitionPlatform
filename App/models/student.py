@@ -12,7 +12,7 @@ class Student(User):
     notifications = db.relationship('Notification', backref='student', lazy=True)
 
     def __init__(self, username, password):
-        super().__init__(username, password)
+        super().__init__(username, password, 'student')
         self.rating_score = 0
         self.comp_count = 0
         self.curr_rank = 0

@@ -9,10 +9,12 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
+    user_type = db.Column(db.String(120), nullable=False)
     
-    def __init__(self, username, password):
+    def __init__(self, username, password, user_type):
         self.username = username
         self.set_password(password)
+        self.user_type = user_type
 
     def get_json(self):
         return{

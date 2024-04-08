@@ -114,7 +114,7 @@ h1 {
                         <p style="margin: 2vw;">{{competition.name}}</p>
                     </div>
                     <div style="width: 10%; text-align: right; margin: 2vw;">
-                        <a style="color: black;" href="{{url_for('index_views.competition_details', name=competition.name)}}">Details</a>
+                        <a style="color: black;" href="{{url_for('comp_views.competition_details_by_name', name=competition.name)}}">Details</a>
                     </div>
                 </li>
             {% endfor %}

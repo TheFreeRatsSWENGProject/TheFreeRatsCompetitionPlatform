@@ -23,10 +23,6 @@ def setup_flask_login(app):
     def load_student(id):
         return Student.query.get(id)
 
-    @login_manager.user_loader
-    def load_moderator(id):
-        return Moderator.query.get(id)
-    
     return login_manager
 
 def setup_jwt(app):
