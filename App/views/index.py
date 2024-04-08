@@ -1,14 +1,16 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify
+from flask_jwt_extended import jwt_required, current_user as jwt_current_user
+from flask_login import login_required, login_user, current_user, logout_user
 from App.models import db
 from App.controllers import *
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
-@index_views.route('/', methods=['GET'])
-def index_page():
-    return render_template('index.html', students=get_all_students())#, competitions=get_all_competitions(), moderators=get_all_moderators())
+@index_views.route('/leaderboard', methods=['GET'])
+def leaderboard_page():
+    return render_template('leaderboard.html', students=get_all_students(), user=current_user)#, competitions=get_all_competitions(), moderators=get_all_moderators())
 
-@index_views.route('/init', methods=['GET'])
+@index_views.route('/', methods=['GET'])
 def init():
     """
     db.drop_all()
@@ -89,8 +91,8 @@ def init():
     update_ratings('mod2', 'comp2')
     update_rankings()
 
-    return jsonify(message='The Database has been successfully initialized!')
-
+    return render_template('leaderboard.html', students=get_all_students(), user=current_user)
+    """
 @index_views.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status':'healthy'})
@@ -102,7 +104,7 @@ def health():
 #@index_views.route('/Student_Profile/<int:user_id>')
 #def Student_Profile(user_id):
  #   return render_template('Student_Profile.html', user_id=user_id)
-
+"""
 @index_views.route('/student_profile/<int:id>')
 def student_profile(id):
     student = get_student(id)
@@ -118,7 +120,7 @@ def student_profile(id):
     notifications= get_notifications(user.username)
     """
 
-    return render_template('student_profile.html', student=student, competitions=competitions)
+    return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
 
 @index_views.route('/moderator_profile/<int:id>')
 def moderator_profile(id):
@@ -135,17 +137,9 @@ def moderator_profile(id):
     notifications= get_notifications(user.username)
     """
 
-    return render_template('moderator_profile.html', moderator=moderator)
+    return render_template('moderator_profile.html', moderator=moderator, user=current_user)
 
-@index_views.route('/competition/<string:name>', methods=['GET'])
-def competition_details(name):
-    competition = get_competition_by_name(name)
-    if not competition:
-        return render_template('404.html')
-
-    #teams = get_participants(competition_name)
-    return render_template('competition_details.html', competition=competition)
-"""
+    """
 @index_views.route('/register_competition', methods=['POST'])
 def Register_Competition():
     username = request.form.get('username')
@@ -156,19 +150,19 @@ def Register_Competition():
         return f'Successfully registered {username} for {competition_name}'
     else:
         return 'Registration failed'
-"""
+
 @index_views.route('/student_ranking/<int:id>')
 def student_rank(id):
     student =get_student(id)
 
     if not student:
         return render_template('404.html')
-    """
+    
     competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
     ranking = Ranking.query.filter_by(student_id=user_id).first()
 
     ranking= ranking.curr_ranking
-    """
+    
     return jsonify(student.curr_rank) 
 
 @index_views.route('/api/moderator', methods=['POST'])
@@ -179,8 +173,8 @@ def create_moderator():
         return jsonify({'message': f"Moderator: {mod.username} created!"})
     else:
         return jsonify({'message': "Failed to create moderator!"})
-        
-        """
+"""       
+"""
 @index_views.route('/login')
 def login():
     return render_template('login.html')

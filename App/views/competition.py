@@ -13,7 +13,7 @@ comp_views = Blueprint('comp_views', __name__, template_folder='../templates')
 @comp_views.route('/competitions', methods=['GET'])
 def get_competitions():
     competitions = get_all_competitions_json()
-    return render_template('competitions.html', competitions=get_all_competitions())
+    return render_template('competitions.html', competitions=get_all_competitions(), user=current_user)
     #return (jsonify(competitions),200) 
 
 ##add new competition to the db
@@ -27,13 +27,14 @@ def add_new_comp():
 
 #create new comp
 @comp_views.route('/createcompetition', methods=['POST'])
+@login_required
 def create_comp():
     data = request.form
     date = data['date']
     date = date[8] + date[9] + '-' + date[5] + date[6] + '-' + date[0] + date[1] + date[2] + date[3]
     response = create_competition('mod1', data['name'], date, data['location'], data['level'], data['max_score'])
     if response:
-        return render_template('competitions.html', competitions=get_all_competitions())
+        return render_template('competitions.html', competitions=get_all_competitions(), user=current_user)
         #return (jsonify({'message': "Competition created!"}), 201)
     return (jsonify({'error': "Error creating competition"}),500)
     #return render_template('competitions.html', competitions=get_all_competitions())
@@ -41,7 +42,7 @@ def create_comp():
 #page to create new comp
 @comp_views.route('/createcompetition', methods=['GET'])
 def create_comp_page():
-    return render_template('competition_creation.html')
+    return render_template('competition_creation.html', user=current_user)
 
 """
 @comp_views.route('/competitions/moderator', methods=['POST'])
@@ -61,20 +62,30 @@ def competition_details(id):
     #team = get_all_teams()
 
     #teams = get_participants(competition_name)
-    return render_template('competition_details.html', competition=competition)#, team=team)
+    return render_template('competition_details.html', competition=competition, user=current_user)#, team=team)
 
     #teams = get_participants(competition_name)
     #return render_template('Competition_Details.html', competition=competition)
-
-""" @index_views.route('/competition/<string:name>', methods=['GET'])
+    """
+@index_views.route('/competition/<string:name>', methods=['GET'])
 def competition_details(name):
     competition = get_competition_by_name(name)
     if not competition:
         return render_template('404.html')
 
     #teams = get_participants(competition_name)
-    return render_template('Competition_Details.html', competition=competition) """
+    return render_template('competition_details.html', competition=competition)
+"""
+@comp_views.route('/competition/<string:name>', methods=['GET'])
+def competition_details_name(name):
+    competition = get_competition_by_name(name)
+    if not competition:
+        return render_template('404.html')
 
+    #teams = get_participants(competition_name)
+    return render_template('competition_details.html', competition=competition, user=current_user)
+    
+    """
 @comp_views.route('/competitions/results', methods=['POST'])
 def add_comp_results():
     data = request.json
@@ -90,11 +101,11 @@ def get_results(id):
     if not leaderboard:
         return jsonify({'error': 'Leaderboard not found!'}), 404 
     return (jsonify(leaderboard),200)
-
+"""
 #page to comp upload comp results
 @comp_views.route('/compresults', methods=['GET'])
 def comp_results_page():
-    return render_template('competition_results.html', students=get_all_students(), competitions=get_all_competitions())
+    return render_template('competition_results.html', students=get_all_students(), competitions=get_all_competitions(), user=current_user)
 
 @comp_views.route('/compresults', methods=['POST'])
 def add_competition_results():

@@ -237,10 +237,11 @@ h1 {
             </ul>
         </div>
     </div>
-
+    {% if user.is_authenticated and user.id==student.id %}
     <div class="openbutton">
         <img class="mail-icon" src="{{url_for('static', filename='mailIcon.jpg')}}" alt="Notifications" onclick="openNav()">
     </div>
+    {% endif %}
 </div>
 <div class="profile-info">
     <div class="student-info">
@@ -272,7 +273,7 @@ h1 {
                             <p style="margin: 2vw;">{{competition}}</p>
                         </div>
                         <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: black;" href="{{url_for('index_views.competition_details', name=competition)}}">Details</a>
+                            <a style="color: black;" href="{{url_for('comp_views.competition_details_name', name=competition)}}">Details</a>
                         </div>
                     </li>
                 {% endfor %}
