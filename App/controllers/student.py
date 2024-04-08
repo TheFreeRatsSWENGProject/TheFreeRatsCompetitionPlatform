@@ -83,11 +83,12 @@ def display_notifications(username):
 
 def update_rankings():
     students = get_all_students()
-
+    
     students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
 
     leaderboard = []
     count = 1
+    
     curr_high = students[0].rating_score
     curr_rank = 1
         
@@ -144,3 +145,5 @@ def display_rankings():
 
     for position in leaderboard:
         print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')
+    
+    return leaderboard

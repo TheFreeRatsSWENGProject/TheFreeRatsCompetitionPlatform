@@ -166,6 +166,14 @@ def update_rankings_command(mod_name, comp_name):
 def display_rankings_command():
     display_rankings()
 
+@mod_cli.command("list", help="Lists moderators in the database")
+@click.argument("format", default="string")
+def list_moderators_command(format):
+    if format == 'string':
+        print(get_all_moderators())
+    else:
+        print(get_all_moderators_json())
+
 app.cli.add_command(mod_cli)
 
 

@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Signup Page{% endblock %}
-{% block page %}{% endblock %}
-<!---{% block page %}Code Comp{% endblock %}--->
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
@@ -131,7 +130,7 @@
 
 <div class="center">
     <h2>Sign Up</h2>
-
+    
     <form action="{{ url_for('auth_views.signup') }}" method="post">
         
         <div class="txt_field">
@@ -144,24 +143,6 @@
             <label for="password">Password:</label>
         </div>
 
-<!---
-</style>
-
-<center>    <h2>UWI Competitions Platform</h2> </center>
-
-    <form action="{{ url_for('auth_views.signup') }}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
---->
-        <!-- <input type="radio" id="student" name="user_type" value="student" required>
-        <label for="student">Student</label><br>
-
-        <input type="radio" id="staff" name="user_type" value="admin" required>
-        <label for="admin">Admin</label><br> -->
-
         <input type="submit" value="Sign Up">
     </form>
     
@@ -171,10 +152,3 @@
 </div>
 
 {% endblock %}
-
-<!---        <button type="submit">Signup</button>
-    </form>
-    
-    <a href="{{ url_for('auth_views.login') }}" class="login-link">Log In</a>
- 
-{% endblock %}--->

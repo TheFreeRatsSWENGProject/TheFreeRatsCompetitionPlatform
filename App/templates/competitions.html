@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Competitions{% endblock %}
-{% block page %}Competitions{% endblock %}
-
+{% block page %}UWI Competitions Platform{% endblock %}
 
 {{ super() }}
 
@@ -55,8 +54,15 @@
     } */
 
 </style>
+<div>
+    <center> <h2>Competitions</h2> </center>
+    {% if session['user_type'] == 'moderator' %}
+    <div>
+        <a href="{{url_for('comp_views.create_comp_page')}}">Create Competition</a>
+    </div>
+    {% endif %}
+</div>
 
-<center>    <h2>UWI Competitions Platform</h2> </center>
 
 <div class="competitions-card">
 

@@ -49,31 +49,26 @@
         text-decoration: underline;
     }
 </style>
-
-<center>
-    <h2>The Facilitators Competition Platform</h2>
-</center>
-
 <div class="container">
     <div class="tables-container">
         <div class="leaderboard-table">
             <center>
-                <h4>Leaderboard</h4>
+                <h2>Leaderboard</h2>
             </center>
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Overall Rank</th>
                         <th>Username</th>
                         <th>Rating Score</th>
-                        <th>Overall Rank</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for student in students %}
+                    {% for student in leaderboard %}
                     <tr>
-                        <td><a href="{{url_for('index_views.student_profile', id=student.id)}}">{{ student.username}}</a></td>
-                        <td>{{student.rating_score}}</td>
-                        <td>{{student.curr_rank}}</td>
+                        <td>{{student['placement']}}</td>
+                        <td><a href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
+                        <td>{{student['rating score']}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -82,6 +77,4 @@
     </div>
 </div>
 
-<a href="{{ url_for('auth_views.login') }}" class="login-link">Log Out</a>
- 
 {% endblock %}

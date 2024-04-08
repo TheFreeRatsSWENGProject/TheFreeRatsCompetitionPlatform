@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
+from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for, session
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
 from App.models import db
@@ -15,9 +15,7 @@ auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 Page/Action Routes
 '''
 
-
-
-
+"""
 @auth_views.route('/users', methods=['GET'])
 def get_user_page():
     users = get_all_users()
@@ -30,7 +28,7 @@ def identify_page():
     return jsonify({'message': f"username: {current_user.username}, id : {current_user.id}"})
 
 
-""" @auth_views.route('/login', methods=['POST'])
+@auth_views.route('/login', methods=['POST'])
 def login_action():
     data = request.form
     user = login(data['username'], data['password'])
@@ -38,17 +36,19 @@ def login_action():
         login_user(user)
         return 'user logged in!'
     return 'bad username or password given', 401 """
-
+"""
 @auth_views.route('/logout', methods=['GET'])
+@login_required
 def logout_action():
     data = request.form
     user = login(data['username'], data['password'])
+    logout_user()
     return 'logged out!'
-
+"""
 '''
 API Routes
 '''
-
+"""
 @auth_views.route('/api/users', methods=['GET'])
 def get_users_action():
     users = get_all_users_json()
@@ -74,25 +74,55 @@ def user_login_api():
 @jwt_required()
 def identify_user_action():
     return jsonify({'message': f"username: {jwt_current_user.username}, id : {jwt_current_user.id}"})
-
+"""
 
 @auth_views.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         student = get_student_by_username(request.form['username'])
-        if request.form['username'] == student.username and student.check_password(request.form['password']):
-            return render_template('index.html', students=get_all_students(), competitions=get_all_competitions())
-        #if get_student_by_username(request.form['username'])!= "":
-        #    return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
-    return render_template('login.html')
+        moderator = get_moderator_by_username(request.form['username'])
+        if student:
+            if request.form['username'] == student.username and student.check_password(request.form['password']):
+                login_user(student)
+                session['user_type'] = 'student'
+                flash("Login successful!", category='success')
+                return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)
+            else:
+                flash("Invalid Credentials!", category='error')
+                return jsonify({'message': 'Invalid Credentials!'})
+        
+        if moderator:
+            if request.form['username'] == moderator.username and moderator.check_password(request.form['password']):
+                login_user(moderator)
+                session['user_type'] = 'moderator'
+                flash("Login successful!", category='success')
+                return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)
+            else:
+                flash("Invalid Credentials!", category='error')
+                return jsonify({'message': 'Invalid Credentials!'})
+    
+        if not student and not moderator:
+            flash("Username not found!", category='error')
+            return jsonify({'message': 'Username not found!'})
+    return render_template('login.html', user=current_user)
+
+@auth_views.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    session['user_type'] = None
+    return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)
 
 @auth_views.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        create_student(request.form['username'], request.form['password'])
-        student = get_student_by_username(request.form['username'])
+        student = create_student(request.form['username'], request.form['password'])
+        
+        if not student:
+            return jsonify({'message': 'Username not available!'})
+        
         if request.form['username'] == student.username:
-            return render_template('index.html', students=get_all_students(), competitions=get_all_competitions())
-    return render_template('signup.html')
-    #    return render_template('index.html', users=get_all_students(), get_ranking=get_ranking, display_rankings=display_rankings, competitions=get_all_competitions())
-    #return render_template('signup.html')
+            login_user(student)
+            session['user_type'] = 'student'
+            return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)#, competitions=get_all_competitions())
+    return render_template('signup.html', user=current_user)
