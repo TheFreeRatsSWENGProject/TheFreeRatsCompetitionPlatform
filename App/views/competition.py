@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import current_user, login_required
+#from datetime import datetime
 
 from.index import index_views
 
@@ -10,7 +11,7 @@ comp_views = Blueprint('comp_views', __name__, template_folder='../templates')
 
 ##return the json list of competitions fetched from the db
 @comp_views.route('/competitions', methods=['GET'])
-def get_competitons():
+def get_competitions():
     competitions = get_all_competitions_json()
     return render_template('competitions.html', competitions=get_all_competitions())
     #return (jsonify(competitions),200) 
@@ -28,7 +29,9 @@ def add_new_comp():
 @comp_views.route('/createcompetition', methods=['POST'])
 def create_comp():
     data = request.form
-    response = create_competition('mod1', data['name'], data['date'], data['location'], data['level'], data['max score'])
+    date = data['date']
+    date = date[8] + date[9] + '-' + date[5] + date[6] + '-' + date[0] + date[1] + date[2] + date[3]
+    response = create_competition('mod1', data['name'], date, data['location'], data['level'], data['max_score'])
     if response:
         return (jsonify({'message': "Competition created!"}), 201)
     return (jsonify({'error': "Error creating competition"}),500)
@@ -36,7 +39,7 @@ def create_comp():
 #page to create new comp
 @comp_views.route('/createcompetition', methods=['GET'])
 def create_comp_page():
-    return render_template('competition_creation.html', students=get_all_students(), competitions=get_all_competitions())
+    return render_template('competition_creation.html')
 
 """
 @comp_views.route('/competitions/moderator', methods=['POST'])
