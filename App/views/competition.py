@@ -33,8 +33,10 @@ def create_comp():
     date = date[8] + date[9] + '-' + date[5] + date[6] + '-' + date[0] + date[1] + date[2] + date[3]
     response = create_competition('mod1', data['name'], date, data['location'], data['level'], data['max_score'])
     if response:
-        return (jsonify({'message': "Competition created!"}), 201)
+        return render_template('competitions.html', competitions=get_all_competitions())
+        #return (jsonify({'message': "Competition created!"}), 201)
     return (jsonify({'error': "Error creating competition"}),500)
+    #return render_template('competitions.html', competitions=get_all_competitions())
 
 #page to create new comp
 @comp_views.route('/createcompetition', methods=['GET'])
@@ -88,3 +90,21 @@ def get_results(id):
     if not leaderboard:
         return jsonify({'error': 'Leaderboard not found!'}), 404 
     return (jsonify(leaderboard),200)
+
+#page to comp upload comp results
+@comp_views.route('/compresults', methods=['GET'])
+def comp_results_page():
+    return render_template('competition_results.html', students=get_all_students(), competitions=get_all_competitions())
+
+@comp_views.route('/compresults', methods=['POST'])
+def add_competition_results():
+    data = request.form
+    students = [data['student1'], data['student2'], data['student3']]
+    response = add_team(data['mod_name'], data['comp_name'], data['team_name'], students)
+
+    if response:
+        response = add_results(data['mod_name'], data['comp_name'], data['team_name'], int(data['score']))
+    #response = add_results(data['mod_name'], data['comp_name'], data['team_name'], int(data['score']))
+    if response:
+        return (jsonify({'message': "Results added successfully!"}),201)
+    return (jsonify({'error': "Error adding results!"}),500)

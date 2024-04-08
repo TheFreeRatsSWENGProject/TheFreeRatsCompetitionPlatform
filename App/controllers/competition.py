@@ -5,7 +5,7 @@ from datetime import datetime
 def create_competition(mod_name, comp_name, date, location, level, max_score):
     comp = get_competition_by_name(comp_name)
     if comp:
-        print(f'{name} already exists!')
+        print(f'{comp_name} already exists!')
         return None
     
     mod = Moderator.query.filter_by(username=mod_name).first()
