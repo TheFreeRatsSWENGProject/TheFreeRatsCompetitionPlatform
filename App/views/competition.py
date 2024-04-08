@@ -116,6 +116,9 @@ def add_competition_results():
     if response:
         response = add_results(data['mod_name'], data['comp_name'], data['team_name'], int(data['score']))
     #response = add_results(data['mod_name'], data['comp_name'], data['team_name'], int(data['score']))
-    if response:
-        return (jsonify({'message': "Results added successfully!"}),201)
-    return (jsonify({'error': "Error adding results!"}),500)
+    #if response:
+    #    return (jsonify({'message': "Results added successfully!"}),201)
+    #return (jsonify({'error': "Error adding results!"}),500)
+
+    competition = get_competition_by_name(data['comp_name'])
+    return render_template('competition_details.html', competition=competition, user=current_user)

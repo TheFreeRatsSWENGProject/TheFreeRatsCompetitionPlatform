@@ -237,7 +237,7 @@ h1 {
             </ul>
         </div>
     </div>
-    {% if user.is_authenticated and user.id==student.id %}
+    {% if user.is_authenticated and user.id==student.id and session['user_type'] == 'student' %}
     <div class="openbutton">
         <img class="mail-icon" src="{{url_for('static', filename='mailIcon.jpg')}}" alt="Notifications" onclick="openNav()">
     </div>
