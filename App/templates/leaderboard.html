@@ -26,17 +26,17 @@
         border-bottom: 1px solid #ddd;
     }
 
-    .leaderboard-table th {
+    /*.leaderboard-table th {
         background-color: #f2f2f2;
         font-weight: bold;
     }
 
     .leaderboard-table tbody tr:nth-child(even) {
         background-color: #f2f2f2;
-    }
+    }*/
 
     .leaderboard-table tbody tr:hover {
-        background-color: #ddd;
+        background-color: black;
     }
 
     .leaderboard-table tbody tr td a {
@@ -53,11 +53,11 @@
     <div class="tables-container">
         <div class="leaderboard-table">
             <center>
-                <h2>Leaderboard</h2>
+                <h2 style="color: white;">Leaderboard</h2>
             </center>
             <table class="table">
                 <thead>
-                    <tr>
+                    <tr style="color: white;">
                         <th>Overall Rank</th>
                         <th>Username</th>
                         <th>Rating Score</th>
@@ -65,9 +65,9 @@
                 </thead>
                 <tbody>
                     {% for student in leaderboard %}
-                    <tr>
+                    <tr style="color: white;">
                         <td>{{student['placement']}}</td>
-                        <td><a style= "color: black;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
+                        <td><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
                         <td>{{student['rating score']}}</td>
                     </tr>
                     {% endfor %}

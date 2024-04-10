@@ -6,19 +6,19 @@
 
 {% block content %}
 <center>
-  <h2>Competition Registration</h2>
+  <h2 style="color: white;">Competition Registration</h2>
 </center>
 
-<main class="container" style="padding-top: 75px">
-  <form name="addForm" class="card" method="POST" action="/createcompetition">
+<main class="container" style="padding: 15px; background-color: black;">
+  <form name="addForm" class="card" method="POST" action="/createcompetition" style="background-color: black; color: white;">
     <div class="card-content">
-      <span class="card-title">Create Competitoin</span>
+      <span class="card-title">Create Competition</span>
         <div class="input-field">
           <input type="text" name="name" placeholder="Enter Comp Name" class="materialize-textarea" required>
           <label for="name">Competition Name</label>
         </div>
         <div class="input-field">
-          <input type="date" name="date" required>
+          <input type="date" name="date" style="color: white;" required>
           <label for="date">Competition Date</label>
         </div>
         <div class="input-field">
@@ -38,7 +38,7 @@
     <div class="card-actions">
         <div class="row">
           <div class="col sm12 m4 offset-m8">
-            <input class="btn blue right" type="submit" value="CREATE" />
+            <input type="submit" class="btn black right" value="CREATE" />
           </div>
         </div>
     </div>

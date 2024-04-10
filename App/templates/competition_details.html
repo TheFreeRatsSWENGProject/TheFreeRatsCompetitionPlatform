@@ -32,29 +32,29 @@
 </style>
 <div style="display: flex;">
     <div>
-        <center><h2 style="margin-left: 50px;">Competition Details</h2></center>
+        <center><h2 style="margin-left: 50px; color: white;">Competition Details</h2></center>
     </div>
     <div>
         {% if session['user_type'] == 'moderator' and moderator in competition.moderators %}
-        <button type="button" style="background-color: white; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px;">
-            <a style="color: black" href="{{ url_for('comp_views.add_competition_results') }}">Add Results</a>
+        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px;">
+            <a style="color: white" href="{{ url_for('comp_views.add_competition_results') }}">Add Results</a>
         </button>
-        <button type="button" style="background-color: white; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px;">
-            <a style="color: black" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
+        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px;">
+            <a style="color: white" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
         </button>
         {% endif %}
     </div>
 </div>
 <div class="container">
-    <center> <h1>{{ competition.name }}</h1> </center>
+    <center> <h1 style="color: white;">{{ competition.name }}</h1> </center>
     
     <div class="competition-details">
         
-        <h3>Teams</h3>
+        <h3 style="color: white;">Teams</h3>
         
         {% for team in competition.teams %}
             
-            <div class="card">
+            <div class="card" style="background-color: black;">
                 <p><strong>Team ID: </strong> {{team.id}}</p>
                 <p><strong>Team Name: </strong> {{team.name}}</p>
                 <p><strong>Students: </strong></p>
