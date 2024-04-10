@@ -67,7 +67,7 @@
                     {% for student in leaderboard %}
                     <tr>
                         <td>{{student['placement']}}</td>
-                        <td><a href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
+                        <td><a style= "color: black;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
                         <td>{{student['rating score']}}</td>
                     </tr>
                     {% endfor %}

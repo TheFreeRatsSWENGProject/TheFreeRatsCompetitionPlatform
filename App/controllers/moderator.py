@@ -116,7 +116,7 @@ def update_ratings(mod_name, comp_name):
         print(f'{comp_name} was not found!')
         return None
     elif comp.confirm:
-        print(f'Results for {comp_name} has already been included!')
+        print(f'Results for {comp_name} has already been finalized!')
         return None
     elif mod not in comp.moderators:
         print(f'{mod_name} is not authorized to add results for {comp_name}!')

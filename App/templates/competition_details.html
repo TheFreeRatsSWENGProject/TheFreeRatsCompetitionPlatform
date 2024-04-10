@@ -30,14 +30,24 @@
         list-style-type: none;
     }
 </style>
-<center><h2>Competition Details</h2></center>
+<div style="display: flex;">
+    <div>
+        <center><h2 style="margin-left: 50px;">Competition Details</h2></center>
+    </div>
+    <div>
+        {% if session['user_type'] == 'moderator' and moderator in competition.moderators %}
+        <button type="button" style="background-color: white; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px;">
+            <a style="color: black" href="{{ url_for('comp_views.add_competition_results') }}">Add Results</a>
+        </button>
+        <button type="button" style="background-color: white; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px;">
+            <a style="color: black" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
+        </button>
+        {% endif %}
+    </div>
+</div>
 <div class="container">
     <center> <h1>{{ competition.name }}</h1> </center>
-    {% if session['user_type'] == 'moderator' %}<!--and competition.name in moderator.competitions-->
-    <div>
-        <a href="{{ url_for('comp_views.add_competition_results') }}">Add Results</a>
-    </div>
-    {% endif %}
+    
     <div class="competition-details">
         
         <h3>Teams</h3>

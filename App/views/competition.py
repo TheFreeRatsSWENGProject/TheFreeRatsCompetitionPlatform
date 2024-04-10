@@ -62,7 +62,11 @@ def competition_details(id):
     #team = get_all_teams()
 
     #teams = get_participants(competition_name)
-    return render_template('competition_details.html', competition=competition, user=current_user)#, team=team)
+    if session['user_type'] == 'moderator':
+        moderator = Moderator.query.filter_by(id=current_user.id).first()
+    else:
+        moderator = None
+    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)#, team=team)
 
     #teams = get_participants(competition_name)
     #return render_template('Competition_Details.html', competition=competition)
@@ -83,7 +87,11 @@ def competition_details_by_name(name):
         return render_template('404.html')
 
     #teams = get_participants(competition_name)
-    return render_template('competition_details.html', competition=competition, user=current_user)
+    if session['user_type'] == 'moderator':
+        moderator = Moderator.query.filter_by(id=current_user.id).first()
+    else:
+        moderator = None
+    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)
     
     """
 @comp_views.route('/competitions/results', methods=['POST'])
@@ -103,11 +111,11 @@ def get_results(id):
     return (jsonify(leaderboard),200)
 """
 #page to comp upload comp results
-@comp_views.route('/compresults', methods=['GET'])
+@comp_views.route('/add_results', methods=['GET'])
 def comp_results_page():
     return render_template('competition_results.html', students=get_all_students(), competitions=get_all_competitions(), user=current_user)
 
-@comp_views.route('/compresults', methods=['POST'])
+@comp_views.route('/add_results', methods=['POST'])
 def add_competition_results():
     data = request.form
     students = [data['student1'], data['student2'], data['student3']]
@@ -121,4 +129,27 @@ def add_competition_results():
     #return (jsonify({'error': "Error adding results!"}),500)
 
     competition = get_competition_by_name(data['comp_name'])
-    return render_template('competition_details.html', competition=competition, user=current_user)
+    if session['user_type'] == 'moderator':
+        moderator = Moderator.query.filter_by(id=current_user.id).first()
+    else:
+        moderator = None
+    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)
+    
+@comp_views.route('/confirm_results/<string:comp_name>', methods=['POST'])
+def confirm_results(comp_name):
+    if session['user_type'] == 'moderator':
+        moderator = Moderator.query.filter_by(id=current_user.id).first()
+    else:
+        moderator = None
+    
+    competition = get_competition_by_name(comp_name)
+
+    update_ratings(moderator.username, competition.name)
+    update_rankings()
+
+    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)
+"""
+@comp_views.route('/confirm_results/<string:comp_name>', methods=['POST'])
+def confirm_results(comp_name):
+    pass
+"""
