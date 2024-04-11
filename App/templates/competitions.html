@@ -74,22 +74,24 @@
     {% for competition in competitions %}
         
         <div class="card" style="background-color: black; color: white;">
-
-            <a href="{{url_for('comp_views.competition_details', id=competition.id)}}">
-                <h3 style="color: white;">{{competition.name}}</h3>
-            </a>
-            <p><strong>Date: </strong>{{competition.date}}</p>
-            <p><strong>Location: </strong>{{competition.location}}</p>
-            <p><strong>Level: </strong>{{competition.level}}</p>
-            <p><strong>Max Score: </strong>{{competition.max_score}}</p>
-            <p><strong>Moderators: </strong>
+            <center>
+                <a style="padding-bottom: 15px; padding-top: 10px; outline: solid white; background-color: #001D3D;" href="{{url_for('comp_views.competition_details', id=competition.id)}}">
+                    <h3 style="color: white;">{{competition.name}}</h3>
+                </a>
+            </center>
+            <div>
+                <p><strong>Date: </strong>{{competition.date}}</p>
+                <p><strong>Location: </strong>{{competition.location}}</p>
+                <p><strong>Level: </strong>{{competition.level}}</p>
+                <p><strong>Max Score: </strong>{{competition.max_score}}</p>
+                <p><strong>Moderators: </strong>
                 {% for moderator in competition.moderators %}
                     <a style="color: white" href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
                         <p>{{moderator.username}}</p>
                     </a>
                 {% endfor %}
-            </p> 
-        
+                </p> 
+            </div>
     </div>
 
     {% endfor %}

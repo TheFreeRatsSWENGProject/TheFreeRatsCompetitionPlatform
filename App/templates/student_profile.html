@@ -39,17 +39,21 @@ h1 {
 }
 
 .student-info {
+    border-radius: 25px;
     width: 30%;
     outline-style: solid;
+    background-color: black;
     /*background-image: linear-gradient(#61677A, #000000);
     color: white;*/
 }
 
 .student-image {
+    background-color: #001D3D;
     padding: 2vw;
 }
 
 .student-username {
+    color: white;
     text-align: center;
     padding: 0vw;
     font-size: 3vw;
@@ -66,23 +70,27 @@ h1 {
 }
 
 .rank {
+    border-radius: 25px;
     width: 25%;
     outline-style: solid;
     margin: auto;
     text-align: center;
     font-size: 2vw;
-    /*color: white;
-    background-image: linear-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: black;
+    /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .rating-score {
+    border-radius: 25px;
     width: 25%;
     outline-style: solid;
     margin: auto;
     text-align: center;
     font-size: 2vw;
-    /*color: white;
-    background-image: linear-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: black;
+    /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .competition-list {
@@ -93,8 +101,9 @@ h1 {
     font-size: 2vw;
     overflow-y: scroll;
     height: 20vw;
-    /*color: white;
-    background-image: radial-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: black;
+    /*background-image: radial-gradient(#61677A, #000000);*/
 }
 
 .competition-list li {
@@ -103,8 +112,9 @@ h1 {
     margin: 2vw;
     font-size: 1.5vw;
     outline-style: solid;
-    /*color: white;
-    background-image: linear-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: #001D3D;;
+    /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .sidepanel {
@@ -217,7 +227,7 @@ h1 {
     
 <div class="headers">
     <div>
-        <center><h2>Profile</h2></center>
+        <h2 style="color: white; padding-left: 50px;">Profile</h2>
     </div>
 
     <div id="sidepanel" class="sidepanel">
@@ -231,7 +241,7 @@ h1 {
         </div>
         <div class="sidepanel-content">
             <ul>
-                {% for notification in student.notifications %}
+                {% for notification in student.notifications[::-1] %}
                     <li>{{ notification.message }}</li>
                 {% endfor %}
             </ul>
@@ -264,7 +274,7 @@ h1 {
                 <p>{{student.rating_score|default('N/A')}}</p>
             </div>
         </span>
-        <div class="competition-list">
+        <div style="color: white;" class="competition-list">
             <center><p>Participations</p></center>
             <ul>
                 {% for competition in competitions %}
@@ -273,7 +283,7 @@ h1 {
                             <p style="margin: 2vw;">{{competition}}</p>
                         </div>
                         <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: black;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
+                            <a style="color: white;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
                         </div>
                     </li>
                 {% endfor %}

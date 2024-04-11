@@ -58,17 +58,17 @@
             <table class="table">
                 <thead>
                     <tr style="color: white;">
-                        <th>Overall Rank</th>
-                        <th>Username</th>
-                        <th>Rating Score</th>
+                        <th><center>Overall Rank</center></th>
+                        <th><center>Username</center></th>
+                        <th><center>Rating Score</center></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for student in leaderboard %}
                     <tr style="color: white;">
-                        <td>{{student['placement']}}</td>
-                        <td><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
-                        <td>{{student['rating score']}}</td>
+                        <td><center>{{student['placement']}}</center></td>
+                        <td><center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></center></td>
+                        <td><center>{{student['rating score']}}</center></td>
                     </tr>
                     {% endfor %}
                 </tbody>

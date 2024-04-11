@@ -65,23 +65,23 @@
     <table class="table">
         <thead>
             <tr style="color: white;">
-                <th>Rank</th>
-                <th>Team</th>
-                <th>Members</th>
-                <th>Score</th>
+                <th><center>Rank</center></th>
+                <th><center>Team</center></th>
+                <th><center>Members</center></th>
+                <th><center>Score</center></th>
             </tr>
         </thead>
         <tbody>
             {% for row in leaderboard %}
             <tr style="color: white;">
-                <td>{{row['placement']}}</td>
-                <td>{{row['team']}}</td>
+                <td><center>{{row['placement']}}</center></td>
+                <td><center>{{row['team']}}</center></td>
                 <td>
                 {% for student in row['members'] %}
-                    <p>{{student}}</p>
+                    <p><center>{{student}}</center></p>
                 {% endfor %}
                 </td>
-                <td>{{row['score']}}</td>
+                <td><center>{{row['score']}}</center></td>
             </tr>
             {% endfor %}
         </tbody>
