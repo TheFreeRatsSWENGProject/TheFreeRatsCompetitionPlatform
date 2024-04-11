@@ -66,7 +66,9 @@ def competition_details(id):
         moderator = Moderator.query.filter_by(id=current_user.id).first()
     else:
         moderator = None
-    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)#, team=team)
+    
+    leaderboard = display_competition_results(competition.name)
+    return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)#, team=team)
 
     #teams = get_participants(competition_name)
     #return render_template('Competition_Details.html', competition=competition)
@@ -91,7 +93,10 @@ def competition_details_by_name(name):
         moderator = Moderator.query.filter_by(id=current_user.id).first()
     else:
         moderator = None
-    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)
+    
+    leaderboard = display_competition_results(name)
+
+    return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
     
     """
 @comp_views.route('/competitions/results', methods=['POST'])
@@ -133,9 +138,12 @@ def add_competition_results():
         moderator = Moderator.query.filter_by(id=current_user.id).first()
     else:
         moderator = None
-    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)
     
-@comp_views.route('/confirm_results/<string:comp_name>', methods=['POST'])
+    leaderboard = display_competition_results(competition.name)
+
+    return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
+    
+@comp_views.route('/confirm_results/<string:comp_name>', methods=['GET', 'POST'])
 def confirm_results(comp_name):
     if session['user_type'] == 'moderator':
         moderator = Moderator.query.filter_by(id=current_user.id).first()
@@ -144,10 +152,12 @@ def confirm_results(comp_name):
     
     competition = get_competition_by_name(comp_name)
 
-    update_ratings(moderator.username, competition.name)
-    update_rankings()
+    if update_ratings(moderator.username, competition.name):
+        update_rankings()
 
-    return render_template('competition_details.html', competition=competition, moderator=moderator, user=current_user)
+    leaderboard = display_competition_results(comp_name)
+
+    return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
 """
 @comp_views.route('/confirm_results/<string:comp_name>', methods=['POST'])
 def confirm_results(comp_name):

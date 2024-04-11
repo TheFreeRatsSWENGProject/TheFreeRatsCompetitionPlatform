@@ -121,6 +121,9 @@ def update_ratings(mod_name, comp_name):
     elif mod not in comp.moderators:
         print(f'{mod_name} is not authorized to add results for {comp_name}!')
         return None
+    elif len(comp.teams) == 0:
+        print(f'No teams found. Results can not be confirmed!')
+        return None
     else:
         comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
 
