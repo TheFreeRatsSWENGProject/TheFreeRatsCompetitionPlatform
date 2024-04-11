@@ -48,7 +48,8 @@ h1 {
 }
 
 .student-image {
-    background-color: #001D3D;
+    background-color: #343A40;
+    border-radius: 25px;
     padding: 2vw;
 }
 
@@ -112,8 +113,9 @@ h1 {
     margin: 2vw;
     font-size: 1.5vw;
     outline-style: solid;
+    border-radius: 25px;
     color: white;
-    background-color: #001D3D;;
+    background-color: #343A40;
     /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
@@ -162,7 +164,9 @@ h1 {
 }
 
 .sidepanel-content ul li{
-    color: #FFFFFF;
+    color: white;
+    background-color: #343A40;
+    border-radius: 25px;
     height: 5vw;
     margin: 2vw;
     padding: 1vw;
@@ -283,7 +287,7 @@ h1 {
                             <p style="margin: 2vw;">{{competition}}</p>
                         </div>
                         <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: white;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
+                            <a style="color: white; text-decoration: underline;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
                         </div>
                     </li>
                 {% endfor %}
