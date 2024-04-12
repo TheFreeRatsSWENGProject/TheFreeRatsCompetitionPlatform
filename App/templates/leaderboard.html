@@ -55,7 +55,7 @@
             <center>
                 <h2 style="color: white; background-color: black; border-radius: 15px;">Leaderboard</h2>
             </center>
-            <table class="table">
+            <table class="table" style="font-family: verdana;">
                 <thead>
                     <tr style="color: white;">
                         <th><center>Overall Rank</center></th>
@@ -68,7 +68,7 @@
                     <tr style="color: white;">
                         <td><center>{{student['placement']}}</center></td>
                         <td><center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></center></td>
-                        <td><center>{{student['rating score']}}</center></td>
+                        <td><center>{{'%0.2f' % student['rating score']|float}}</center></td>
                     </tr>
                     {% endfor %}
                 </tbody>

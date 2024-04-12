@@ -234,7 +234,7 @@ h1 {
         <h2 style="color: white; padding-left: 50px;">Profile</h2>
     </div>
 
-    <div id="sidepanel" class="sidepanel">
+    <div id="sidepanel" class="sidepanel" style="font-family: helvetica;">
         <div class="sidepanel-header">
             <div class="sidepanel-title">
                 <h4>Notifications</h4>
@@ -257,7 +257,7 @@ h1 {
     </div>
     {% endif %}
 </div>
-<div class="profile-info">
+<div class="profile-info" style="font-family: helvetica;">
     <div class="student-info">
         <div class="student-image">
             <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Student Photo" width="80%"></center>
@@ -271,17 +271,21 @@ h1 {
         <span class="ranking-info">
             <div class="rank">
                 <p>Rank</p>
-                <p>{{student.curr_rank|default('N/A')}}</p>
+                {% if student.curr_rank == 0 %}
+                <p>Unranked</p>
+                {% else %}
+                <p>{{student.curr_rank}}</p>
+                {% endif %}
             </div>
             <div class="rating-score">
                 <p>Rating Score</p>
-                <p>{{student.rating_score|default('N/A')}}</p>
+                <p>{{'%0.2f' % student.rating_score|float}}</p>
             </div>
         </span>
         <div style="color: white;" class="competition-list">
-            <center><p>Participations</p></center>
+            <center><p style="font-family: optima;">Participations</p></center>
             <ul>
-                {% for competition in competitions %}
+                {% for competition in competitions[::-1] %}
                     <li>
                         <div style="width: 90%; text-align: left;">
                             <p style="margin: 2vw;">{{competition}}</p>

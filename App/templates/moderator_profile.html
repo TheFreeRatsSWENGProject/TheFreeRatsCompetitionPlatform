@@ -101,7 +101,7 @@ h1 {
 <div>
     <center><h2 style="color: white;">Profile</h2></center>
 </div>
-<div class="profile-info">
+<div class="profile-info" style="font-family: helvetica;">
     <div class="moderator-info">
         <div class="moderator-image">
             <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Moderator Photo" width="80%"></center>
@@ -112,7 +112,7 @@ h1 {
     </div>
 
     <div class="competition-list">
-        <center><p>Competitions</p></center>
+        <center><p style="font-family: optima;">Competitions</p></center>
         <ul>
             {% for competition in moderator.competitions %}
                 <li>

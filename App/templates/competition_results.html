@@ -8,9 +8,9 @@
 <center><h2 style="color: white;">Competition Results</h2></center>
 
 <main class="container" style="padding: 15px; background-color: black;">
-    <form name="addForm" class="card" method="POST" action="{{ url_for('comp_views.add_competition_results', comp_name=competition.name) }}" style="background-color: black;">
+    <form name="addForm" class="card" method="POST" action="{{ url_for('comp_views.add_competition_results', comp_name=competition.name) }}" style="background-color: black; font-family: helvetica;">
         <div class="card-content">
-            <span style="color: white" class="card-title">Enter competition results</span>
+            <span style="color: white; font-family: optima;" class="card-title">Enter competition results</span>
             <div class="input-field">
                 <input style="color: white;" type="text" name="team_name" placeholder="Enter Team Name" class="validate" required>
                 <label for="team_name">Team Name</label>

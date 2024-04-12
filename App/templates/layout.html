@@ -14,13 +14,13 @@
     
     <nav class="black">
       <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
+        <a style="font-family: copperplate;" href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
+            <ul id="nav-mobile" class="left" style="font-family: lucida bright;">
                 <li><a href="/leaderboard">Leaderboard</a></li>
                 <li><a href="/competitions">Competitions</a></li>
             </ul>
-            <ul id="nav-mobile" class="right">
+            <ul id="nav-mobile" class="right" style="font-family: lucida bright;">
               {% if user.is_authenticated %}
                 <li><a href="/logout">Log Out</a></li>
                 <li><a href="/profile">Profile</a></li>
