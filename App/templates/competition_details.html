@@ -48,11 +48,11 @@
     <div>
         {% if session['user_type'] == 'moderator' and moderator in competition.moderators and not competition.confirm %}
         <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px;">
-            <a style="color: white" href="{{ url_for('comp_views.add_competition_results') }}">Add Results</a>
+            <a style="color: white" href="{{ url_for('comp_views.add_results_page', comp_id=competition.id) }}">Add Results</a>
         </button>
-            <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px;">
-                <a style="color: white" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
-            </button>
+        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px;">
+            <a style="color: white" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
+        </button>
         {% endif %}
     </div>
 </div>
