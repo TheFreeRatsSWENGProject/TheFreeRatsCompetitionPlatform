@@ -119,10 +119,12 @@ def signup():
         student = create_student(request.form['username'], request.form['password'])
         
         if not student:
-            return jsonify({'message': 'Username not available!'})
-        
-        if request.form['username'] == student.username:
+            #flash('Username not available!', category="error")
+            pass
+        elif request.form['username'] == student.username:
+            #flash('Account created successfully!', category="success")
             login_user(student)
             session['user_type'] = 'student'
             return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)#, competitions=get_all_competitions())
+    
     return render_template('signup.html', user=current_user)
