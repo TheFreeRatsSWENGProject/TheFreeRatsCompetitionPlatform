@@ -3,21 +3,27 @@ from App.models import Team, Competition, Student, Moderator
 
 def create_team(team_name, students):
     team = Team(name=team_name)
+    count = 0
     for s in students:
         stud = Student.query.filter_by(username=s).first()
         if stud:
             team.add_student(stud)
         else:
+            count += 1
             print(f'{s} was not found!')
-    try:
-        db.session.add(team)
-        db.session.commit()
-        print(f'New Team: {team_name} created!')
-        return team
-    except Exception as e:
-        db.session.rollback()
-        print("Something went wrong!")
+    
+    if count == 3:
         return None
+    else:
+        try:
+            db.session.add(team)
+            db.session.commit()
+            print(f'New Team: {team_name} created!')
+            return team
+        except Exception as e:
+            db.session.rollback()
+            print("Something went wrong!")
+            return None
 
 def get_team_by_name(name):
     return Team.query.filter_by(name=name).first()
@@ -84,7 +90,11 @@ def add_team(mod_name, comp_name, team_name, students):
                 return None
         
         team = create_team(team_name, students)
-        return comp.add_team(team)
+        
+        if team:
+            return comp.add_team(team)
+        else:
+            return None
 
 """
 def add_results(mod_name, comp_name, team_name, students, score):

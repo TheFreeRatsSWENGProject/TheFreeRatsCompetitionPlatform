@@ -96,10 +96,11 @@ def competition_details_by_name(name):
         return render_template('404.html')
 
     #teams = get_participants(competition_name)
-    if session['user_type'] == 'moderator':
-        moderator = Moderator.query.filter_by(id=current_user.id).first()
-    else:
-        moderator = None
+    if current_user:
+        if session['user_type'] == 'moderator':
+            moderator = Moderator.query.filter_by(id=current_user.id).first()
+        else:
+            moderator = None
     
     leaderboard = display_competition_results(name)
 
