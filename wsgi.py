@@ -1,3 +1,4 @@
+import csv
 import click, pytest, sys
 from flask import Flask
 from datetime import datetime, date
@@ -20,6 +21,60 @@ def initialize():
     db.drop_all()
     db.create_all()
 
+    #creates students
+    with open("students.csv") as student_file:
+        reader = csv.DictReader(student_file)
+
+        for student in reader:
+            stud = create_student(student['username'], student['password'])
+            #db.session.add(stud)
+        #db.session.commit()
+    
+    student_file.close()
+
+    #creates moderators
+    with open("moderators.csv") as moderator_file:
+        reader = csv.DictReader(moderator_file)
+
+        for moderator in reader:
+            mod = create_moderator(moderator['username'], moderator['password'])
+            #db.session.add(mod)
+        #db.session.commit()
+    
+    moderator_file.close()
+
+    #creates competitions
+    with open("competitions.csv") as competition_file:
+        reader = csv.DictReader(competition_file)
+
+        for competition in reader:
+            comp = create_competition(competition['mod_name'], competition['comp_name'], competition['date'], competition['location'], competition['level'], competition['max_score'])
+    
+    competition_file.close()
+    
+    with open("results.csv") as results_file:
+        reader = csv.DictReader(results_file)
+
+        for result in reader:
+            students = [result['student1'], result['student2'], result['student3']]
+            team = add_team(result['mod_name'], result['comp_name'], result['team_name'], students)
+            add_results(result['mod_name'], result['comp_name'], result['team_name'], int(result['score']))
+            #db.session.add(comp)
+        #db.session.commit()
+    
+    results_file.close()
+
+    with open("competitions.csv") as competitions_file:
+        reader = csv.DictReader(competitions_file)
+
+        for competition in reader:
+            update_ratings(competition['mod_name'], competition['comp_name'])
+            #db.session.add(comp)
+        #db.session.commit()
+    
+    competitions_file.close()
+
+    """
     stud1 = create_student('stud1', 'stud1pass')
     stud2 = create_student('stud2', 'stud2pass')
     stud3 = create_student('stud3', 'stud3pass')
@@ -66,7 +121,7 @@ def initialize():
     
     update_ratings('mod2', 'comp2')
     update_rankings()
-
+    """
     print('database intialized')
 
 '''

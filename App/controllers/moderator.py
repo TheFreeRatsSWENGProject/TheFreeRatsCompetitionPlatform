@@ -103,6 +103,7 @@ def add_results(mod_name, comp_name, team_name, score):
                         db.session.rollback()
                         print("Something went wrong!")
                         return None
+    return None
 
 
 def update_ratings(mod_name, comp_name):
@@ -116,10 +117,13 @@ def update_ratings(mod_name, comp_name):
         print(f'{comp_name} was not found!')
         return None
     elif comp.confirm:
-        print(f'Results for {comp_name} has already been included!')
+        print(f'Results for {comp_name} has already been finalized!')
         return None
     elif mod not in comp.moderators:
         print(f'{mod_name} is not authorized to add results for {comp_name}!')
+        return None
+    elif len(comp.teams) == 0:
+        print(f'No teams found. Results can not be confirmed!')
         return None
     else:
         comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()

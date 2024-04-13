@@ -1,5 +1,13 @@
+/* {
+    background-image: linear-gradient(#61677A, #000000);
+}*/
+
 body {
-    /* background-image: linear-gradient(#61677A, #000000); */
+    background-color: #343A40;/*background-image: linear-gradient(#61677A, #000000);*/
+}
+
+h2 {
+    font-family: serif;
 }
 
 h5 {

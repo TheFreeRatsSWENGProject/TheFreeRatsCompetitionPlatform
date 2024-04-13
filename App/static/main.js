@@ -27,4 +27,8 @@ function closeNav(){
     document.getElementById("sidepanel").style.width = "0";
 }
 
+/*function closeMessage(){
+    document.getElementById("error_message").style.display = "none";
+}*/
+
 main();

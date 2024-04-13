@@ -128,26 +128,26 @@
 
 </style>
 
-<div class="center">
-    <h2>Login</h2>
+<div style="background-color: black; border-radius: 25px;" class="center">
+    <h2 style="color: white;">Login</h2>
     
-    <form action="{{ url_for('auth_views.login') }}" method="post">
+    <form action="{{ url_for('auth_views.login') }}" method="post" style="font-family: helvetica;">
         
         <div class="txt_field">
-            <input type="text" id="username" name="username" required>
-            <label for="username">Username:</label>
+            <input style="color: white;" type="text"  id="username" name="username" required>
+            <label style="color: white;" for="username">Username:</label>
         </div>
 
         <div class="txt_field">
-            <input type="password" id="password" name="password" required>
-            <label for="password">Password:</label>
+            <input type="password" style="color: white;" id="password" name="password" required>
+            <label style="color: white;" for="password">Password:</label>
         </div>
 
-        <input type="submit" value="Login">
+        <input type="submit" class="btn black" value="Login">
     </form>
 
-    <div class="signup_link">
-        Not a user? <a href="{{ url_for('auth_views.signup') }}" class="signup-link">Sign Up</a>
+    <div style="color: white; margin: 25px;" class="signup_link">
+        Not a user? <a style="color: white; text-decoration: underline;" href="{{ url_for('auth_views.signup') }}" class="signup-link">Sign Up</a>
     </div>
 </div>
  

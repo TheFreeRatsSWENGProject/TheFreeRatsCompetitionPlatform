@@ -23,24 +23,24 @@
     .leaderboard-table td {
         padding: 12px 15px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid white;
     }
 
-    .leaderboard-table th {
+    /*.leaderboard-table th {
         background-color: #f2f2f2;
         font-weight: bold;
     }
 
     .leaderboard-table tbody tr:nth-child(even) {
         background-color: #f2f2f2;
-    }
+    }*/
 
     .leaderboard-table tbody tr:hover {
-        background-color: #ddd;
+        background-color: black;
     }
 
     .leaderboard-table tbody tr td a {
-        color: #337ab7;
+        color: black;
         text-decoration: none;
         font-weight: bold;
     }
@@ -53,22 +53,22 @@
     <div class="tables-container">
         <div class="leaderboard-table">
             <center>
-                <h2>Leaderboard</h2>
+                <h2 style="color: white; background-color: black; border-radius: 15px;">Leaderboard</h2>
             </center>
-            <table class="table">
+            <table class="table" style="font-family: verdana;">
                 <thead>
-                    <tr>
-                        <th>Overall Rank</th>
-                        <th>Username</th>
-                        <th>Rating Score</th>
+                    <tr style="color: white;">
+                        <th><center>Overall Rank</center></th>
+                        <th><center>Username</center></th>
+                        <th><center>Rating Score</center></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for student in leaderboard %}
-                    <tr>
-                        <td>{{student['placement']}}</td>
-                        <td><a href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></td>
-                        <td>{{student['rating score']}}</td>
+                    {% for student in leaderboard[:20] %}
+                    <tr style="color: white;">
+                        <td><center>{{student['placement']}}</center></td>
+                        <td><center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></center></td>
+                        <td><center>{{'%0.2f' % student['rating score']|float}}</center></td>
                     </tr>
                     {% endfor %}
                 </tbody>

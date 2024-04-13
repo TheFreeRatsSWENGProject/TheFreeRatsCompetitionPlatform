@@ -39,17 +39,22 @@ h1 {
 }
 
 .student-info {
+    border-radius: 25px;
     width: 30%;
     outline-style: solid;
+    background-color: black;
     /*background-image: linear-gradient(#61677A, #000000);
     color: white;*/
 }
 
 .student-image {
-    padding: 2vw;
+    background-color: #343A40;
+    border-radius: 25px;
+    padding: 0vw;
 }
 
 .student-username {
+    color: white;
     text-align: center;
     padding: 0vw;
     font-size: 3vw;
@@ -66,35 +71,40 @@ h1 {
 }
 
 .rank {
+    border-radius: 25px;
     width: 25%;
     outline-style: solid;
     margin: auto;
     text-align: center;
     font-size: 2vw;
-    /*color: white;
-    background-image: linear-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: black;
+    /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .rating-score {
+    border-radius: 25px;
     width: 25%;
     outline-style: solid;
     margin: auto;
     text-align: center;
     font-size: 2vw;
-    /*color: white;
-    background-image: linear-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: black;
+    /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .competition-list {
     width: 95%;
     margin: auto;
-    margin-top: 2vw;
+    margin-top: 1.5vw;
     outline-style: solid;
     font-size: 2vw;
     overflow-y: scroll;
     height: 20vw;
-    /*color: white;
-    background-image: radial-gradient(#61677A, #000000);*/
+    color: white;
+    background-color: black;
+    /*background-image: radial-gradient(#61677A, #000000);*/
 }
 
 .competition-list li {
@@ -103,8 +113,10 @@ h1 {
     margin: 2vw;
     font-size: 1.5vw;
     outline-style: solid;
-    /*color: white;
-    background-image: linear-gradient(#61677A, #000000);*/
+    border-radius: 25px;
+    color: white;
+    background-color: #343A40;
+    /*background-image: linear-gradient(#61677A, #000000);*/
 }
 
 .sidepanel {
@@ -152,7 +164,9 @@ h1 {
 }
 
 .sidepanel-content ul li{
-    color: #FFFFFF;
+    color: white;
+    background-color: #343A40;
+    border-radius: 25px;
     height: 5vw;
     margin: 2vw;
     padding: 1vw;
@@ -217,10 +231,10 @@ h1 {
     
 <div class="headers">
     <div>
-        <center><h2>Profile</h2></center>
+        <h2 style="color: white; padding-left: 50px;">Profile</h2>
     </div>
 
-    <div id="sidepanel" class="sidepanel">
+    <div id="sidepanel" class="sidepanel" style="font-family: helvetica;">
         <div class="sidepanel-header">
             <div class="sidepanel-title">
                 <h4>Notifications</h4>
@@ -231,7 +245,7 @@ h1 {
         </div>
         <div class="sidepanel-content">
             <ul>
-                {% for notification in student.notifications %}
+                {% for notification in student.notifications[::-1] %}
                     <li>{{ notification.message }}</li>
                 {% endfor %}
             </ul>
@@ -243,7 +257,7 @@ h1 {
     </div>
     {% endif %}
 </div>
-<div class="profile-info">
+<div class="profile-info" style="font-family: helvetica;">
     <div class="student-info">
         <div class="student-image">
             <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Student Photo" width="80%"></center>
@@ -257,23 +271,27 @@ h1 {
         <span class="ranking-info">
             <div class="rank">
                 <p>Rank</p>
-                <p>{{student.curr_rank|default('N/A')}}</p>
+                {% if student.curr_rank == 0 %}
+                <p>Unranked</p>
+                {% else %}
+                <p>{{student.curr_rank}}</p>
+                {% endif %}
             </div>
             <div class="rating-score">
                 <p>Rating Score</p>
-                <p>{{student.rating_score|default('N/A')}}</p>
+                <p>{{'%0.2f' % student.rating_score|float}}</p>
             </div>
         </span>
-        <div class="competition-list">
-            <center><p>Participations</p></center>
+        <div style="color: white;" class="competition-list">
+            <center><p style="font-family: optima;">Participations</p></center>
             <ul>
-                {% for competition in competitions %}
+                {% for competition in competitions[::-1] %}
                     <li>
                         <div style="width: 90%; text-align: left;">
                             <p style="margin: 2vw;">{{competition}}</p>
                         </div>
                         <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: black;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
+                            <a style="color: white; text-decoration: underline;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
                         </div>
                     </li>
                 {% endfor %}

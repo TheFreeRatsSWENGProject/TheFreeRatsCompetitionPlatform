@@ -14,13 +14,13 @@
     
     <nav class="black">
       <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
+        <a style="font-family: copperplate;" href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
+            <ul id="nav-mobile" class="left" style="font-family: lucida bright;">
                 <li><a href="/leaderboard">Leaderboard</a></li>
                 <li><a href="/competitions">Competitions</a></li>
             </ul>
-            <ul id="nav-mobile" class="right">
+            <ul id="nav-mobile" class="right" style="font-family: lucida bright;">
               {% if user.is_authenticated %}
                 <li><a href="/logout">Log Out</a></li>
                 <li><a href="/profile">Profile</a></li>
@@ -32,21 +32,21 @@
         </div>
       </div>
     </nav>
-
-    {% with meassgaes = get_flashed_messages(with_categories=true) %}
+    <!--
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
         {% if category == 'error' %}
-        <div class="alert alert-danger alter-dismissable fade show", role="alert">
-          {{ message }}
-          <button type="'button" class="'close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div style="background-color: black; color: white;" class="alert">
+          <span class="closebtn">
+            {{ message }}
+            <button type="button" class="close" oncick="closeMessage()">X</button>
+          </span>
         </div>
         {% else %}
-        <div class="alert alert-success alter-dismissable fade show", role="alert">
+        <div class="alert alert-success alter-dismissable fade show" role="alert">
           {{ message }}
-          <button type="'button" class="'close" data-dismiss="alert">
+          <button type="button" class="close" data-dismiss="alert">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -54,8 +54,9 @@
       {% endfor %}
     {% endif %}
     {% endwith %}
+    -->
     {% block content %}{% endblock %}
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{{url_for('static', filename='main.js')}}"></script>
   </body>

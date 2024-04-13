@@ -47,6 +47,9 @@ def display_competition_results(name):
     if not comp:
         print(f'{name} was not found!')
         return None
+    elif len(comp.teams) == 0:
+        print(f'No teams found for {name}!')
+        return []
     else:
         comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
         comp_teams.sort(key=lambda x: x.points_earned, reverse=True)
