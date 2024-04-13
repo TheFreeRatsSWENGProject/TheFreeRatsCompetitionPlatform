@@ -69,31 +69,32 @@
 
 
 <div class="competitions-card">
-
     
     {% for competition in competitions[::-1] %}
         
         <div class="card" style="background-color: black; color: white; font-family: helvetica;">
-            <center>
-                <a style="padding-bottom: 15px; padding-top: 10px; outline: solid white; background-color: #343A40;" href="{{url_for('comp_views.competition_details', id=competition.id)}}">
-                    <h3 style="color: white; font-family: optima;">{{competition.name}}</h3>
-                </a>
-            </center>
-            <div>
-                <p><strong>Date: </strong>{{competition.date.strftime("%d %B %Y")}}</p>
-                <p><strong>Location: </strong>{{competition.location}}</p>
-                <p><strong>Level: </strong>{{competition.level}}</p>
-                <p><strong>Max Score: </strong>{{competition.max_score}}</p>
-                <p><strong>Moderators: </strong>
-                {% for moderator in competition.moderators %}
-                    <a style="color: white" href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
-                        <p>{{moderator.username}}</p>
-                    </a>
-                {% endfor %}
-                </p> 
-            </div>
-    </div>
-
+            <a style="color: white;" href="{{url_for('comp_views.competition_details', id=competition.id)}}">
+                <center>
+                    <div style="padding-bottom: 15px; padding-top: 10px; outline: solid white; background-color: #343A40;">
+                        <h3 style="color: white; font-family: optima;">{{competition.name}}</h3>
+                    </div>
+                </center>
+                <div>
+                    <p><strong>Date: </strong>{{competition.date.strftime("%d %B %Y")}}</p>
+                    <p><strong>Location: </strong>{{competition.location}}</p>
+                    <p><strong>Level: </strong>{{competition.level}}</p>
+                    <p><strong>Max Score: </strong>{{competition.max_score}}</p>
+                    <p><strong>Moderators: </strong>
+                    {% for moderator in competition.moderators %}
+                        <a style="color: white" href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
+                            <p>{{moderator.username}}</p>
+                        </a>
+                    {% endfor %}
+                    </p> 
+                </div>
+            </a>
+        </div>
+    
     {% endfor %}
 
 </div>
