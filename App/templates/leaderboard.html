@@ -64,7 +64,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for student in leaderboard %}
+                    {% for student in leaderboard[:20] %}
                     <tr style="color: white;">
                         <td><center>{{student['placement']}}</center></td>
                         <td><center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></center></td>

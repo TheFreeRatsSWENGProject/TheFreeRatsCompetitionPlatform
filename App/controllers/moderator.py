@@ -103,6 +103,7 @@ def add_results(mod_name, comp_name, team_name, score):
                         db.session.rollback()
                         print("Something went wrong!")
                         return None
+    return None
 
 
 def update_ratings(mod_name, comp_name):

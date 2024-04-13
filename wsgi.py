@@ -27,8 +27,8 @@ def initialize():
 
         for student in reader:
             stud = create_student(student['username'], student['password'])
-            db.session.add(stud)
-        db.session.commit()
+            #db.session.add(stud)
+        #db.session.commit()
     
     student_file.close()
 
@@ -38,8 +38,8 @@ def initialize():
 
         for moderator in reader:
             mod = create_moderator(moderator['username'], moderator['password'])
-            db.session.add(mod)
-        db.session.commit()
+            #db.session.add(mod)
+        #db.session.commit()
     
     moderator_file.close()
 
@@ -49,11 +49,31 @@ def initialize():
 
         for competition in reader:
             comp = create_competition(competition['mod_name'], competition['comp_name'], competition['date'], competition['location'], competition['level'], competition['max_score'])
-            db.session.add(comp)
-        db.session.commit()
     
     competition_file.close()
     
+    with open("results.csv") as results_file:
+        reader = csv.DictReader(results_file)
+
+        for result in reader:
+            students = [result['student1'], result['student2'], result['student3']]
+            team = add_team(result['mod_name'], result['comp_name'], result['team_name'], students)
+            add_results(result['mod_name'], result['comp_name'], result['team_name'], int(result['score']))
+            #db.session.add(comp)
+        #db.session.commit()
+    
+    results_file.close()
+
+    with open("competitions.csv") as competitions_file:
+        reader = csv.DictReader(competitions_file)
+
+        for competition in reader:
+            update_ratings(competition['mod_name'], competition['comp_name'])
+            #db.session.add(comp)
+        #db.session.commit()
+    
+    competitions_file.close()
+
     """
     stud1 = create_student('stud1', 'stud1pass')
     stud2 = create_student('stud2', 'stud2pass')
