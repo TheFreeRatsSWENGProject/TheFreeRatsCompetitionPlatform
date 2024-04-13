@@ -101,6 +101,8 @@ def competition_details_by_name(name):
             moderator = Moderator.query.filter_by(id=current_user.id).first()
         else:
             moderator = None
+    else:
+        moderator = None
     
     leaderboard = display_competition_results(name)
 
