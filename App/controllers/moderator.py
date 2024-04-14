@@ -58,16 +58,17 @@ def add_mod(mod1_name, comp_name, mod2_name):
     if not mod1:
         print(f'Moderator: {mod1_name} not found!')
         return None
+    elif not comp:
+        print(f'Competition: {comp_name} not found!')
+        return None
+    elif not mod2:
+        print(f'Moderator: {mod2_name} not found!')
+        return None
+    elif not mod1 in comp.moderators:
+        print(f'{mod1_name} is not authorized to add results for {comp_name}!')
+        return None
     else:
-        if not comp:
-            print(f'Competition: {comp_name} not found!')
-            return None
-        else: 
-            if not mod2:
-                print(f'Moderator: {mod2_name} not found!')
-                return None
-            else:
-                return comp.add_mod(mod2)
+        return comp.add_mod(mod2)
                 
 def add_results(mod_name, comp_name, team_name, score):
     mod = Moderator.query.filter_by(username=mod_name).first()
