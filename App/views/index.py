@@ -7,11 +7,15 @@ import csv
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
+@index_views.route('/', methods=['GET'])
+def home_page():
+    return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)
+
 @index_views.route('/leaderboard', methods=['GET'])
 def leaderboard_page():
     return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)#, competitions=get_all_competitions(), moderators=get_all_moderators())
 
-@index_views.route('/', methods=['GET'])
+@index_views.route('/init', methods=['GET'])
 def init():
     """
     db.drop_all()
