@@ -145,12 +145,11 @@ def init():
 
         for competition in reader:
             update_ratings(competition['mod_name'], competition['comp_name'])
+            update_rankings()
             #db.session.add(comp)
         #db.session.commit()
     
     competitions_file.close()
-
-    update_rankings()
 
     return render_template('leaderboard.html', leaderboard=display_rankings(), user=current_user)
     """
@@ -180,7 +179,7 @@ def profile():
 
     return template
 
-@index_views.route('/student_profile/<int:id>')
+@index_views.route('/student_profile/<int:id>', methods=['GET'])
 def student_profile(id):
     student = get_student(id)
 
@@ -197,7 +196,7 @@ def student_profile(id):
 
     return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
 
-@index_views.route('/student_profile/<string:name>')
+@index_views.route('/student_profile/<string:name>', methods=['GET'])
 def student_profile_by_name(name):
     student = get_student_by_username(name)
 
@@ -214,7 +213,7 @@ def student_profile_by_name(name):
 
     return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
 
-@index_views.route('/moderator_profile/<int:id>')
+@index_views.route('/moderator_profile/<int:id>', methods=['GET'])
 def moderator_profile(id):   
     moderator = get_moderator(id)
 

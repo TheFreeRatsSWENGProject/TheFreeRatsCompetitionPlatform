@@ -14,7 +14,7 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 # def get_user_page():
 #     users = get_all_users()
 #     return render_template('users.html', users=users)
-
+"""
 @user_views.route('/api/users', methods=['GET'])
 def get_users_action():
     users = get_all_students_json()
@@ -91,3 +91,4 @@ def create_competition():
 def get_all_notifications():
     notifications = display_notifications()
     return jsonify(notifications)
+"""
