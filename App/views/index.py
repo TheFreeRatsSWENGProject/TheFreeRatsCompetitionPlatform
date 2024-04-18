@@ -144,8 +144,9 @@ def init():
         reader = csv.DictReader(competitions_file)
 
         for competition in reader:
-            update_ratings(competition['mod_name'], competition['comp_name'])
-            update_rankings()
+            if competition['comp_name'] != 'TopCoder':
+                update_ratings(competition['mod_name'], competition['comp_name'])
+                update_rankings()
             #db.session.add(comp)
         #db.session.commit()
     
