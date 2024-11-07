@@ -1,27 +1,71 @@
+
 services:
 - type: web
-  name: competitions-platform
+  name: flask-postgres-api
   env: python
-  repo: https://github.com/Ara-Ara-Arabiansss/SoftwareEngineering.git
+  repo: https://github.com/TheFreeRatsSWENGProject/TheFreeRatsCompetitionPlatform.git
   plan: free
   branch: main
   healthCheckPath: /healthcheck
   buildCommand: "pip install -r requirements.txt"
   startCommand: "gunicorn wsgi:app"
   envVars:
+  - fromGroup: flask-postgres-api-settings
+  - key: POSTGRES_URL
+    fromDatabase:
+      name: flask-postgres-api-db
+      property: host
+  - key: POSTGRES_USER
+    fromDatabase:
+      name: flask-postgres-api-db
+      property: user
+  - key: POSTGRES_PASSWORD
+    fromDatabase:
+      name: flask-postgres-api-db
+      property: password
+  - key: POSTGRES_DB
+    fromDatabase:
+      name: flask-postgres-api-db
+      property: database 
+
+envVarGroups:
+- name: flask-postgres-api-settings
+  envVars:
   - key: ENV
-    value: PRODUCTION
-  - key: JWT_TOKEN_EXPIRES
-    value: 7
-  - key: SECRET_KEY
-    value: a939121b63a73f88bce37d0d1469a006
-  - key: SQLALCHEMY_DATABASE_URI
-    value: postgresql://competitions_platform_db_gfy9_user:ZwKvA8Tja028QeC1a0zGNH5DC2ttRPRy@dpg-cki6f9mafg7c73fcnndg-a/competitions_platform_db_gfy9
+    value: production
+  - key: FLASK_APP
+    value: wsgi.py
+    
 
 databases:
-- name: competitions_platform_db
+- name: flask-postgres-api-db
   plan: free
   databaseName: mydb
+
+# services:
+# - type: web
+#   name: competitions-platform
+#   env: python
+#   repo: https://github.com/Ara-Ara-Arabiansss/SoftwareEngineering.git
+#   plan: free
+#   branch: main
+#   healthCheckPath: /healthcheck
+#   buildCommand: "pip install -r requirements.txt"
+#   startCommand: "gunicorn wsgi:app"
+#   envVars:
+#   - key: ENV
+#     value: PRODUCTION
+#   - key: JWT_TOKEN_EXPIRES
+#     value: 7
+#   - key: SECRET_KEY
+#     value: a939121b63a73f88bce37d0d1469a006
+#   - key: SQLALCHEMY_DATABASE_URI
+#     value: postgresql://competitions_platform_db_gfy9_user:ZwKvA8Tja028QeC1a0zGNH5DC2ttRPRy@dpg-cki6f9mafg7c73fcnndg-a/competitions_platform_db_gfy9
+
+# databases:
+# - name: competitions_platform_db
+#   plan: free
+#   databaseName: mydb
   
 # services:
 # - type: web
