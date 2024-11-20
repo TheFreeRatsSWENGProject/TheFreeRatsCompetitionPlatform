@@ -81,9 +81,61 @@ def display_notifications(username):
     else:
         return {"notifications":[notification.to_Dict() for notification in student.notifications]}
 
+# def update_rankings():
+#     students = get_all_students()
+    
+#     students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+
+#     leaderboard = []
+#     count = 1
+    
+#     curr_high = students[0].rating_score
+#     curr_rank = 1
+        
+#     for student in students:
+#         if curr_high != student.rating_score:
+#             curr_rank = count
+#             curr_high = student.rating_score
+
+#         if student.comp_count != 0:
+#             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+#             count += 1
+        
+#             student.curr_rank = curr_rank
+#             if student.prev_rank == 0:
+#                 message = f'RANK : {student.curr_rank}. Congratulations on your first rank!'
+#             elif student.curr_rank == student.prev_rank:
+#                 message = f'RANK : {student.curr_rank}. Well done! You retained your rank.'
+#             elif student.curr_rank < student.prev_rank:
+#                 message = f'RANK : {student.curr_rank}. Congratulations! Your rank has went up.'
+#             else:
+#                 message = f'RANK : {student.curr_rank}. Oh no! Your rank has went down.'
+#             student.prev_rank = student.curr_rank
+#             notification = Notification(student.id, message)
+#             student.notifications.append(notification)
+
+#             try:
+#                 db.session.add(student)
+#                 db.session.commit()
+#             except Exception as e:
+#                 db.session.rollback()
+
+#     return leaderboard
+
 def update_rankings():
     students = get_all_students()
     
+    # Calculate the aggregate score for each student
+    for student in students:
+        # Example formula for aggregate score
+        participation_rate = student.comp_count / max(1, student.total_possible_competitions)
+        bonus_points = student.bonus_points  # Assume this is already stored
+        avg_score = student.total_score / max(1, student.comp_count)
+        
+        # Weighted formula
+        student.rating_score = (0.6 * avg_score) + (0.3 * participation_rate * 100) + (0.1 * bonus_points)
+
+    # Sort students based on aggregate scores and participation count
     students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
 
     leaderboard = []
@@ -91,29 +143,33 @@ def update_rankings():
     
     curr_high = students[0].rating_score
     curr_rank = 1
-        
+    
     for student in students:
         if curr_high != student.rating_score:
             curr_rank = count
             curr_high = student.rating_score
 
-        if student.comp_count != 0:
-            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+        if student.comp_count != 0:  # Only include students who have participated
+            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score": student.rating_score})
             count += 1
         
+            # Update current rank and notify students
             student.curr_rank = curr_rank
             if student.prev_rank == 0:
-                message = f'RANK : {student.curr_rank}. Congratulations on your first rank!'
+                message = f'RANK: {student.curr_rank}. Congratulations on your first rank!'
             elif student.curr_rank == student.prev_rank:
-                message = f'RANK : {student.curr_rank}. Well done! You retained your rank.'
+                message = f'RANK: {student.curr_rank}. Well done! You retained your rank.'
             elif student.curr_rank < student.prev_rank:
-                message = f'RANK : {student.curr_rank}. Congratulations! Your rank has went up.'
+                message = f'RANK: {student.curr_rank}. Congratulations! Your rank has improved.'
             else:
-                message = f'RANK : {student.curr_rank}. Oh no! Your rank has went down.'
+                message = f'RANK: {student.curr_rank}. Oh no! Your rank has dropped.'
             student.prev_rank = student.curr_rank
+
+            # Add notification
             notification = Notification(student.id, message)
             student.notifications.append(notification)
 
+            # Commit changes to the database
             try:
                 db.session.add(student)
                 db.session.commit()
@@ -121,6 +177,7 @@ def update_rankings():
                 db.session.rollback()
 
     return leaderboard
+
 
 def display_rankings():
     students = get_all_students()
