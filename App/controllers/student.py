@@ -123,37 +123,46 @@ def display_notifications(username):
 #     return leaderboard
 
 def update_rankings():
-    students = get_all_students()
+    # Fetch all students from the database
+    students = Student.query.all()
+    
+    # Get the total number of competitions conducted
+    total_competitions = Competition.get_total_competitions()
     
     # Calculate the aggregate score for each student
     for student in students:
-        # Example formula for aggregate score
-        participation_rate = student.comp_count / max(1, student.total_possible_competitions)
-        bonus_points = student.bonus_points  # Assume this is already stored
-        avg_score = student.total_score / max(1, student.comp_count)
+        # Calculate participation rate as competitions participated divided by total competitions
+        participation_rate = student.comp_count / max(1, total_competitions)
+        avg_score = student.rating_score / max(1, student.comp_count)  # Assuming rating_score includes cumulative scores
         
-        # Weighted formula
-        student.rating_score = (0.6 * avg_score) + (0.3 * participation_rate * 100) + (0.1 * bonus_points)
-
-    # Sort students based on aggregate scores and participation count
+        # Aggregate formula
+        student.rating_score = (0.8 * avg_score) + (0.3 * participation_rate * 100)
+    
+    # Sort students by rating_score and comp_count in descending order
     students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
 
     leaderboard = []
     count = 1
     
-    curr_high = students[0].rating_score
+    # Initialize current high score for rank calculation
+    curr_high = students[0].rating_score if students else 0
     curr_rank = 1
     
+    # Generate rankings
     for student in students:
         if curr_high != student.rating_score:
             curr_rank = count
             curr_high = student.rating_score
 
-        if student.comp_count != 0:  # Only include students who have participated
-            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score": student.rating_score})
+        if student.comp_count > 0:  # Only include students who have participated in competitions
+            leaderboard.append({
+                "placement": curr_rank,
+                "student": student.username,
+                "rating score": student.rating_score
+            })
             count += 1
         
-            # Update current rank and notify students
+            # Update rank and notify student
             student.curr_rank = curr_rank
             if student.prev_rank == 0:
                 message = f'RANK: {student.curr_rank}. Congratulations on your first rank!'
@@ -163,11 +172,13 @@ def update_rankings():
                 message = f'RANK: {student.curr_rank}. Congratulations! Your rank has improved.'
             else:
                 message = f'RANK: {student.curr_rank}. Oh no! Your rank has dropped.'
+            
+            # Update previous rank
             student.prev_rank = student.curr_rank
-
-            # Add notification
+            
+            # Create and add notification
             notification = Notification(student.id, message)
-            student.notifications.append(notification)
+            student.add_notification(notification)
 
             # Commit changes to the database
             try:
@@ -175,8 +186,12 @@ def update_rankings():
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
+                print(f"Error updating student {student.username}: {e}")
 
     return leaderboard
+
+
+
 
 
 def display_rankings():

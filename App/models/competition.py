@@ -84,6 +84,15 @@ class Competition(db.Model):
             "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }
-
+    
+    def get_total_competitions():
+        try:
+            total = db.session.query(Competition).count()  
+            return total
+        except Exception as e:
+            print(f"Error fetching total competitions: {e}")
+            return 0  # Default to 0 if there's an error
+    
     def __repr__(self):
         return f'<Competition {self.id} : {self.name}>'
+
