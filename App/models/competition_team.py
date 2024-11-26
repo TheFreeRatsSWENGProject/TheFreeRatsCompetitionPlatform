@@ -6,7 +6,7 @@ class CompetitionTeam(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comp_id = db.Column(db.Integer, db.ForeignKey('competition.id'), nullable=False)
     team_id =  db.Column(db.Integer, db.ForeignKey('team.id'), nullable=False)
-    points_earned = db.Column(db.Float, default=0)
+    points_earned = db.Column(db.Float, default=0)  
     rating_score = db.Column(db.Float, default=0)
 
     def __init__(self, comp_id, team_id):

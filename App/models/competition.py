@@ -1,14 +1,16 @@
 from App.database import db
 from datetime import datetime
-from .competition_moderator import *
-from .competition_team import *
+from .competition_moderator import CompetitionModerator
+from .competition_team import CompetitionTeam
+from App.models.observer import Subject
+from App.models.notification import Notification
 
-class Competition(db.Model):
-    __tablename__='competition'
+class Competition(db.Model, Subject):  # Extend Subject
+    __tablename__ = 'competition'
 
     id = db.Column(db.Integer, primary_key=True)
-    name =  db.Column(db.String, nullable=False, unique=True)
-    date = db.Column(db.DateTime, default= datetime.utcnow)
+    name = db.Column(db.String, nullable=False, unique=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
     location = db.Column(db.String(120), nullable=False)
     level = db.Column(db.Float, default=1)
     max_score = db.Column(db.Integer, default=25)
@@ -17,6 +19,8 @@ class Competition(db.Model):
     teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
 
     def __init__(self, name, date, location, level, max_score):
+        db.Model.__init__(self)  # Initialize db.Model
+        Subject.__init__(self)   # Initialize Subject
         self.name = name
         self.date = date
         self.location = location
@@ -24,7 +28,7 @@ class Competition(db.Model):
         self.max_score = max_score
         self.moderators = []
         self.teams = []
-    
+
     def add_mod(self, mod):
         for m in self.moderators:
             if m.id == mod.id:
@@ -36,6 +40,9 @@ class Competition(db.Model):
             self.moderators.append(mod)
             mod.competitions.append(self)
             db.session.commit()
+
+            # Notify observers about the moderator addition
+            self.notify(event="ModeratorAdded", data={"moderator": mod.username, "competition": self.name})
             print(f'{mod.username} was added to {self.name}!')
             return comp_mod
         except Exception as e:
@@ -48,12 +55,15 @@ class Competition(db.Model):
             if t.id == team.id:
                 print(f'Team already registered for {self.name}!')
                 return None
-        
+
         comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
         try:
             self.teams.append(team)
             team.competitions.append(self)
             db.session.commit()
+
+            # Notify observers about the team addition
+            self.notify(event="TeamAdded", data={"team": team.name, "competition": self.name})
             print(f'{team.name} was added to {self.name}!')
             return comp_team
         except Exception as e:
@@ -67,8 +77,8 @@ class Competition(db.Model):
             "name": self.name,
             "date": self.date.strftime("%d-%m-%Y"),
             "location": self.location,
-            "level" : self.level,
-            "max_score" : self.max_score,
+            "level": self.level,
+            "max_score": self.max_score,
             "moderators": [mod.username for mod in self.moderators],
             "teams": [team.name for team in self.teams]
         }
@@ -79,15 +89,16 @@ class Competition(db.Model):
             "Name": self.name,
             "Date": self.date,
             "Location": self.location,
-            "Level" : self.level,
-            "Max Score" : self.max_score,
+            "Level": self.level,
+            "Max Score": self.max_score,
             "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }
-    
+
+    @staticmethod
     def get_total_competitions():
         try:
-            total = db.session.query(Competition).count()  
+            total = db.session.query(Competition).count()
             return total
         except Exception as e:
             print(f"Error fetching total competitions: {e}")
@@ -95,4 +106,3 @@ class Competition(db.Model):
     
     def __repr__(self):
         return f'<Competition {self.id} : {self.name}>'
-
