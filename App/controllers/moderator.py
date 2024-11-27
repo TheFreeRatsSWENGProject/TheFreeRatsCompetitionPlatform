@@ -1,3 +1,4 @@
+from App.controllers.student import update_rankings
 from App.database import db
 from App.models import Moderator, Competition, Team, CompetitionTeam
 
