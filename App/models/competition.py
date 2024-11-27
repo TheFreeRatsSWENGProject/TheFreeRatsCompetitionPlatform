@@ -47,7 +47,7 @@ class Competition(db.Model, Subject):  # Extend Subject
             return comp_mod
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong adding mod to comp!")
             return None
 
     def add_team(self, team):
@@ -68,7 +68,7 @@ class Competition(db.Model, Subject):  # Extend Subject
             return comp_team
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong adding team to comp!")
             return None
 
     def get_json(self):

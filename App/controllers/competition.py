@@ -19,7 +19,7 @@ def create_competition(mod_name, comp_name, date, location, level, max_score):
             return newComp
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong in creating competition!")
             return None
     else:
         print("Invalid credentials!")

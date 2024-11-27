@@ -22,7 +22,7 @@ def create_team(team_name, students):
             return team
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong creating team !")
             return None
 
 def get_team_by_name(name):

@@ -28,7 +28,7 @@ class Team(db.Model):
             return stud_team
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong adding student to team!")
             return None
 
     def get_json(self):
