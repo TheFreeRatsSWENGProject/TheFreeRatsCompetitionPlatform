@@ -133,7 +133,7 @@ def update_ratings(mod_name, comp_name):
             team = Team.query.filter_by(id=comp_team.team_id).first()
 
             for stud in team.students:
-                stud.rating_score = (stud.rating_score*stud.comp_count + comp_team.rating_score)/(stud.comp_count+1)
+                stud.rating_score = (stud.rating_score * stud.comp_count + comp_team.rating_score) / (stud.comp_count + 1)
                 stud.comp_count += 1
                 try:
                     db.session.add(stud)
@@ -143,4 +143,7 @@ def update_ratings(mod_name, comp_name):
 
         comp.confirm = True
         print("Results finalized!")
+
+        # Recalculate rankings for all students
+        update_rankings()
         return True

@@ -206,11 +206,6 @@ def confirm_results(comp_name):
     leaderboard = display_competition_results(comp_name)
 
     return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
-"""
-@comp_views.route('/confirm_results/<string:comp_name>', methods=['POST'])
-def confirm_results(comp_name):
-    pass
-"""
 
 @comp_views.route('/competitions_postman', methods=['GET'])
 def get_competitions_postman():
