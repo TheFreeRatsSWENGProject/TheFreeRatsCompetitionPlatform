@@ -24,7 +24,7 @@ class Notification(db.Model, Observer):  #extend da observer
         else:
             self.message = f"Unknown event '{event}' occurred in competition '{data.get('competition', 'unknown')}'!"
 
-        #save noti in database 
+        # Save notification in database 
         try:
             db.session.add(self)
             db.session.commit()
@@ -34,9 +34,6 @@ class Notification(db.Model, Observer):  #extend da observer
             print(f"Failed to create notification: {e}")
 
     def get_json(self):
-        """
-        Serialize the notification data for API responses.
-        """
         return {
             "id": self.id,
             "student_id": self.student_id,
@@ -44,9 +41,6 @@ class Notification(db.Model, Observer):  #extend da observer
         }
 
     def to_dict(self):
-        """
-        Alternative method for serializing the notification data.
-        """
         return {
             "ID": self.id,
             "Student ID": self.student_id,

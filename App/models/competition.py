@@ -5,29 +5,27 @@ from .competition_team import CompetitionTeam
 from App.models.observer import Subject
 from App.models.notification import Notification
 
-class Competition(db.Model, Subject):  # Extend Subject
+class Competition(db.Model, Subject):
     __tablename__ = 'competition'
-
+    
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False, unique=True)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-    location = db.Column(db.String(120), nullable=False)
-    level = db.Column(db.Float, default=1)
-    max_score = db.Column(db.Integer, default=25)
+    name = db.Column(db.String, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    level = db.Column(db.Integer, nullable=False)
+    max_score = db.Column(db.Integer, nullable=False)
     confirm = db.Column(db.Boolean, default=False)
-    moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
-    teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
+    moderators = db.relationship('Moderator', secondary='competition_moderator', overlaps='competitions', lazy=True)
+    teams = db.relationship('Team', secondary='competition_team', overlaps='competitions', lazy=True)
 
     def __init__(self, name, date, location, level, max_score):
-        db.Model.__init__(self)  # Initialize db.Model
-        Subject.__init__(self)   # Initialize Subject
+        super().__init__()
         self.name = name
         self.date = date
         self.location = location
         self.level = level
         self.max_score = max_score
-        self.moderators = []
-        self.teams = []
+        self.confirm = False
 
     def add_mod(self, mod):
         for m in self.moderators:
@@ -53,9 +51,9 @@ class Competition(db.Model, Subject):  # Extend Subject
     def add_team(self, team):
         for t in self.teams:
             if t.id == team.id:
-                print(f'Team already registered for {self.name}!')
+                print(f'{team.name} already added to {self.name}!')
                 return None
-
+        
         comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
         try:
             self.teams.append(team)
