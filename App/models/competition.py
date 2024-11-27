@@ -73,7 +73,7 @@ class Competition(db.Model, Subject):
         return {
             "id": self.id,
             "name": self.name,
-            "date": self.date.strftime("%d-%m-%Y"),
+            "date": self.date.strftime("%Y-%m-%d"),  # Format date correctly
             "location": self.location,
             "level": self.level,
             "max_score": self.max_score,
@@ -85,7 +85,7 @@ class Competition(db.Model, Subject):
         return {
             "ID": self.id,
             "Name": self.name,
-            "Date": self.date,
+            "Date": self.date.strftime("%Y-%m-%d"),  # Format date correctly
             "Location": self.location,
             "Level": self.level,
             "Max Score": self.max_score,
