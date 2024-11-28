@@ -27,6 +27,8 @@ class Competition(db.Model, Subject):
         self.level = level
         self.max_score = max_score
         self.confirm = False
+        self.moderators = []
+        self.teams = []
 
     def add_mod(self, mod):
         from App.models.moderator import Moderator  # Local import to avoid circular import
@@ -44,16 +46,17 @@ class Competition(db.Model, Subject):
 
             comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
             db.session.add(comp_mod)  # Add the CompetitionModerator instance to the session
+            db.session.commit()
             self.moderators.append(mod)
             mod.competitions.append(self)
             
             self.attach(mod)  # Attach the moderator as an observer
-            db.session.commit()
 
             # Notify observers about the moderator addition
             self.notify(event="ModeratorAdded", data={"moderator": mod.username, "competition": self.name})
+            self.detach(mod)  # Remove the moderator as an observer
             
-            print(f'{mod.username} was added to {self.name}!')
+            #print(f'{mod.username} was added to {self.name}!')
             return comp_mod
         except Exception as e:
             db.session.rollback()
@@ -79,18 +82,21 @@ class Competition(db.Model, Subject):
             self.teams.append(team)
             team.competitions.append(self)
 
+            print("WORKING")
             self.attach(team)  # Attach the team as an observer
+            print("WORKING")
             db.session.commit()
 
             # Notify observers about the team addition
             self.notify(event="TeamAdded", data={"team": team.name, "competition": self.name})
+            self.detach(team)  # Remove the team as an observer
             
             print(f'{team.name} was added to {self.name}!')
             return comp_team
         except Exception as e:
             db.session.rollback()
             print(f"Something went wrong adding team to comp: {e}")
-            traceback.print_exc()  # Print the full traceback of the exception
+            #traceback.print_exc()  # Print the full traceback of the exception
             return None
 
     def get_json(self):

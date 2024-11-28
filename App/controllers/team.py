@@ -8,6 +8,7 @@ def create_team(team_name, students):
         stud = Student.query.filter_by(username=s).first()
         if stud:
             team.add_student(stud)
+            #print(team.to_Dict())
         else:
             count += 1
             print(f'{s} was not found!')
@@ -19,6 +20,7 @@ def create_team(team_name, students):
             db.session.add(team)
             db.session.commit()
             print(f'New Team: {team_name} created!')
+            #print(team.to_Dict())
             return team
         except Exception as e:
             db.session.rollback()
@@ -57,7 +59,11 @@ def find_team(team_name, students):
 
 def add_team(mod_name, comp_name, team_name, students):
     mod = Moderator.query.filter_by(username=mod_name).first()
+    #print("In add Team in team controller, MOD:" + str(mod.toDict()) +  "\n")
     comp = Competition.query.filter_by(name=comp_name).first()
+    #print("In add Team in team controller, COMP:" + str(comp.toDict()) +  "\n")
+    #print(str(comp.confirm) + "\n")
+    #print(str(comp.moderators) + "\n")
     
     if not mod:
         print(f'Moderator: {mod_name} not found!')
@@ -79,7 +85,7 @@ def add_team(mod_name, comp_name, team_name, students):
         
         comp_students = []
         
-        for team in comp.teams:
+        for teams in comp.teams:
             for stud in team.students:
                 comp_students.append(stud.username)
         
@@ -90,8 +96,8 @@ def add_team(mod_name, comp_name, team_name, students):
                 return None
         
         team = create_team(team_name, students)
-        
         if team:
+            #print(team.to_Dict())
             return comp.add_team(team)
         else:
             return None
