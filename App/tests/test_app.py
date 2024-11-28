@@ -167,10 +167,12 @@ class UnitTests(unittest.TestCase):
       assert competition_moderator.comp_id == 1 and competition_moderator.mod_id == 1
 
     def test_competition_moderator_get_json(self):
-      db.drop_all()
-      db.create_all()
-      competition_moderator = CompetitionModerator(1, 1)
-      self.assertDictEqual(competition_moderator.get_json(), {"id": None, "competition_id": 1, "moderator_id": 1})
+          app = create_app()
+          with app.app_context():
+              db.drop_all()
+              db.create_all()
+              competition_moderator = CompetitionModerator(1, 1)
+              self.assertDictEqual(competition_moderator.get_json(), {"id": None, "competition_id": 1, "moderator_id": 1})
 
     #StudentTeam Unit Tests
     def test_new_student_team(self):

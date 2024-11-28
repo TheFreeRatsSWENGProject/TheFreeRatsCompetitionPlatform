@@ -79,7 +79,7 @@ def display_notifications(username):
         print(f'{username} does not exist!')
         return None
     else:
-        return {"notifications":[notification.to_Dict() for notification in student.notifications]}
+        return {"notifications":[notification.to_dict() for notification in student.notifications]}
 
 def update_rankings():
     students = get_all_students()
