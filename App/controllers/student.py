@@ -11,7 +11,7 @@ def create_student(username, password):
     try:
         db.session.add(newStudent)
         db.session.commit()
-        print(f'New Student: {username} created!')
+        #print(f'New Student: {username} created!')
         return newStudent
     except Exception as e:
         db.session.rollback()

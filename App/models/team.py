@@ -1,7 +1,7 @@
 from App.database import db
 from .student_team import *
-
-class Team(db.Model):
+from App.models.observer import Observer
+class Team(db.Model, Observer):
     __tablename__ = 'team'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -10,6 +10,7 @@ class Team(db.Model):
     competitions = db.relationship('Competition', secondary='competition_team', overlaps='teams', lazy=True)
 
     def __init__(self, name):
+        super().__init__()
         self.name = name
         self.students = []
 
@@ -44,3 +45,12 @@ class Team(db.Model):
             "Name" : self.name,
             "Students" : [student.username for student in self.student]
         }
+
+    def update(self, event, data=None):
+        if event == "TeamAdded":
+            print(f"Team Notification: {self.name}, you have been added to the competition '{data['competition']}'!")
+        else:
+            print(f"Unknown event '{event}' occurred.")
+    
+    def __repr__(self):
+        return f'{self.name}'
