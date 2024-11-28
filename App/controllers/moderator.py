@@ -12,7 +12,8 @@ def create_moderator(username, password):
     try:
         db.session.add(newMod)
         db.session.commit()
-        print(f'New Moderator: {username} created!')
+        # print(f'\nNew Moderator: {username} created!')
+        # print(str(newMod.toDict()))
         return newMod
     except Exception as e:
         db.session.rollback()
@@ -100,6 +101,7 @@ def add_results(mod_name, comp_name, team_name, score):
                         db.session.add(comp_team)
                         db.session.commit()
                         print(f'Score successfully added for {team_name}!')
+                        print(str(comp_team.toDict()))
                         return comp_team
                     except Exception as e:
                         db.session.rollback()

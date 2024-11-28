@@ -1,11 +1,10 @@
 from App.database import db
 from .student_team import StudentTeam
-from App.models.observer import Subject
-from App.models.competition import Competition
+from App.models.observer import Subject, Observer
 
-class Team(db.Model, Subject):
+class Team(db.Model, Subject, Observer):
     __tablename__ = 'team'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     students = db.relationship('Student', secondary='student_team', overlaps='teams', lazy=True)
@@ -57,11 +56,11 @@ class Team(db.Model, Subject):
 
     def get_json(self):
         return {
-            "id" : self.id,
-            "name" : self.name,
-            "students" : [student.username for student in self.students]
+            "id": self.id,
+            "name": self.name,
+            "students": [student.username for student in self.students]
         }
-    
+
     def to_Dict(self):
         return {
             "TeamID": self.id,
@@ -69,18 +68,5 @@ class Team(db.Model, Subject):
             "Students": [student.username for student in self.students]
         }
 
-    # def update(self, event, data=None):
-    #     from App.models.competition import Competition  # Local import to avoid circular import
-
-    #     if event == "TeamAdded":
-    #         competition = Competition.query.filter_by(name=data['competition']).first()
-    #         if competition:
-    #             self.competitions.append(competition)
-    #             print(f"Team Notification: {self.name}, you have been added to the competition '{data['competition']}'!")
-    #         else:
-    #             print(f"Competition '{data['competition']}' not found!")
-    #     else:
-    #         print(f"Unknown event '{event}' occurred in competition '{data.get('competition', 'unknown')}'!")
-    
     def __repr__(self):
         return f'{self.name}'

@@ -54,7 +54,7 @@ class Competition(db.Model, Subject):
 
             # Notify observers about the moderator addition
             self.notify(event="ModeratorAdded", data={"moderator": mod.username, "competition": self.name})
-            self.detach(mod)  # Remove the moderator as an observer
+            # self.detach(mod)  # Remove the moderator as an observer
             
             #print(f'{mod.username} was added to {self.name}!')
             return comp_mod
@@ -70,33 +70,31 @@ class Competition(db.Model, Subject):
             if t.id == team.id:
                 print(f'{team.name} already added to {self.name}!')
                 return None
-        
-        try:
-            # Commit the Competition instance to the database to ensure it has an id
-            if self.id is None:
-                db.session.add(self)
-                db.session.commit()
-
-            comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
-            db.session.add(comp_team)  # Add the CompetitionTeam instance to the session
-            self.teams.append(team)
-            team.competitions.append(self)
-
-            print("WORKING")
-            self.attach(team)  # Attach the team as an observer
-            print("WORKING")
+            
+        if self.id is None:
+            db.session.add(self)
             db.session.commit()
 
-            # Notify observers about the team addition
-            self.notify(event="TeamAdded", data={"team": team.name, "competition": self.name})
-            self.detach(team)  # Remove the team as an observer
+        comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
+        db.session.add(comp_team)  # Add the CompetitionTeam instance to the session
+        db.session.commit()
+        
+        try:
+            self.teams.append(team)
+            team.competitions.append(self)
+            db.session.commit()
             
-            print(f'{team.name} was added to {self.name}!')
+            # print(f'\n{team.name} was added to {self.name}!')
+            # print(str(comp_team.toDict()))
+
+            # Notify observers about the team addition
+            # self.notify(event="StudentAddedToCompetition", data={"competition": self.name})
+
             return comp_team
         except Exception as e:
             db.session.rollback()
             print(f"Something went wrong adding team to comp: {e}")
-            #traceback.print_exc()  # Print the full traceback of the exception
+            traceback.print_exc()  # Print the full traceback of the exception
             return None
 
     def get_json(self):
@@ -122,3 +120,4 @@ class Competition(db.Model, Subject):
             "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }
+    

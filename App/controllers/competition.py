@@ -17,7 +17,8 @@ def create_competition(mod_name, comp_name, date, location, level, max_score):
             db.session.commit()
 
             newComp.add_mod(mod)
-            print(f'New Competition: {comp_name} created!')
+            # print(f'\nNew Competition: {comp_name} created!')
+            # print(str(newComp.toDict()))
             return newComp
         except Exception as e:
             db.session.rollback()

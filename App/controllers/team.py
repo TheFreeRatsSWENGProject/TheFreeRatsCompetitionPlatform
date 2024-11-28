@@ -19,8 +19,8 @@ def create_team(team_name, students):
         try:
             db.session.add(team)
             db.session.commit()
-            print(f'New Team: {team_name} created!')
-            #print(team.to_Dict())
+            print(f'\nNew Team: {team_name} created!')
+            print(str(team.to_Dict()))
             return team
         except Exception as e:
             db.session.rollback()
@@ -59,11 +59,8 @@ def find_team(team_name, students):
 
 def add_team(mod_name, comp_name, team_name, students):
     mod = Moderator.query.filter_by(username=mod_name).first()
-    #print("In add Team in team controller, MOD:" + str(mod.toDict()) +  "\n")
     comp = Competition.query.filter_by(name=comp_name).first()
-    #print("In add Team in team controller, COMP:" + str(comp.toDict()) +  "\n")
-    #print(str(comp.confirm) + "\n")
-    #print(str(comp.moderators) + "\n")
+    
     
     if not mod:
         print(f'Moderator: {mod_name} not found!')
@@ -72,7 +69,7 @@ def add_team(mod_name, comp_name, team_name, students):
         print(f'Competition: {comp_name} not found!')
         return None
     elif comp.confirm:
-        print(f'Results for {comp_name} has already been finalized!')
+        print(f'Results for {comp_name} have already been finalized!')
         return None
     elif mod not in comp.moderators:
         print(f'{mod_name} is not authorized to add teams for {comp_name}!')
@@ -81,12 +78,13 @@ def add_team(mod_name, comp_name, team_name, students):
         team = find_team(team_name, students)
 
         if team:
+            print(f'Team {team_name} already exists with the same students.')
             return comp.add_team(team)
         
         comp_students = []
         
-        for teams in comp.teams:
-            for stud in team.students:
+        for t in comp.teams:
+            for stud in t.students:
                 comp_students.append(stud.username)
         
         for stud in students:

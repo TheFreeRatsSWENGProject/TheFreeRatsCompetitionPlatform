@@ -51,15 +51,21 @@ class Student(User, Observer):
         }
 
     def update(self, event, data=None):
-        from App.models.team import Team  # Local import to avoid circular import
-
         if event == "StudentAddedToTeam":
+            from App.models.team import Team
             team = Team.query.filter_by(name=data['team']).first()
             if team:
                 self.teams.append(team)
-                print(f"Student Notification: {self.username}, you have been added to the team '{data['team']}'!")
+                print(f"StudentNotification: {self.username}, you have been added to the team '{data['team']}'!")
             else:
                 print(f"Team '{data['team']}' not found!")
+        elif event == "StudentAddedToCompetition":
+            from App.models.competition import Competition
+            comp = Competition.query.filter_by(name=data['competition']).first()
+            if comp:
+                print(f"StudentNotification: {self.username}, you have been added to the competition '{data['competition']}'!")
+            else:
+                print(f"Competition '{data['competition']}' not found!")    
         else:
             print(f"Unknown event '{event}' occurred in team '{data.get('team', 'unknown')}'!")
 
