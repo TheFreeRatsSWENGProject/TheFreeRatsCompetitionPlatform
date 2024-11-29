@@ -97,7 +97,6 @@ class UnitTests(unittest.TestCase):
           "location": "St. Augustine", 
           "level": 1, 
           "max_score": 25, 
-          "confirm": False,  # Include the confirm field
           "moderators": [],  # No moderators added
           "teams": []  # No teams added
       } 
@@ -244,7 +243,6 @@ class IntegrationTests(unittest.TestCase):
             "location": "St. Augustine",
             "level": 2,
             "max_score": 25,
-            "confirm": False,
             "moderators": ["debra"],
             "teams": []
         }
@@ -266,7 +264,6 @@ class IntegrationTests(unittest.TestCase):
             "location": "St. Augustine",
             "level": 2,
             "max_score": 25,
-            "confirm": False,
             "moderators": ["debra"],
             "teams": []
         }
@@ -368,7 +365,7 @@ class IntegrationTests(unittest.TestCase):
       comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emilypass")
+      student3 = create_student("emily","emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -390,7 +387,7 @@ class IntegrationTests(unittest.TestCase):
       comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emilypass")
+      student3 = create_student("emily","emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
