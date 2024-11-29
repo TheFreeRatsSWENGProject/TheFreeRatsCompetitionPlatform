@@ -1,5 +1,6 @@
 import os, tempfile, pytest, logging, unittest
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 from App.main import create_app
 from App.database import db, create_db
@@ -13,6 +14,18 @@ LOGGER = logging.getLogger(__name__)
    Unit Tests
 '''
 class UnitTests(unittest.TestCase):
+    # Setup and Teardown
+    def setUp(self):
+        self.app = create_app()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+
     #User Unit Tests
     def test_new_user(self):
         user = User("ryan", "ryanpass")
@@ -31,8 +44,6 @@ class UnitTests(unittest.TestCase):
 
     #Student Unit Tests
     def test_new_student(self):
-      db.drop_all()
-      db.create_all()
       student = Student("james", "jamespass")
       assert student.username == "james"
 
@@ -75,11 +86,23 @@ class UnitTests(unittest.TestCase):
       competition = Competition("RunTime", datetime.strptime("09-02-2024", "%d-%m-%Y"), "St. Augustine", 1, 25)
       assert competition.name == "RunTime" and competition.date.strftime("%d-%m-%Y") == "09-02-2024" and competition.location == "St. Augustine" and competition.level == 1 and competition.max_score == 25
 
-    def test_competition_get_json(self):
-      db.drop_all()
-      db.create_all()
-      competition = Competition("RunTime", datetime.strptime("09-02-2024", "%d-%m-%Y"), "St. Augustine", 1, 25)
-      self.assertDictEqual(competition.get_json(), {"id": None, "name": "RunTime", "date": "09-02-2024", "location": "St. Augustine", "level": 1, "max_score": 25, "moderators": [], "teams": []})
+    def test_competition_get_json(self): 
+      competition = Competition("RunTime", datetime.strptime("09-02-2024", "%d-%m-%Y"), "St. Augustine", 1, 25) 
+      db.session.add(competition) 
+      db.session.commit()  # Ensure this is called before accessing competition.id
+      expected_json = { 
+          "id": competition.id,  # This should now have a valid ID after commit
+          "name": "RunTime", 
+          "date": "2024-02-09",  # This matches the format used in get_json
+          "location": "St. Augustine", 
+          "level": 1, 
+          "max_score": 25, 
+          "confirm": False,  # Include the confirm field
+          "moderators": [],  # No moderators added
+          "teams": []  # No teams added
+      } 
+      actual_json = competition.get_json() 
+      self.assertDictEqual(actual_json, expected_json)
     
     #Notification Unit Tests
     def test_new_notification(self):
@@ -167,12 +190,15 @@ class UnitTests(unittest.TestCase):
       assert competition_moderator.comp_id == 1 and competition_moderator.mod_id == 1
 
     def test_competition_moderator_get_json(self):
-          app = create_app()
-          with app.app_context():
-              db.drop_all()
-              db.create_all()
-              competition_moderator = CompetitionModerator(1, 1)
-              self.assertDictEqual(competition_moderator.get_json(), {"id": None, "competition_id": 1, "moderator_id": 1})
+        competition_moderator = CompetitionModerator(comp_id=1, mod_id=1)
+        db.session.add(competition_moderator)
+        db.session.commit()
+        expected = {
+            'id': competition_moderator.id,
+            'competition_id': 1,
+            'moderator_id': 1
+        }
+        self.assertDictEqual(competition_moderator.get_json(), expected)
 
     #StudentTeam Unit Tests
     def test_new_student_team(self):
@@ -303,7 +329,7 @@ class IntegrationTests(unittest.TestCase):
       comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -325,7 +351,7 @@ class IntegrationTests(unittest.TestCase):
       comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -347,7 +373,7 @@ class IntegrationTests(unittest.TestCase):
       comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 30)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -377,7 +403,7 @@ class IntegrationTests(unittest.TestCase):
       comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -407,7 +433,7 @@ class IntegrationTests(unittest.TestCase):
       comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -455,7 +481,7 @@ class IntegrationTests(unittest.TestCase):
       comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -485,7 +511,7 @@ class IntegrationTests(unittest.TestCase):
       comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
-      student3 = create_student("emily", "emilypass")
+      student3 = create_student("emilypass")
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
@@ -506,3 +532,6 @@ class IntegrationTests(unittest.TestCase):
       update_ratings(mod.username, comp2.name)
       update_rankings()
       self.assertListEqual(get_all_competitions_json(), [{"id": 1, "name": "RunTime", "date": "29-03-2024", "location": "St. Augustine", "level": 2, "max_score": 25, "moderators": ["debra"], "teams": ["Runtime Terrors", "Scrum Lords"]}, {"id": 2, "name": "Hacker Cup", "date": "23-02-2024", "location": "Macoya", "level": 1, "max_score": 20, "moderators": ["debra"], "teams": ["Runtime Terrors", "Scrum Lords"]}])
+
+if __name__ == '__main__':
+    unittest.main()

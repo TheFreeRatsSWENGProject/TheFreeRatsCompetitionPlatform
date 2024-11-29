@@ -105,6 +105,7 @@ class Competition(db.Model, Subject):
             "location": self.location,
             "level": self.level,
             "max_score": self.max_score,
+            "confirm": self.confirm,  # Include the confirm field
             "moderators": [mod.username for mod in self.moderators],
             "teams": [team.name for team in self.teams]
         }
