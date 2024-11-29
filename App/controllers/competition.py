@@ -11,15 +11,17 @@ def create_competition(mod_name, comp_name, date, location, level, max_score):
     mod = Moderator.query.filter_by(username=mod_name).first()
     if mod:
         newComp = Competition(name=comp_name, date=datetime.strptime(date, "%d-%m-%Y"), location=location, level=level, max_score=max_score)
+        #print("NewComp: ", newComp.toDict())
         try:
-            newComp.add_mod(mod)
             db.session.add(newComp)
             db.session.commit()
-            print(f'New Competition: {comp_name} created!')
+            newComp.add_mod(mod)
+            # print(f'\nNew Competition: {comp_name} created!')
+            # print(str(newComp.toDict()))
             return newComp
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong in creating competition!")
             return None
     else:
         print("Invalid credentials!")

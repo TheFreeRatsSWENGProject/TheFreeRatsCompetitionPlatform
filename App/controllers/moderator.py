@@ -1,3 +1,4 @@
+from App.controllers.student import update_rankings
 from App.database import db
 from App.models import Moderator, Competition, Team, CompetitionTeam
 
@@ -11,7 +12,8 @@ def create_moderator(username, password):
     try:
         db.session.add(newMod)
         db.session.commit()
-        print(f'New Moderator: {username} created!')
+        # print(f'\nNew Moderator: {username} created!')
+        # print(str(newMod.toDict()))
         return newMod
     except Exception as e:
         db.session.rollback()
@@ -99,10 +101,11 @@ def add_results(mod_name, comp_name, team_name, score):
                         db.session.add(comp_team)
                         db.session.commit()
                         print(f'Score successfully added for {team_name}!')
+                        print(str(comp_team.toDict()))
                         return comp_team
                     except Exception as e:
                         db.session.rollback()
-                        print("Something went wrong!")
+                        print("Something went wrong adding results!")
                         return None
     return None
 
@@ -133,7 +136,7 @@ def update_ratings(mod_name, comp_name):
             team = Team.query.filter_by(id=comp_team.team_id).first()
 
             for stud in team.students:
-                stud.rating_score = (stud.rating_score*stud.comp_count + comp_team.rating_score)/(stud.comp_count+1)
+                stud.rating_score = (stud.rating_score * stud.comp_count + comp_team.rating_score) / (stud.comp_count + 1)
                 stud.comp_count += 1
                 try:
                     db.session.add(stud)
@@ -143,4 +146,7 @@ def update_ratings(mod_name, comp_name):
 
         comp.confirm = True
         print("Results finalized!")
+
+        # Recalculate rankings for all students
+        update_rankings()
         return True

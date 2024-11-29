@@ -1,74 +1,114 @@
 from App.database import db
 from datetime import datetime
-from .competition_moderator import *
-from .competition_team import *
+from .competition_moderator import CompetitionModerator
+from .competition_team import CompetitionTeam
+from App.models.observer import Subject
+import traceback
 
-class Competition(db.Model):
-    __tablename__='competition'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name =  db.Column(db.String, nullable=False, unique=True)
-    date = db.Column(db.DateTime, default= datetime.utcnow)
-    location = db.Column(db.String(120), nullable=False)
-    level = db.Column(db.Float, default=1)
-    max_score = db.Column(db.Integer, default=25)
+class Competition(db.Model, Subject):
+    __tablename__ = 'competition'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    level = db.Column(db.Integer, nullable=False)
+    max_score = db.Column(db.Integer, nullable=False)
     confirm = db.Column(db.Boolean, default=False)
-    moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
-    teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
+    moderators = db.relationship('Moderator', secondary='competition_moderator', overlaps='competitions', lazy=True)
+    teams = db.relationship('Team', secondary='competition_team', overlaps='competitions', lazy=True)
 
     def __init__(self, name, date, location, level, max_score):
+        db.Model.__init__(self)  # Initialize the db.Model part of the class
+        Subject.__init__(self)  # Initialize the Subject part of the class
         self.name = name
         self.date = date
         self.location = location
         self.level = level
         self.max_score = max_score
+        self.confirm = False
         self.moderators = []
         self.teams = []
-    
+
     def add_mod(self, mod):
+        from App.models.moderator import Moderator  # Local import to avoid circular import
+        if mod not in self.moderators:
+            self.moderators.append(mod)
+            db.session.commit()
+
         for m in self.moderators:
             if m.id == mod.id:
                 print(f'{mod.username} already added to {self.name}!')
                 return None
-        
-        comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
+
         try:
+            # Commit the Competition instance to the database to ensure it has an id
+            if self.id is None:
+                db.session.add(self)
+                db.session.commit()
+
+            comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
+            db.session.add(comp_mod)  # Add the CompetitionModerator instance to the session
+            db.session.commit()
             self.moderators.append(mod)
             mod.competitions.append(self)
-            db.session.commit()
-            print(f'{mod.username} was added to {self.name}!')
+            
+            self.attach(mod)  # Attach the moderator as an observer
+
+            # Notify observers about the moderator addition
+            self.notify(event="ModeratorAdded", data={"moderator": mod.username, "competition": self.name})
+            # self.detach(mod)  # Remove the moderator as an observer
+            
+            #print(f'{mod.username} was added to {self.name}!')
             return comp_mod
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print(f"Something went wrong adding mod to comp: {e}")
             return None
 
     def add_team(self, team):
+        from App.models.team import Team  # Local import to avoid circular import
+
         for t in self.teams:
             if t.id == team.id:
-                print(f'Team already registered for {self.name}!')
+                print(f'{team.name} already added to {self.name}!')
                 return None
-        
+            
+        if self.id is None:
+            db.session.add(self)
+            db.session.commit()
+
         comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
+        db.session.add(comp_team)  # Add the CompetitionTeam instance to the session
+        db.session.commit()
+        
         try:
             self.teams.append(team)
             team.competitions.append(self)
             db.session.commit()
-            print(f'{team.name} was added to {self.name}!')
+            
+            # print(f'\n{team.name} was added to {self.name}!')
+            # print(str(comp_team.toDict()))
+
+            # Notify observers about the team addition
+            # self.notify(event="StudentAddedToCompetition", data={"competition": self.name})
+
             return comp_team
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print(f"Something went wrong adding team to comp: {e}")
+            traceback.print_exc()  # Print the full traceback of the exception
             return None
 
     def get_json(self):
         return {
             "id": self.id,
             "name": self.name,
-            "date": self.date.strftime("%d-%m-%Y"),
+            "date": self.date.strftime("%d-%m-%Y"),  # Format date correctly
             "location": self.location,
-            "level" : self.level,
-            "max_score" : self.max_score,
+            "level": self.level,
+            "max_score": self.max_score,
+            "confirm": self.confirm,  # Include the confirm field
             "moderators": [mod.username for mod in self.moderators],
             "teams": [team.name for team in self.teams]
         }
@@ -77,22 +117,14 @@ class Competition(db.Model):
         return {
             "ID": self.id,
             "Name": self.name,
-            "Date": self.date,
+            "Date": self.date.strftime("%Y-%m-%d"),  # Format date correctly
             "Location": self.location,
-            "Level" : self.level,
-            "Max Score" : self.max_score,
+            "Level": self.level,
+            "Max Score": self.max_score,
             "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }
-    
-    def get_total_competitions():
-        try:
-            total = db.session.query(Competition).count()  
-            return total
-        except Exception as e:
-            print(f"Error fetching total competitions: {e}")
-            return 0  # Default to 0 if there's an error
-    
-    def __repr__(self):
-        return f'<Competition {self.id} : {self.name}>'
 
+    def get_total_competitions():
+        return db.session.query(Competition).count()
+    

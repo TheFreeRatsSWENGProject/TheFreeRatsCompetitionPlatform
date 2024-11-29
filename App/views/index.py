@@ -182,8 +182,8 @@ def profile():
 
 @index_views.route('/student_profile/<int:id>', methods=['GET'])
 def student_profile(id):
+    update_rankings()
     student = get_student(id)
-
     if not student:
         return render_template('404.html')
     
@@ -199,8 +199,8 @@ def student_profile(id):
 
 @index_views.route('/student_profile/<string:name>', methods=['GET'])
 def student_profile_by_name(name):
+    update_rankings()
     student = get_student_by_username(name)
-
     if not student:
         return render_template('404.html')
     

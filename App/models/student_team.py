@@ -3,7 +3,7 @@ from App.database import db
 class StudentTeam(db.Model):
     __tablename__ = 'student_team'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'), nullable=False)
 
@@ -19,8 +19,8 @@ class StudentTeam(db.Model):
         }
     
     def to_Dict(self):
-      return {
+        return {
             "ID" : self.id,
             "Student ID" : self.student_id,
             "Team ID" : self.team_id
-      }
+        }

@@ -8,6 +8,7 @@ def create_team(team_name, students):
         stud = Student.query.filter_by(username=s).first()
         if stud:
             team.add_student(stud)
+            #print(team.to_Dict())
         else:
             count += 1
             print(f'{s} was not found!')
@@ -18,11 +19,12 @@ def create_team(team_name, students):
         try:
             db.session.add(team)
             db.session.commit()
-            print(f'New Team: {team_name} created!')
+            print(f'\nNew Team: {team_name} created!')
+            print(str(team.to_Dict()))
             return team
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
+            print("Something went wrong creating team !")
             return None
 
 def get_team_by_name(name):
@@ -59,6 +61,7 @@ def add_team(mod_name, comp_name, team_name, students):
     mod = Moderator.query.filter_by(username=mod_name).first()
     comp = Competition.query.filter_by(name=comp_name).first()
     
+    
     if not mod:
         print(f'Moderator: {mod_name} not found!')
         return None
@@ -66,7 +69,7 @@ def add_team(mod_name, comp_name, team_name, students):
         print(f'Competition: {comp_name} not found!')
         return None
     elif comp.confirm:
-        print(f'Results for {comp_name} has already been finalized!')
+        print(f'Results for {comp_name} have already been finalized!')
         return None
     elif mod not in comp.moderators:
         print(f'{mod_name} is not authorized to add teams for {comp_name}!')
@@ -75,12 +78,13 @@ def add_team(mod_name, comp_name, team_name, students):
         team = find_team(team_name, students)
 
         if team:
+            print(f'Team {team_name} already exists with the same students.')
             return comp.add_team(team)
         
         comp_students = []
         
-        for team in comp.teams:
-            for stud in team.students:
+        for t in comp.teams:
+            for stud in t.students:
                 comp_students.append(stud.username)
         
         for stud in students:
@@ -90,8 +94,8 @@ def add_team(mod_name, comp_name, team_name, students):
                 return None
         
         team = create_team(team_name, students)
-        
         if team:
+            #print(team.to_Dict())
             return comp.add_team(team)
         else:
             return None
