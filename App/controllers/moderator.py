@@ -66,7 +66,7 @@ def add_mod(mod1_name, comp_name, mod2_name):
     elif not mod2:
         print(f'Moderator: {mod2_name} not found!')
         return None
-    elif not mod1 in comp.moderators:
+    elif mod1 not in comp.moderators:
         print(f'{mod1_name} is not authorized to add results for {comp_name}!')
         return None
     else:

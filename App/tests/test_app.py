@@ -97,6 +97,7 @@ class UnitTests(unittest.TestCase):
           "location": "St. Augustine", 
           "level": 1, 
           "max_score": 25, 
+          # "confirm": False,  # Include the confirm field
           "moderators": [],  # No moderators added
           "teams": []  # No teams added
       } 
@@ -243,6 +244,7 @@ class IntegrationTests(unittest.TestCase):
             "location": "St. Augustine",
             "level": 2,
             "max_score": 25,
+            # "confirm": False,
             "moderators": ["debra"],
             "teams": []
         }
@@ -264,6 +266,7 @@ class IntegrationTests(unittest.TestCase):
             "location": "St. Augustine",
             "level": 2,
             "max_score": 25,
+            # "confirm": False,
             "moderators": ["debra"],
             "teams": []
         }
@@ -355,7 +358,18 @@ class IntegrationTests(unittest.TestCase):
       comp_team = add_results(mod.username, comp.name, "Beyond Infinity", 10)
       update_ratings(mod.username, comp.name)
       update_rankings()
-      self.assertDictEqual(comp.get_json(), {'id': 1, 'name': 'RunTime', 'date': '29-03-2024', 'location': 'St. Augustine', 'level': 2, 'max_score': 25, 'moderators': ['debra'], 'teams': ['Runtime Terrors', 'Scrum Lords', 'Beyond Infinity']})
+      expected_json = { 
+          "id": 1,  # This should now have a valid ID after commit
+          "name": "RunTime", 
+          "date": "29-03-2024",  # This matches the format used in get_json
+          "location": "St. Augustine", 
+          "level": 2, 
+          "max_score": 25, 
+          # "confirm": False,  # Include the confirm field
+          "moderators": ['debra'],  # No moderators added
+          "teams": ['Runtime Terrors', 'Scrum Lords', 'Beyond Infinity']
+      }
+      self.assertDictEqual(comp.get_json(), expected_json)
 
     #Feature 5 Integration Tests
     def test_display_rankings(self):
