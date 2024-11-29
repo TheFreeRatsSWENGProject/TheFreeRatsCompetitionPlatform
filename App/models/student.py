@@ -59,13 +59,12 @@ class Student(User, Observer):
                 print(f"StudentNotification: {self.username}, you have been added to the team '{data['team']}'!")
             else:
                 print(f"Team '{data['team']}' not found!")
-        elif event == "StudentAddedToCompetition":
-            from App.models.competition import Competition
-            comp = Competition.query.filter_by(name=data['competition']).first()
-            if comp:
-                print(f"StudentNotification: {self.username}, you have been added to the competition '{data['competition']}'!")
-            else:
-                print(f"Competition '{data['competition']}' not found!")    
+        elif event == "RankUpdated":
+            new_rank = data['new_rank']
+            if self.curr_rank != new_rank:
+                self.prev_rank = self.curr_rank
+                self.curr_rank = new_rank
+                print(f"StudentNotification: {self.username}, your rank has been updated to '{new_rank}'!")
         else:
             print(f"Unknown event '{event}' occurred in team '{data.get('team', 'unknown')}'!")
 

@@ -120,4 +120,7 @@ class Competition(db.Model, Subject):
             "Moderators": [mod.username for mod in self.moderators],
             "Teams": [team.name for team in self.teams]
         }
+
+    def get_total_competitions():
+        return db.session.query(Competition).count()
     
