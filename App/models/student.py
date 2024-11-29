@@ -64,7 +64,7 @@ class Student(User, Observer):
             if self.curr_rank != new_rank:
                 self.prev_rank = self.curr_rank
                 self.curr_rank = new_rank
-                print(f"StudentNotification: {self.username}, your rank has been updated to '{new_rank}'!")
+                #print(f"StudentNotification: {self.username}, your rank has been updated to '{new_rank}'!")
         else:
             print(f"Unknown event '{event}' occurred in team '{data.get('team', 'unknown')}'!")
 
