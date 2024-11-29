@@ -32,6 +32,9 @@ class Competition(db.Model, Subject):
 
     def add_mod(self, mod):
         from App.models.moderator import Moderator  # Local import to avoid circular import
+        if mod not in self.moderators:
+            self.moderators.append(mod)
+            db.session.commit()
 
         for m in self.moderators:
             if m.id == mod.id:
@@ -101,7 +104,7 @@ class Competition(db.Model, Subject):
         return {
             "id": self.id,
             "name": self.name,
-            "date": self.date.strftime("%Y-%m-%d"),  # Format date correctly
+            "date": self.date.strftime("%d-%m-%Y"),  # Format date correctly
             "location": self.location,
             "level": self.level,
             "max_score": self.max_score,

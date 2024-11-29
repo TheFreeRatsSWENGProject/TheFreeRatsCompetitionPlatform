@@ -93,7 +93,7 @@ class UnitTests(unittest.TestCase):
       expected_json = { 
           "id": competition.id,  # This should now have a valid ID after commit
           "name": "RunTime", 
-          "date": "2024-02-09",  # This matches the format used in get_json
+          "date": "09-02-2024",  # This matches the format used in get_json
           "location": "St. Augustine", 
           "level": 1, 
           "max_score": 25, 
@@ -217,21 +217,60 @@ class UnitTests(unittest.TestCase):
     Integration Tests
 '''
 class IntegrationTests(unittest.TestCase):
-    
+    # Setup and Teardown
+    def setUp(self):
+        self.app = create_app()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+
     #Feature 1 Integration Tests
     def test1_create_competition(self):
-      db.drop_all()
-      db.create_all()
-      mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      assert comp.name == "RunTime" and comp.date.strftime("%d-%m-%Y") == "29-03-2024" and comp.location == "St. Augustine" and comp.level == 2 and comp.max_score == 25
+        db.drop_all()
+        db.create_all()
+        mod = create_moderator("debra", "debrapass")
+        comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+        assert comp is not None
+        
+        expected_json = {
+            "id": comp.id,
+            "name": "RunTime",
+            "date": "29-03-2024",
+            "location": "St. Augustine",
+            "level": 2,
+            "max_score": 25,
+            "confirm": False,
+            "moderators": ["debra"],
+            "teams": []
+        }
+        
+        actual_json = comp.get_json()
+        
+        assert actual_json == expected_json
 
     def test2_create_competition(self):
-      db.drop_all()
-      db.create_all()
-      mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      self.assertDictEqual(comp.get_json(), {"id": 1, "name": "RunTime", "date": "29-03-2024", "location": "St. Augustine", "level": 2, "max_score": 25, "moderators": ["debra"], "teams": []})
+        db.drop_all()
+        db.create_all()
+        mod = create_moderator("debra", "debrapass")
+        comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+        self.assertIsNotNone(comp)
+        expected_json = {
+            "id": comp.id,
+            "name": "RunTime",
+            "date": "29-03-2024",
+            "location": "St. Augustine",
+            "level": 2,
+            "max_score": 25,
+            "confirm": False,
+            "moderators": ["debra"],
+            "teams": []
+        }
+        self.assertDictEqual(comp.get_json(), expected_json)
       
     #Feature 2 Integration Tests
     def test1_add_results(self):

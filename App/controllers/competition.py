@@ -10,12 +10,11 @@ def create_competition(mod_name, comp_name, date, location, level, max_score):
     
     mod = Moderator.query.filter_by(username=mod_name).first()
     if mod:
-        newComp = Competition(comp_name, datetime.strptime(date, "%d-%m-%Y"), location, level, max_score)
+        newComp = Competition(name=comp_name, date=datetime.strptime(date, "%d-%m-%Y"), location=location, level=level, max_score=max_score)
         #print("NewComp: ", newComp.toDict())
         try:
             db.session.add(newComp)
             db.session.commit()
-
             newComp.add_mod(mod)
             # print(f'\nNew Competition: {comp_name} created!')
             # print(str(newComp.toDict()))
