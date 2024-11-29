@@ -81,12 +81,9 @@ def display_notifications(username):
     else:
         return {"notifications":[notification.to_dict() for notification in student.notifications]}
 
-class RankingSubject(Subject):  #only thing that might be better to do is make a rank model
-    pass                        #we could prob add the ranks to the model before we use it to notify student
-                                #IDK if mendez would be fine with how the class RankingSubject is rn
-
 def update_rankings():
     students = get_all_students()
+    from App.models import RankingSubject
     ranking_subj = RankingSubject()
     # Sort by rating_score, comp_count, and a unique identifier (e.g., student.id)
     students.sort(key=lambda x: (x.rating_score, x.comp_count, x.id), reverse=True)
@@ -103,23 +100,13 @@ def update_rankings():
             curr_rank = count
             curr_high = student.rating_score
 
+        ranking_subj.notify("RankUpdated", {"curr": curr_rank})
+        ranking_subj.detach(student)
+
         if student.comp_count != 0:
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score": student.rating_score})
             count += 1
         
-            student.curr_rank = curr_rank
-            if student.prev_rank == 0:
-                message = f'RANK : {student.curr_rank}. Congratulations on your first rank!'
-            elif student.curr_rank == student.prev_rank:
-                message = f'RANK : {student.curr_rank}. Well done! You retained your rank.'
-            elif student.curr_rank < student.prev_rank:
-                message = f'RANK : {student.curr_rank}. Congratulations! Your rank has went up.'
-            else:
-                message = f'RANK : {student.curr_rank}. Oh no! Your rank has went down.'
-            student.prev_rank = student.curr_rank
-            notification = Notification(student.id, message)
-            student.notifications.append(notification)
-
             try:
                 db.session.add(student)
                 db.session.commit()
