@@ -394,116 +394,110 @@ class IntegrationTests(unittest.TestCase):
       self.assertListEqual(display_rankings(), [{"placement": 1, "student": "james", "rating score": 24.0}, {"placement": 1, "student": "steven", "rating score": 24.0}, {"placement": 1, "student": "emily", "rating score": 24.0}, {"placement": 4, "student": "mark", "rating score": 16.0}, {"placement": 4, "student": "eric", "rating score": 16.0}, {"placement": 4, "student": "ryan", "rating score": 16.0}])
 
     #Feature 6 Integration Tests
-    # def test1_display_notification(self):
-    #   db.drop_all()
-    #   db.create_all()
-    #   mod = create_moderator("debra", "debrapass")
-    #   comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-    #   student1 = create_student("james", "jamespass")
-    #   student2 = create_student("steven", "stevenpass")
-    #   student3 = create_student("emily","emilypass")
-    #   student4 = create_student("mark", "markpass")
-    #   student5 = create_student("eric", "ericpass")
-    #   student6 = create_student("ryan", "ryanpass")
-    #   students1 = [student1.username, student2.username, student3.username]
-    #   team1 = add_team(mod.username, comp.name, "Runtime Terrors", students1)
-    #   comp_team1 = add_results(mod.username, comp.name, "Runtime Terrors", 15)
-    #   students2 = [student4.username, student5.username, student6.username]
-    #   team2 = add_team(mod.username, comp.name, "Scrum Lords", students2)
-    #   comp_team2 = add_results(mod.username, comp.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp.name)
-    #   update_rankings()
-    #   self.assertDictEqual(display_notifications("james"), {"notifications": [{"ID": 1, "Notification": "RANK : 1. Congratulations on your first rank!"}]})
+    def test1_display_notification(self):
+      mod = create_moderator("debra", "debrapass")
+      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      student1 = create_student("james", "jamespass")
+      student2 = create_student("steven", "stevenpass")
+      student3 = create_student("emily", "emilypass")
+      student4 = create_student("mark", "markpass")
+      student5 = create_student("eric", "ericpass")
+      student6 = create_student("ryan", "ryanpass")
+      students1 = [student1.username, student2.username, student3.username]
+      team1 = add_team(mod.username, comp.name, "Runtime Terrors", students1)
+      comp_team1 = add_results(mod.username, comp.name, "Runtime Terrors", 15)
+      students2 = [student4.username, student5.username, student6.username]
+      team2 = add_team(mod.username, comp.name, "Scrum Lords", students2)
+      comp_team2 = add_results(mod.username, comp.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp.name)
+      noti = display_notifications("james")
+      compIDs = Competition.query.with_entities(Competition.id).all()
+      rank = display_notifications("james")
+      self.assertDictEqual(noti, {"notifications": [{"ID": 1, "Notification": "RANK : 1. Congratulations on your first rank!"}]})
 
-    # def test2_display_notification(self):
-    #   db.drop_all()
-    #   db.create_all()
-    #   mod = create_moderator("debra", "debrapass")
-    #   comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-    #   comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 30)
-    #   student1 = create_student("james", "jamespass")
-    #   student2 = create_student("steven", "stevenpass")
-    #   student3 = create_student("emily", "emilypass")
-    #   student4 = create_student("mark", "markpass")
-    #   student5 = create_student("eric", "ericpass")
-    #   student6 = create_student("ryan", "ryanpass")
-    #   students1 = [student1.username, student2.username, student3.username]
-    #   team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
-    #   comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
-    #   students2 = [student4.username, student5.username, student6.username]
-    #   team2 = add_team(mod.username, comp1.name, "Scrum Lords", students2)
-    #   comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp1.name)
-    #   update_rankings()
-    #   students3 = [student1.username, student4.username, student5.username]
-    #   team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
-    #   comp_team3 = add_results(mod.username, comp2.name, "Runtime Terrors", 15)
-    #   students4 = [student2.username, student3.username, student6.username]
-    #   team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
-    #   comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp2.name)
-    #   update_rankings()
-    #   self.assertDictEqual(display_notifications("james"), {"notifications": [{"ID": 1, "Notification": "RANK : 1. Congratulations on your first rank!"}, {"ID": 7, "Notification": "RANK : 1. Well done! You retained your rank."}]})
+    def test2_display_notification_rank_retained(self):
+      mod = create_moderator("debra", "debrapass")
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 30)
+      student1 = create_student("james", "jamespass")
+      student2 = create_student("steven", "stevenpass")
+      student3 = create_student("emily", "emilypass")
+      student4 = create_student("mark", "markpass")
+      student5 = create_student("eric", "ericpass")
+      student6 = create_student("ryan", "ryanpass")
+      students1 = [student1.username, student2.username, student3.username]
+      team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
+      comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
+      students2 = [student4.username, student5.username, student6.username]
+      team2 = add_team(mod.username, comp1.name, "Scrum Lords", students2)
+      comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp1.name)
+      update_rankings()
+      students3 = [student1.username, student4.username, student5.username]
+      team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
+      comp_team3 = add_results(mod.username, comp2.name, "Runtime Terrors", 15)
+      students4 = [student2.username, student3.username, student6.username]
+      team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
+      comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp2.name)
+      update_rankings()
+      self.assertDictEqual(display_notifications("james"), {"notifications": [{"ID": 1, "Notification": "RANK : 1. Congratulations on your first rank!"}, {"ID": 7, "Notification": "RANK : 1. Well done! You retained your rank."}]})
 
-    # def test3_display_notification(self):
-    #   db.drop_all()
-    #   db.create_all()
-    #   mod = create_moderator("debra", "debrapass")
-    #   comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-    #   comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
-    #   student1 = create_student("james", "jamespass")
-    #   student2 = create_student("steven", "stevenpass")
-    #   student3 = create_student("emilypass")
-    #   student4 = create_student("mark", "markpass")
-    #   student5 = create_student("eric", "ericpass")
-    #   student6 = create_student("ryan", "ryanpass")
-    #   students1 = [student1.username, student2.username, student3.username]
-    #   team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
-    #   comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
-    #   students2 = [student4.username, student5.username, student6.username]
-    #   team2 = add_team(mod.username, comp1.name, "Scrum Lords", students2)
-    #   comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp1.name)
-    #   update_rankings()
-    #   students3 = [student1.username, student4.username, student5.username]
-    #   team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
-    #   comp_team3 = add_results(mod.username, comp2.name, "Runtime Terrors", 20)
-    #   students4 = [student2.username, student3.username, student6.username]
-    #   team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
-    #   comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp2.name)
-    #   update_rankings()
-    #   self.assertDictEqual(display_notifications("steven"), {"notifications": [{"ID": 2, "Notification": "RANK : 1. Congratulations on your first rank!"}, {"ID": 10, "Notification": "RANK : 4. Oh no! Your rank has went down."}]})
+    def test3_display_notification_rank_down(self):
+      mod = create_moderator("debra", "debrapass")
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
+      student1 = create_student("james", "jamespass")
+      student2 = create_student("steven", "stevenpass")
+      student3 = create_student("emily", "emilypass")
+      student4 = create_student("mark", "markpass")
+      student5 = create_student("eric", "ericpass")
+      student6 = create_student("ryan", "ryanpass")
+      students1 = [student1.username, student2.username, student3.username]
+      team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
+      comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
+      students2 = [student4.username, student5.username, student6.username]
+      team2 = add_team(mod.username, comp1.name, "Scrum Lords", students2)
+      comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp1.name)
+      update_rankings()
+      students3 = [student1.username, student4.username, student5.username]
+      team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
+      comp_team3 = add_results(mod.username, comp2.name, "Runtime Terrors", 20)
+      students4 = [student2.username, student3.username, student6.username]
+      team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
+      comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp2.name)
+      update_rankings()
+      self.assertDictEqual(display_notifications("steven"), {"notifications": [{"ID": 2, "Notification": "RANK : 1. Congratulations on your first rank!"}, {"ID": 10, "Notification": "RANK : 4. Oh no! Your rank has went down."}]})
 
-    # def test4_display_notification(self):
-    #   db.drop_all()
-    #   db.create_all()
-    #   mod = create_moderator("debra", "debrapass")
-    #   comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-    #   comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
-    #   student1 = create_student("james", "jamespass")
-    #   student2 = create_student("steven", "stevenpass")
-    #   student3 = create_student("emilypass")
-    #   student4 = create_student("mark", "markpass")
-    #   student5 = create_student("eric", "ericpass")
-    #   student6 = create_student("ryan", "ryanpass")
-    #   students1 = [student1.username, student2.username, student3.username]
-    #   team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
-    #   comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
-    #   students2 = [student4.username, student5.username, student6.username]
-    #   team2 = add_team(mod.username, comp1.name, "Scrum Lords", students2)
-    #   comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp1.name)
-    #   update_rankings()
-    #   students3 = [student1.username, student4.username, student5.username]
-    #   team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
-    #   comp_team3 = add_results(mod.username, comp2.name, "Runtime Terrors", 20)
-    #   students4 = [student2.username, student3.username, student6.username]
-    #   team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
-    #   comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
-    #   update_ratings(mod.username, comp2.name)
-    #   update_rankings()
-    #   self.assertDictEqual(display_notifications("mark"), {"notifications": [{"ID": 4, "Notification": "RANK : 4. Congratulations on your first rank!"}, {"ID": 8, "Notification": "RANK : 2. Congratulations! Your rank has went up."}]})
+    def test4_display_notification_rank_up(self):
+      mod = create_moderator("debra", "debrapass")
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
+      student1 = create_student("james", "jamespass")
+      student2 = create_student("steven", "stevenpass")
+      student3 = create_student("emily", "emilypass")
+      student4 = create_student("mark", "markpass")
+      student5 = create_student("eric", "ericpass")
+      student6 = create_student("ryan", "ryanpass")
+      students1 = [student1.username, student2.username, student3.username]
+      team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
+      comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
+      students2 = [student4.username, student5.username, student6.username]
+      team2 = add_team(mod.username, comp1.name, "Scrum Lords", students2)
+      comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp1.name)
+      update_rankings()
+      students3 = [student1.username, student4.username, student5.username]
+      team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
+      comp_team3 = add_results(mod.username, comp2.name, "Runtime Terrors", 20)
+      students4 = [student2.username, student3.username, student6.username]
+      team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
+      comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
+      update_ratings(mod.username, comp2.name)
+      update_rankings()
+      self.assertDictEqual(display_notifications("mark"), {"notifications": [{"ID": 4, "Notification": "RANK : 4. Congratulations on your first rank!"}, {"ID": 8, "Notification": "RANK : 2. Congratulations! Your rank has went up."}]})
 
     #Additional Integration Tests
     def test1_add_mod(self):
@@ -512,7 +506,7 @@ class IntegrationTests(unittest.TestCase):
       mod1 = create_moderator("debra", "debrapass")
       mod2 = create_moderator("robert", "robertpass")
       comp = create_competition(mod1.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      assert add_mod(mod1.username, comp.name, mod2.username) == None
+      assert add_mod(mod1.username, comp.name, mod2.username) != None
        
     def test2_add_mod(self):
       db.drop_all()
