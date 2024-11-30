@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
-{% block title %}Profile{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
+{% block title %}Profile | TFR Competition Platform{% endblock %}
+{% block page %}TFR Competition Platform{% endblock %}
+
 
 {{ super() }}
 
@@ -30,7 +31,7 @@ h1 {
     color: white;*/
 }
 
-.moderator-image {
+.moderator-image-container {
     background-color: #343A40;
     border-radius: 25px;
     padding-top: 0vw;
@@ -101,20 +102,20 @@ h1 {
 </style>
 
 <div>
-    <center><h2 style="color: white;">Profile</h2></center>
+    <h2 style="color: white; text-align: center;">Profile</h2>
 </div>
 <div class="profile-info" style="font-family: helvetica;">
     <div class="moderator-info">
-        <div class="moderator-image">
-            <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Moderator Photo" width="80%"></center>
+        <div class="moderator-image-container">
+            <img class="moderator-image" src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Moderator Photo" height="80%" width="100%">
         </div>
         <div style="color: white;" class="moderator-username">
-            <p>{{moderator.username}}</p>
+            <p>{{moderator.username | capitalize}}</p>
         </div> 
     </div>
 
     <div class="competition-list">
-        <center><p style="font-family: optima;">Competitions</p></center>
+        <p style="font-family: optima; text-align: center;">Competitions</p>
         <ul>
             {% for competition in moderator.competitions %}
                 <li>

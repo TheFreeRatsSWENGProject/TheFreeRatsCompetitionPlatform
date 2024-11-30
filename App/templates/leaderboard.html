@@ -191,7 +191,7 @@
                     {%for student in leaderboard[:20]%}
                     <tr>
                         <td class="rank">{{student['placement']}}</td>
-                        <td class="name">{{student['student']}}</td>
+                        <td class="name">{{student['student'] | capitalize}}</td>
                         {%if student['placement'] == 1%}
                         <td class="points">
                             <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
