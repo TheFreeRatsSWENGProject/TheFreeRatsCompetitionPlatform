@@ -60,10 +60,12 @@ class Student(User, Observer):
             else:
                 print(f"Team '{data['team']}' not found!")
         elif event == "RankUpdated":
-            new_rank = data['new_rank']
+            new_rank = data['curr']
             if self.curr_rank != new_rank:
                 self.prev_rank = self.curr_rank
                 self.curr_rank = new_rank
+                # print("New rank is: ", new_rank)
+                #print("Inside notification:" + str(self.to_Dict()))
                 #print(f"StudentNotification: {self.username}, your rank has been updated to '{new_rank}'!")
         else:
             print(f"Unknown event '{event}' occurred in team '{data.get('team', 'unknown')}'!")
