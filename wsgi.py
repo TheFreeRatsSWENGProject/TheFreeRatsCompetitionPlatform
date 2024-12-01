@@ -162,6 +162,17 @@ def display_student_info_command(username):
 def display_notifications_command(username):
     print(display_notifications(username))
 
+@student_cli.command("rank-history", help="Displays rank history of a student")
+@click.argument("username")
+def display_rank_history_command(username):
+    display_rank_history(username)
+
+@student_cli.command("rank-history-json", help="Gets rank history of a student in JSON format")
+@click.argument("username")
+def get_rank_history_json_command(username):
+    history_json = get_rank_history_json(username)
+    print(history_json)
+
 app.cli.add_command(student_cli)
 
 

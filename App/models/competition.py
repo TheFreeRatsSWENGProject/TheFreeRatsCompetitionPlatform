@@ -29,6 +29,10 @@ class Competition(db.Model, Subject):
         self.confirm = False
         self.moderators = []
         self.teams = []
+        
+    # @staticmethod
+    # def get_competition_by_name(name):
+    #     return Competition.query.filter_by(name=name).first()
 
     def add_mod(self, mod):
         from App.models.moderator import Moderator  # Local import to avoid circular import
