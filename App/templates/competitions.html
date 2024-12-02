@@ -65,13 +65,17 @@
         transition: 0.2s;
     }
 
+    .mod-create {
+        text-align: center;
+    }
+
 </style>
 <div>
     <div>
         <h2 style="margin-left: 50px; color: white; text-align: center;">Competitions</h2>
     </div>
     {% if session['user_type'] == 'moderator' %}
-    <div>
+    <div class="mod-create">
         <button type="button" style="padding: 5px; margin-left: 50px; margin-top: 50px; background-color: black; height: 35px; border-radius: 15px; font-family: helvetica;">
             <a style="color: white;" href="{{url_for('comp_views.create_comp_page')}}">Create Competition</a>
         </button>
