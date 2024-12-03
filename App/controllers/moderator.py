@@ -148,5 +148,5 @@ def update_ratings(mod_name, comp_name):
         print("Results finalized!")
 
         # Recalculate rankings for all students
-        update_rankings()
+        update_rankings(comp_name)
         return True

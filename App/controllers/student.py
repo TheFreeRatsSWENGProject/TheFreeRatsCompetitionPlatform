@@ -82,20 +82,21 @@ def display_notifications(username):
     else:
         return {"notifications":[notification.to_dict() for notification in student.notifications]}
 
-current_competition_name = None
 
-def set_current_competition_name(comp_name):
-    global current_competition_name
-    current_competition_name = comp_name
-
-def get_current_competition_name():
-    global current_competition_name
-    return current_competition_name
+def create_ranking(student_id, rank, date, score):
+    ranking = RankHistory(student_id, rank, date,score)
     
-def update_rankings():
+    try:
+        db.session.add(ranking)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f'Error creating ranking: {e}')
+
+def update_rankings(comp_name):
     students = get_all_students()
-    comp_name = get_current_competition_name()
-    from App.models import RankingSubject, RankHistory
+    competition = Competition.query.filter_by(name=comp_name).first()
+    from App.models import RankingSubject
     ranking_subj = RankingSubject()
     # Sort by rating_score, comp_count, and a unique identifier (e.g., student.id)
     students.sort(key=lambda x: (x.rating_score, x.comp_count, x.id), reverse=True)
@@ -105,9 +106,6 @@ def update_rankings():
     curr_high = students[0].rating_score if students else 0
     curr_rank = 1
 
-    # Retrieve the competition date using the competition name
-    competition = Competition.query.filter_by(name=comp_name).first()
-    competition_date = competition.date if competition else None
 
     for student in students:
         ranking_subj.attach(student)
@@ -124,15 +122,18 @@ def update_rankings():
 
             student.prev_rank = student.curr_rank
 
-            # Record the rank history
-            rank_history = RankHistory(student_id=student.id, rank=curr_rank, date=competition_date)
+           
             try:
                 db.session.add(student)
-                db.session.add(rank_history)
+                # db.session.add(rank_history)
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
-                print(f"Error adding rank history for {student.username}: {e}")
+                print(f'Error updating student rank: {e}')
+                
+            create_ranking(student.id, student.curr_rank, competition.date,student.rating_score)
+        else:
+            create_ranking(student.id, 0, competition.date,student.rating_score)
 
     return leaderboard
 
@@ -174,9 +175,9 @@ def display_rank_history(username):
     history = RankHistory.query.filter_by(student_id=student.id).order_by(RankHistory.date.desc()).all()
     history.sort(key=lambda x: (x.id), reverse=True)
 
-    print("Rank\tDate")
+    print("Rank\tDate\t\t\t\tScore")
     for rank in history:
-        print(f'{rank.rank}\t{rank.date}')
+        print(f'{rank.rank}\t{rank.date}\t{rank.score}')
 
     return history
 
