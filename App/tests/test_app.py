@@ -182,6 +182,12 @@ class UnitTests(unittest.TestCase):
 '''
     Integration Tests
 '''
+@pytest.fixture(autouse=True, scope="module")
+def empty_db():
+    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
+    create_db()
+    yield app.test_client()
+    db.drop_all()
 
 class IntegrationTests(unittest.TestCase):
     # Setup and Teardown
