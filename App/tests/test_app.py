@@ -401,7 +401,7 @@ class IntegrationTests(unittest.TestCase):
 
 
     #Feature 6 Integration Tests
-    def test1_display_notification(self):
+    def test1_display_notification_first_rank(self):
       db.drop_all()
       db.create_all()
       mod = create_moderator("debra", "debrapass")
@@ -422,7 +422,7 @@ class IntegrationTests(unittest.TestCase):
       # print(display_notifications("james"))
       self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}]})
 
-    def test2_display_notification(self):
+    def test2_display_notification_retained_rank(self):
       db.drop_all()
       db.create_all()
       mod = create_moderator("debra", "debrapass")
@@ -457,7 +457,7 @@ class IntegrationTests(unittest.TestCase):
       # print(display_notifications("james"))
       self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}, {'ID': 9, 'Student ID': 1, 'Notification': 'RANK : 1. Well done! You retained your rank.'}]})
 
-    def test3_display_notification(self):
+    def test3_display_notification_rank_down(self):
       db.drop_all()
       db.create_all()
       mod = create_moderator("debra", "debrapass")
@@ -488,7 +488,7 @@ class IntegrationTests(unittest.TestCase):
       # print(test)
       self.assertDictEqual(display_notifications("steven"), {'notifications': [{'ID': 2, 'Student ID': 2, 'Notification': 'RANK : 1. Congratulations on your first rank!'}, {'ID': 8, 'Student ID': 2, 'Notification': 'RANK : 1. Well done! You retained your rank.'}, {'ID': 16, 'Student ID': 2, 'Notification': 'RANK : 4. Oh no! Your rank has went down.'}]})
 
-    def test4_display_notification(self):
+    def test4_display_notification_rank_up(self):
       db.drop_all()
       db.create_all()
       mod = create_moderator("debra", "debrapass")
@@ -529,6 +529,32 @@ class IntegrationTests(unittest.TestCase):
     #   test= add_mod(mod1.username, comp.name, mod2.username)
     #   print(test)
     #   assert add_mod(mod1.username, comp.name, mod2.username) != None
+
+
+    def test_get_rank_history(self):
+      mod = create_moderator("debra", "debrapass")
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 30)
+      student1 = create_student("james", "jamespass")
+      student2 = create_student("steven", "stevenpass")
+      student3 = create_student("emily", "emilypass")
+      students1 = [student1.username, student2.username, student3.username]
+      team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
+      comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
+      update_ratings(mod.username, comp1.name)
+      update_rankings(comp1.name)
+        
+      students2 = [student1.username, student2.username, student3.username]
+      team2 = add_team(mod.username, comp2.name, "Scrum Lords", students2)
+      comp2_team2 = add_results(mod.username, comp2.name, "Scrum Lords", 20)
+      update_ratings(mod.username, comp2.name)
+      update_rankings(comp2.name)
+        
+      rank_history = get_rank_history_json(student2.username)
+      print(rank_history)
+      
+      self.assertListEqual(get_rank_history_json("steven"), [{'student_id': 2, 'rank': 1, 'date': '2024-03-29', 'score': 24.0}, {'student_id': 2, 'rank': 1, 'date': '2024-03-29', 'score': 24.0}, {'student_id': 2, 'rank': 1, 'date': '2024-02-23', 'score': 18.666666666666664}, {'student_id': 2, 'rank': 1, 'date': '2024-02-23', 'score': 18.666666666666664}])
+       
        
     def test2_add_mod(self):
       db.drop_all()
