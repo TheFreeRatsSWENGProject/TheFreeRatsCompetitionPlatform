@@ -146,7 +146,7 @@ def init():
         for competition in reader:
             if competition['comp_name'] != 'TopCoder':
                 update_ratings(competition['mod_name'], competition['comp_name'])
-                update_rankings()
+                update_rankings(comp.name)
             #db.session.add(comp)
         #db.session.commit()
     
@@ -335,7 +335,7 @@ def init_postman():
 
         for competition in reader:
             update_ratings(competition['mod_name'], competition['comp_name'])
-            update_rankings()
+            update_rankings(comp.name)
             #db.session.add(comp)
         #db.session.commit()
     

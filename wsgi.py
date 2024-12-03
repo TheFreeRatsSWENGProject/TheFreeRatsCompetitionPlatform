@@ -70,7 +70,7 @@ def initialize():
         for competition in reader:
             if competition['comp_name'] != 'TopCoder':
                 update_ratings(competition['mod_name'], competition['comp_name'])
-                update_rankings()
+                update_rankings(comp.name)
             #db.session.add(comp)
         #db.session.commit()
     
@@ -162,6 +162,30 @@ def display_student_info_command(username):
 def display_notifications_command(username):
     print(display_notifications(username))
 
+@student_cli.command("rank-history", help="Displays rank history of a student")
+@click.argument("username")
+def display_rank_history_command(username):
+    display_rank_history(username)
+
+# @student_cli.command("rank-history", help="Displays rank history of a student")
+# @click.argument("student_name")
+# def rank_history_command(student_name):
+#     student = Student.query.filter_by(username=student_name).first()
+#     if not student:
+#         print(f"Student {student_name} not found!")
+#         return
+
+#     rank_history = RankHistory.query.filter_by(student_id=student.id).all()
+#     print("Rank    Date       Score")
+#     for rank in rank_history:
+#         print(f"{rank.rank}       {rank.date.strftime('%Y-%m-%d')}       {rank.score}")
+
+@student_cli.command("rank-history-json", help="Gets rank history of a student in JSON format")
+@click.argument("username")
+def get_rank_history_json_command(username):
+    history_json = get_rank_history_json(username)
+    print(history_json)
+
 app.cli.add_command(student_cli)
 
 
@@ -217,7 +241,7 @@ def add_results_command(mod_name, comp_name, team_name, student1, student2, stud
 @click.argument("comp_name", default="comp1")
 def update_rankings_command(mod_name, comp_name):
     update_ratings(mod_name, comp_name)
-    update_rankings()
+    update_rankings(comp_name)
 
 @mod_cli.command("rankings", help="Displays overall rankings")
 def display_rankings_command():
