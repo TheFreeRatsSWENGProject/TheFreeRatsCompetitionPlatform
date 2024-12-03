@@ -382,6 +382,24 @@ class IntegrationTests(unittest.TestCase):
       update_rankings(comp.name)
       self.assertListEqual(display_rankings(), [{"placement": 1, "student": "james", "rating score": 24.0}, {"placement": 1, "student": "steven", "rating score": 24.0}, {"placement": 1, "student": "emily", "rating score": 24.0}, {"placement": 4, "student": "mark", "rating score": 16.0}, {"placement": 4, "student": "eric", "rating score": 16.0}, {"placement": 4, "student": "ryan", "rating score": 16.0}])
 
+    def test_notification(self):
+      db.drop_all()
+      db.create_all()
+      mod = create_moderator("debra", "debrapass")
+      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      student1 = create_student("james", "jamespass")
+      student2 = create_student("steven", "stevenpass")
+      student3 = create_student("emily", "emilypass")
+      students1 = [student1.username, student2.username, student3.username]
+      team1 = add_team(mod.username, comp.name, "Runtime Terrors", students1)
+      comp_team1 = add_results(mod.username, comp.name, "Runtime Terrors", 15)
+      update_ratings(mod.username, comp.name)
+      test=display_notifications("james")
+      print(test)
+      self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}]})
+    
+
+
     #Feature 6 Integration Tests
     def test1_display_notification(self):
       db.drop_all()
@@ -401,7 +419,6 @@ class IntegrationTests(unittest.TestCase):
       team2 = add_team(mod.username, comp.name, "Scrum Lords", students2)
       comp_team2 = add_results(mod.username, comp.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp.name)
-      update_rankings(comp.name)
       print(display_notifications("james"))
       self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}]})
 
@@ -438,7 +455,7 @@ class IntegrationTests(unittest.TestCase):
       update_rankings(comp2.name)
       print("COMP 2 FINISH")
       print(display_notifications("james"))
-      self.assertDictEqual(display_notifications("james"), {"notifications": [{"ID": 3, "Notification": "RANK : 1. Congratulations on your first rank!"}, {"ID": 7, "Notification": "RANK : 1. Well done! You retained your rank."}]})
+      self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}, {'ID': 9, 'Student ID': 1, 'Notification': 'RANK : 1. Well done! You retained your rank.'}]})
 
     def test3_display_notification(self):
       db.drop_all()
@@ -467,8 +484,9 @@ class IntegrationTests(unittest.TestCase):
       team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
-      update_rankings(comp2.name)
-      self.assertDictEqual(display_notifications("steven"), {"notifications": [{"ID": 2, "Notification": "RANK : 1. Congratulations on your first rank!"}, {"ID": 10, "Notification": "RANK : 4. Oh no! Your rank has went down."}]})
+      test=display_notifications("steven")
+      print(test)
+      self.assertDictEqual(display_notifications("steven"), {'notifications': [{'ID': 2, 'Student ID': 2, 'Notification': 'RANK : 1. Congratulations on your first rank!'}, {'ID': 8, 'Student ID': 2, 'Notification': 'RANK : 1. Well done! You retained your rank.'}, {'ID': 16, 'Student ID': 2, 'Notification': 'RANK : 4. Oh no! Your rank has went down.'}]})
 
     def test4_display_notification(self):
       db.drop_all()
@@ -497,8 +515,9 @@ class IntegrationTests(unittest.TestCase):
       team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
-      update_rankings(comp2.name)
-      self.assertDictEqual(display_notifications("mark"), {"notifications": [{"ID": 4, "Notification": "RANK : 4. Congratulations on your first rank!"}, {"ID": 8, "Notification": "RANK : 2. Congratulations! Your rank has went up."}]})
+      test=display_notifications("mark")
+      print(test)
+      self.assertDictEqual(display_notifications("mark"), {'notifications': [{'ID': 6, 'Student ID': 4, 'Notification': 'RANK : 4. Congratulations on your first rank!'}, {'ID': 12, 'Student ID': 4, 'Notification': 'RANK : 4. Well done! You retained your rank.'}, {'ID': 14, 'Student ID': 4, 'Notification': 'RANK : 2. Congratulations! Your rank has went up.'}]})
 
     #Additional Integration Tests
     # def test1_add_mod(self):

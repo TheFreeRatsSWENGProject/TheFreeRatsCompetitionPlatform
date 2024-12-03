@@ -98,6 +98,7 @@ def update_rankings(comp_name):
     competition = Competition.query.filter_by(name=comp_name).first()
     from App.models import RankingSubject
     ranking_subj = RankingSubject()
+    
     # Sort by rating_score, comp_count, and a unique identifier (e.g., student.id)
     students.sort(key=lambda x: (x.rating_score, x.comp_count, x.id), reverse=True)
 
@@ -106,35 +107,34 @@ def update_rankings(comp_name):
     curr_high = students[0].rating_score if students else 0
     curr_rank = 1
 
-
     for student in students:
-        ranking_subj.attach(student)
-        if curr_high != student.rating_score:
-            curr_rank = count
-            curr_high = student.rating_score
-
-        ranking_subj.notify("RankUpdated", {"curr": curr_rank})
-        ranking_subj.detach(student)
-
-
         if student.comp_count != 0:
+            if curr_high != student.rating_score:
+                curr_rank = count
+                curr_high = student.rating_score
+
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score": student.rating_score})
             count += 1
 
-            student.prev_rank = student.curr_rank
+            print(f"Attaching and notifying student: {student.username} with rank: {curr_rank}")
+            ranking_subj.attach(student)
+            ranking_subj.notify("RankUpdated", {"curr": curr_rank})
+            ranking_subj.detach(student)
 
-           
+            student.prev_rank = student.curr_rank
+            student.curr_rank = curr_rank
+
             try:
                 db.session.add(student)
-                # db.session.add(rank_history)
                 db.session.commit()
+                print(f"Updated student rank: {student.username} to {student.curr_rank}")
             except Exception as e:
                 db.session.rollback()
                 print(f'Error updating student rank: {e}')
-                
-            create_ranking(student.id, student.curr_rank, competition.date,student.rating_score)
+
+            create_ranking(student.id, student.curr_rank, competition.date, student.rating_score)
         else:
-            create_ranking(student.id, 0, competition.date,student.rating_score)
+            create_ranking(student.id, 0, competition.date, student.rating_score)
 
     return leaderboard
 
