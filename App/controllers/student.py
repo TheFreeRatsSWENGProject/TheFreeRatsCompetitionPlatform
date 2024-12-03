@@ -116,6 +116,7 @@ def update_rankings(comp_name):
         ranking_subj.notify("RankUpdated", {"curr": curr_rank})
         ranking_subj.detach(student)
 
+
         if student.comp_count != 0:
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score": student.rating_score})
             count += 1

@@ -72,22 +72,19 @@ class Student(User, Observer):
             else:
                 message = f'RANK : {new_rank}. Oh no! Your rank has went down.'
 
-            # student.prev_rank = student.curr_rank
-            # ranking = Ranking(student.id, student.curr_rank, competition.date)
-            # notification = Notification(student.id, message)
-            # student.notifications.append(notification)
-
-
-            if self.curr_rank != new_rank:
+            if self.curr_rank != new_rank or self.prev_rank == 0:
                 self.prev_rank = self.curr_rank
                 self.curr_rank = new_rank
+
                 notification = Notification(self.id, message)
                 self.notifications.append(notification)
-                # print("New rank is: ", new_rank)
-                #print("Inside notification:" + str(self.to_Dict()))
-                #print(f"StudentNotification: {self.username}, your rank has been updated to '{new_rank}'!")
 
-                
+                try:
+                    db.session.add(self)
+                    db.session.commit()
+                except Exception as e:
+                    db.session.rollback()
+                    print(f'Error updating student notifications: {e}')
         else:
             print(f"Unknown event '{event}' occurred in team '{data.get('team', 'unknown')}'!")
 
