@@ -51,40 +51,40 @@ class Student(User, Observer):
             "Rank": self.curr_rank
         }
 
+    def set_rank(self, new_rank):
+        self.prev_rank = self.curr_rank
+        self.curr_rank = new_rank
+
     def update(self, event, data=None):
-        if event == "StudentAddedToTeam":
-            from App.models.team import Team
-            team = Team.query.filter_by(name=data['team']).first()
-            if team:
-                self.teams.append(team)
-                print(f"StudentNotification: {self.username}, you have been added to the team '{data['team']}'!")
-            else:
-                print(f"Team '{data['team']}' not found!")
-        elif event == "RankUpdated":
+        if event == "RankUpdated":
             new_rank = data['curr']
+            print(f"Student {self.username} received RankUpdated event with new rank: {new_rank}")
 
             if self.prev_rank == 0:
                 message = f'RANK : {new_rank}. Congratulations on your first rank!'
-            elif self.curr_rank == new_rank:
+            elif new_rank == self.curr_rank:
                 message = f'RANK : {self.curr_rank}. Well done! You retained your rank.'
-            elif self.curr_rank < new_rank:
+            elif new_rank < self.curr_rank:
                 message = f'RANK : {new_rank}. Congratulations! Your rank has went up.'
             else:
                 message = f'RANK : {new_rank}. Oh no! Your rank has went down.'
 
-            if self.curr_rank != new_rank or self.prev_rank == 0:
-                self.prev_rank = self.curr_rank
-                self.curr_rank = new_rank
-
+            # Check if the same notification already exists
+            if not any(notification.message == message for notification in self.notifications):
                 notification = Notification(self.id, message)
                 self.notifications.append(notification)
+                print(f"Notification created for student {self.username}: {message}")
 
-                try:
-                    db.session.add(self)
-                    db.session.commit()
-                except Exception as e:
-                    db.session.rollback()
-                    print(f'Error updating student notifications: {e}')
+            if self.curr_rank != new_rank or self.prev_rank == 0:
+                self.set_rank(new_rank)
+
+            try:
+                db.session.add(self)
+                db.session.commit()
+                print(f"Notification saved for student {self.username}")
+            except Exception as e:
+                db.session.rollback()
+                print(f'Error updating student notifications: {e}')
         else:
             print(f"Unknown event '{event}' occurred in team '{data.get('team', 'unknown')}'!")
 
