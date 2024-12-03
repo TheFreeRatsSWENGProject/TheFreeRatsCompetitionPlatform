@@ -116,7 +116,7 @@ def update_rankings(comp_name):
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score": student.rating_score})
             count += 1
 
-            print(f"Attaching and notifying student: {student.username} with rank: {curr_rank}")
+            # print(f"Attaching and notifying student: {student.username} with rank: {curr_rank}")
             ranking_subj.attach(student)
             ranking_subj.notify("RankUpdated", {"curr": curr_rank})
             ranking_subj.detach(student)
@@ -127,7 +127,7 @@ def update_rankings(comp_name):
             try:
                 db.session.add(student)
                 db.session.commit()
-                print(f"Updated student rank: {student.username} to {student.curr_rank}")
+                # print(f"Updated student rank: {student.username} to {student.curr_rank}")
             except Exception as e:
                 db.session.rollback()
                 print(f'Error updating student rank: {e}')

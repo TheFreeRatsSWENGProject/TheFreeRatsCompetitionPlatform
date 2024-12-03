@@ -394,8 +394,8 @@ class IntegrationTests(unittest.TestCase):
       team1 = add_team(mod.username, comp.name, "Runtime Terrors", students1)
       comp_team1 = add_results(mod.username, comp.name, "Runtime Terrors", 15)
       update_ratings(mod.username, comp.name)
-      test=display_notifications("james")
-      print(test)
+      # test=display_notifications("james")
+      # print(test)
       self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}]})
     
 
@@ -419,7 +419,7 @@ class IntegrationTests(unittest.TestCase):
       team2 = add_team(mod.username, comp.name, "Scrum Lords", students2)
       comp_team2 = add_results(mod.username, comp.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp.name)
-      print(display_notifications("james"))
+      # print(display_notifications("james"))
       self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}]})
 
     def test2_display_notification(self):
@@ -434,7 +434,7 @@ class IntegrationTests(unittest.TestCase):
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
-      print("ALL STUDENTS MADE")
+      # print("ALL STUDENTS MADE")
       students1 = [student1.username, student2.username, student3.username]
       team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
       comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
@@ -443,7 +443,7 @@ class IntegrationTests(unittest.TestCase):
       comp1_team2 = add_results(mod.username, comp1.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp1.name)
       update_rankings(comp1.name)
-      print("COMP 1 FINISH")
+      # print("COMP 1 FINISH")
       print(display_notifications("james"))
       students3 = [student1.username, student4.username, student5.username]
       team3 = add_team(mod.username, comp2.name, "Runtime Terrors", students3)
@@ -453,8 +453,8 @@ class IntegrationTests(unittest.TestCase):
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
       update_rankings(comp2.name)
-      print("COMP 2 FINISH")
-      print(display_notifications("james"))
+      # print("COMP 2 FINISH")
+      # print(display_notifications("james"))
       self.assertDictEqual(display_notifications("james"), {'notifications': [{'ID': 3, 'Student ID': 1, 'Notification': 'RANK : 1. Congratulations on your first rank!'}, {'ID': 9, 'Student ID': 1, 'Notification': 'RANK : 1. Well done! You retained your rank.'}]})
 
     def test3_display_notification(self):
@@ -484,8 +484,8 @@ class IntegrationTests(unittest.TestCase):
       team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
-      test=display_notifications("steven")
-      print(test)
+      # test=display_notifications("steven")
+      # print(test)
       self.assertDictEqual(display_notifications("steven"), {'notifications': [{'ID': 2, 'Student ID': 2, 'Notification': 'RANK : 1. Congratulations on your first rank!'}, {'ID': 8, 'Student ID': 2, 'Notification': 'RANK : 1. Well done! You retained your rank.'}, {'ID': 16, 'Student ID': 2, 'Notification': 'RANK : 4. Oh no! Your rank has went down.'}]})
 
     def test4_display_notification(self):
@@ -515,8 +515,8 @@ class IntegrationTests(unittest.TestCase):
       team4 = add_team(mod.username, comp2.name, "Scrum Lords", students4)
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
-      test=display_notifications("mark")
-      print(test)
+      # test=display_notifications("mark")
+      # print(test)
       self.assertDictEqual(display_notifications("mark"), {'notifications': [{'ID': 6, 'Student ID': 4, 'Notification': 'RANK : 4. Congratulations on your first rank!'}, {'ID': 12, 'Student ID': 4, 'Notification': 'RANK : 4. Well done! You retained your rank.'}, {'ID': 14, 'Student ID': 4, 'Notification': 'RANK : 2. Congratulations! Your rank has went up.'}]})
 
     #Additional Integration Tests
@@ -567,8 +567,8 @@ class IntegrationTests(unittest.TestCase):
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
       update_rankings(comp2.name)
-      test= get_all_students_json()
-      print(test)
+      # test= get_all_students_json()
+      # print(test)
       self.assertEqual(get_all_students_json(), [{'id': 1, 'username': 'james', 'rating_score': 22, 'comp_count': 2, 'curr_rank': 1}, {'id': 2, 'username': 'steven', 'rating_score': 17, 'comp_count': 2, 'curr_rank': 4}, {'id': 3, 'username': 'emily', 'rating_score': 17, 'comp_count': 2, 'curr_rank': 4}, {'id': 4, 'username': 'mark', 'rating_score': 18, 'comp_count': 2, 'curr_rank': 2}, {'id': 5, 'username': 'eric', 'rating_score': 18, 'comp_count': 2, 'curr_rank': 2}, {'id': 6, 'username': 'ryan', 'rating_score': 13, 'comp_count': 2, 'curr_rank': 6}])
 
     def test_comp_list(self):
@@ -583,7 +583,7 @@ class IntegrationTests(unittest.TestCase):
       student4 = create_student("mark", "markpass")
       student5 = create_student("eric", "ericpass")
       student6 = create_student("ryan", "ryanpass")
-      print("ALL STUDENTS MADE")
+      # print("ALL STUDENTS MADE")
       students1 = [student1.username, student2.username, student3.username]
       team1 = add_team(mod.username, comp1.name, "Runtime Terrors", students1)
       comp1_team1 = add_results(mod.username, comp1.name, "Runtime Terrors", 15)
@@ -600,8 +600,8 @@ class IntegrationTests(unittest.TestCase):
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
       update_rankings(comp2.name)
-      test= get_all_competitions_json()
-      print(test)
+      # test= get_all_competitions_json()
+      # print(test)
       self.assertListEqual(get_all_competitions_json(), [{'id': 1, 'name': 'RunTime', 'date': '29-03-2024', 'location': 'St. Augustine', 'level': 2, 'max_score': 25, 'confirm': True, 'moderators': ['debra'], 'teams': ['Runtime Terrors', 'Scrum Lords']}, {'id': 2, 'name': 'Hacker Cup', 'date': '23-02-2024', 'location': 'Macoya', 'level': 1, 'max_score': 20, 'confirm': True, 'moderators': ['debra'], 'teams': ['Runtime Terrors', 'Scrum Lords']}])
 
 if __name__ == '__main__':

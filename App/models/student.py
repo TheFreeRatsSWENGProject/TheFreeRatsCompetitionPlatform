@@ -58,7 +58,7 @@ class Student(User, Observer):
     def update(self, event, data=None):
         if event == "RankUpdated":
             new_rank = data['curr']
-            print(f"Student {self.username} received RankUpdated event with new rank: {new_rank}")
+            # print(f"Student {self.username} received RankUpdated event with new rank: {new_rank}")
 
             if self.prev_rank == 0:
                 message = f'RANK : {new_rank}. Congratulations on your first rank!'
