@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
-{% block title %}Homepage{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
+{% block title %}Home | TFR Competition Platform{% endblock %}
+{% block page %}TheFreeRats Competition Platform{% endblock %}
 
 {{ super() }}
 
 {% block content %}
 
 <style>
-
+/* 
     .tables-container {
         display: flex;
         justify-content: space-between;
@@ -35,7 +35,7 @@
         background-color: #f2f2f2;
     }*/
 
-    .leaderboard-table tbody tr:hover {
+    /* .leaderboard-table tbody tr:hover {
         background-color: black;
     }
 
@@ -47,34 +47,176 @@
 
     .leaderboard-table tbody tr td a:hover {
         text-decoration: underline;
+    } */ 
+     * {
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+     .main-container {
+        height: 100%;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+     .table-container {
+        width: 40rem;
+        background-color: #A9927D;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 0.5rem;
+        -webkit-box-shadow: 0px 0px 0px 0px #F2F4F3;
+        box-shadow: 0px 0px 0px 0px #F2F4F3;
+    }
+
+     .leaderboard-title {
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2.5rem 2.5rem;
+    }
+     .leaderboard {
+        width: 100%;
+        position: relative;
+    }
+     table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        color: white;
+        cursor: default;
+    }
+     tr {
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.2rem;
+    }
+    tr:not(:first-child):hover {
+        background-color: #fff;
+        color: black;
+        transform: scale(1.1);
+        -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+        box-shadow: 0px 5px 15px 8px #e4e7fb;
+    }
+    /* tr:nth-child(odd) {
+        background-color: #FF8C94;
+    } */
+    /* tr:nth-child(1) {
+        color: #fff;
+    } */
+
+    td {
+        height: 5rem;
+        font-family: "Rubik", sans-serif;
+        font-size: 1.4rem;
+        padding: 1rem 2rem;
+        position: relative;
+    }
+
+    .rank {
+        width: 1rem;
+        font-size: 2.2rem;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .name {
+        text-align: left;
+        font-size: 1.2rem;
+    }
+
+    .points {
+        font-weight: bold;
+        font-size: 1.3rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .points:first-child {
+        width: 10rem;
+    }
+    
+    .medal {
+        height: 3rem;
+        margin-left: 1.5rem;
+    }
+
+    .ribbon {
+        width: 42rem;
+        height: 5.5rem;
+        top: -0.5rem;
+        background-color: #5E503F;
+        position: absolute;
+        left: -1rem;
+        -webkit-box-shadow: 0px 15px 11px -6px #F2F4F3;
+        box-shadow: 0px 15px 11px -6px #F2F4F3;
+    }
+
+    .ribbon::before {
+        content: "";
+        height: 1.5rem;
+        width: 1.5rem;
+        bottom: -0.8rem;
+        left: 0.35rem;
+        transform: rotate(45deg);
+        background-color: #5c5be5;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .ribbon::after {
+        content: "";
+        height: 1.5rem;
+        width: 1.5rem;
+        bottom: -0.8rem;
+        right: 0.35rem;
+        transform: rotate(45deg);
+        background-color: #5c5be5;
+        position: absolute;
+        z-index: -1;
     }
 </style>
-<div class="container">
-    <div class="tables-container">
-        <div class="leaderboard-table">
-            <center>
-                <h2 style="color: white; background-color: black; border-radius: 15px;">Leaderboard</h2>
-            </center>
-            <table class="table" style="font-family: verdana;">
-                <thead>
-                    <tr style="color: white;">
-                        <th><center>Overall Rank</center></th>
-                        <th><center>Username</center></th>
-                        <th><center>Rating Score</center></th>
+
+    <div class="main-container">
+        <div class="table-container">
+            <div class="leaderboard-title">
+                <h2 style="color:black; text-align: center;">Leaderboard</h2>
+            </div>
+            <div class="leaderboard">
+                <div class="ribbon"></div>
+                <table class="table" style="font-family: verdana;">
+                    {%for student in leaderboard[:20]%}
+                    <tr>
+                        <td class="rank">{{student['placement']}}</td>
+                        <td class="name">{{student['student'] | capitalize}}</td>
+                        {%if student['placement'] == 1%}
+                        <td class="points">
+                            <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+                            {{'%0.2f' % student['rating score'] | float}} 
+                        </td>
+                        {%elif student['placement'] == 2%}
+                        <td class="points">
+                            <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+                            {{'%0.2f' % student['rating score'] | float}} 
+                        </td>
+                        {%elif student['placement'] == 3%}
+                        <td class="points">
+                            <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+                            {{'%0.2f' % student['rating score'] | float}} 
+                        </td>
+                        {%else%}
+                        <td class="points">{{'%0.2f' % student['rating score'] | float}}</td>
+                        {%endif%}
                     </tr>
-                </thead>
-                <tbody>
-                    {% for student in leaderboard[:20] %}
-                    <tr style="color: white;">
-                        <td><center>{{student['placement']}}</center></td>
-                        <td><center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></center></td>
-                        <td><center>{{'%0.2f' % student['rating score']|float}}</center></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    {%endfor%}
+                </table>
+            </div>
         </div>
     </div>
-</div>
+
+
 <div style="padding: 20px;"></div>
 {% endblock %}

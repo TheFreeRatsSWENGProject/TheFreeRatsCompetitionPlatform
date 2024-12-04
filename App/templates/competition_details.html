@@ -1,91 +1,127 @@
 {% extends "layout.html" %}
-{% block title %}Competition Details{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
+{% block title %}Competition Details | TFR Competition Platform{% endblock %}
+{% block page %}TheFreeRats Competition Platform{% endblock %}
 
 {{ super() }}
 
 {% block content %}
 
 <style>
-    .competition-details {
-        margin-top: 20px;
+    .main-container {
+        height: 100%;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    .table-container {
+        width: 40rem;
+        background-color: #A9927D;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 0.5rem;
+        -webkit-box-shadow: 0px 0px 0px 0px #F2F4F3;
+        box-shadow: 0px 0px 0px 0px #F2F4F3;
+    }
+    .student-name {
+        color: white;
     }
 
-    .card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        color: white;
+        cursor: default;
+    }
+     tr {
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.2rem;
+    }
+    tr:hover {
         background-color: #fff;
-        transition: box-shadow 0.3s;
+        color: black;
+        transform: scale(1.1);
+        -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+        box-shadow: 0px 5px 15px 8px #e4e7fb;
+    }
+    tr:hover a {
         color: black;
     }
+    tr a:hover {
+        text-decoration: underline;
+    }
+    /* tr:nth-child(odd) {
+        background-color: #FF8C94;
+    } */
+    /* tr:nth-child(1) {
+        color: #fff;
+    } */
 
-    .card:hover {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    td {
+        height: 5rem;
+        font-family: "Rubik", sans-serif;
+        font-size: 1.4rem;
+        padding: 1rem 2rem;
+        position: relative;
     }
 
-    .teams li {
-        list-style-type: none;
-    }
-
-    .table th,
-    .table td {
-        padding: 12px 15px;
+    .rank {
+        width: 1rem;
+        font-size: 2.2rem;
+        font-weight: bold;
         text-align: left;
-        border-bottom: 1px solid white;
     }
 
-    .table tbody tr:hover {
-        background-color: black;
+    .team .members {
+        text-align: left;
+        font-size: 1.2rem;
     }
+
+    .points {
+        font-weight: bold;
+        font-size: 1.3rem;
+        align-items: center;
+    }
+
 
 </style>
-<div style="display: flex;">
-    <div>
-        <center><h2 style="margin-left: 50px; color: white;">Competition Details</h2></center>
-    </div>
+<div">
     <div>
         {% if session['user_type'] == 'moderator' and moderator in competition.moderators and not competition.confirm %}
-        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; width: 120px; height: 35px; border-radius: 15px; font-family: helvetica;">
+        <button type="button" style="background-color: #343A40; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px; font-family: helvetica;">
             <a style="color: white" href="{{ url_for('comp_views.add_results_page', comp_id=competition.id) }}">Add Results</a>
         </button>
-        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; width: 120px; height: 35px; border-radius: 15px; font-family: helvetica;">
+        <button type="button" style="background-color: #343A40; padding: 5px; margin-left: 50px; margin-top: 50px; height: 35px; border-radius: 15px; font-family: helvetica;">
             <a style="color: white" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
         </button>
         {% endif %}
     </div>
 </div>
-<div class="container" style="font-family: serif;">
-    {% if not competition.confirm %}
-        <center> <h4 style="color: white; background-color: black; border-radius: 15px;">{{ competition.name }} Unofficial Results</h4> </center>
-    {% else %}
-        <center> <h4 style="color: white; background-color: black; border-radius: 15px;">{{ competition.name }} Official Results</h4> </center>
-    {% endif %}
-    <table class="table" style="color: white; font-family: verdana;">
-        <thead>
-            <tr>
-                <th><center>Rank</center></th>
-                <th><center>Team</center></th>
-                <th><center>Members</center></th>
-                <th><center>Score</center></th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="main-container">
+    <div class="table-container" style="font-family: serif;">
+        {% if not competition.confirm %}
+            <h2 style="color: black; border-radius: 15px; text-align: center;">{{ competition.name }} Unofficial Results</h2>
+        {% else %}
+            <h2 style="color: black; border-radius: 15px; text-align: center;">{{ competition.name }} Official Results</h2>
+        {% endif %}
+        <table class="table" style="color: white; font-family: verdana;">
             {% for row in leaderboard %}
             <tr>
-                <td><center>{{row['placement']}}</center></td>
-                <td><center>{{row['team']}}</center></td>
-                <td>
-                {% for student in row['members'] %}
-                    <center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student)}}">{{student}}</p></center>
+                <td class="rank">{{row['placement']}}</td>
+                <td class="team">{{row['team']}}</td>
+                <td class="members">
+                {%for student in row['members']%}
+                    <a class="student-name" href="{{url_for('index_views.student_profile_by_name', name=student)}}"><p>{{student}} </p></a>
                 {% endfor %}
                 </td>
-                <td><center>{{row['score']}}</center></td>
+                <td class="points">{{row['score']}}</td>
             </tr>
             {% endfor %}
-        </tbody>
-    </table>
+        </table>
+    </div>
 </div>
-<div style="padding: 20px;"></div>
 {% endblock %}

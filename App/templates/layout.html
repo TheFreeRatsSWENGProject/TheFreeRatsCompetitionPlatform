@@ -10,24 +10,34 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
 
+  <style>
+    body {
+      background-color: #161615;
+    }
+
+    nav {
+      background-color: #343A40;
+    }
+  </style>
+
   <body>
     
-    <nav class="black">
+    <nav>
       <div class="nav-wrapper">
-        <a style="font-family: copperplate;" href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
+        <a style="font-family: copperplate; padding-left: 5px;" href="#!" class="brand-logo left">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left" style="font-family: lucida bright;">
+          <ul id="nav-mobile" class="right" style="font-family: lucida bright;">
+            {% if user.is_authenticated %}
+              <li><a href="/profile">Profile</a></li>
+              <li><a href="/logout">Log Out</a></li>
+            {% else %}
+              <li><a href="/signup">Sign Up</a></li>
+              <li><a href="/login">Log In</a></li>
+            {% endif %}
+          </ul>
+            <ul id="nav-mobile" class="right" style="font-family: lucida bright;">
                 <li><a href="/leaderboard">Leaderboard</a></li>
                 <li><a href="/competitions">Competitions</a></li>
-            </ul>
-            <ul id="nav-mobile" class="right" style="font-family: lucida bright;">
-              {% if user.is_authenticated %}
-                <li><a href="/logout">Log Out</a></li>
-                <li><a href="/profile">Profile</a></li>
-              {% else %}
-                <li><a href="/signup">Sign Up</a></li>
-                <li><a href="/login">Log In</a></li>
-              {% endif %}
             </ul>
         </div>
       </div>

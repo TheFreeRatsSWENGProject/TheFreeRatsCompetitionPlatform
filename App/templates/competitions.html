@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
-{% block title %}Competitions{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
+{% block title %}Competitions | TFR Competition Platform{% endblock %}
+{% block page %}TheFreeRats Competition Platform{% endblock %}
 
 {{ super() }}
 
@@ -53,14 +53,30 @@
         line-height: 1.3;
     } */
 
+    .header-text {
+        padding-bottom: 15px; 
+        padding-top: 10px; 
+        outline: solid #343A40; 
+        background-color: #5E503F;
+    }
+
+    .header-text:hover {
+        outline: solid white;
+        transition: 0.2s;
+    }
+
+    .mod-create {
+        text-align: center;
+    }
+
 </style>
-<div style="display: flex;">
+<div>
     <div>
-        <center><h2 style="margin-left: 50px; color: white;">Competitions</h2></center>
+        <h2 style="margin-left: 50px; color: white; text-align: center;">Competitions</h2>
     </div>
     {% if session['user_type'] == 'moderator' %}
-    <div>
-        <button type="button" style="padding: 5px; margin-left: 50px; margin-top: 50px; background-color: black; height: 35px; border-radius: 15px; font-family: helvetica;">
+    <div class="mod-create">
+        <button type="button" style="padding: 5px; margin-left: 50px; margin-top: 50px; background-color: #343A40; height: 35px; border-radius: 15px; font-family: helvetica;">
             <a style="color: white;" href="{{url_for('comp_views.create_comp_page')}}">Create Competition</a>
         </button>
     </div>
@@ -72,14 +88,13 @@
     
     {% for competition in competitions[::-1] %}
         
-        <div class="card" style="background-color: black; color: white; font-family: helvetica;">
+        <div class="card" style="background-color: #A9927D; color: white; font-family: helvetica;">
             <a style="color: white;" href="{{url_for('comp_views.competition_details', id=competition.id)}}">
-                <center>
-                    <div style="padding-bottom: 15px; padding-top: 10px; outline: solid white; background-color: #343A40;">
-                        <h3 style="color: white; font-family: optima;">{{competition.name}}</h3>
-                    </div>
-                </center>
-                <div>
+                <div class="header-text">
+                    <h3 style="color: white; font-family: optima; text-align: center;">{{competition.name}}</h3>
+                </div>
+            </a>
+                <div style="text-align: center;">
                     <p><strong>Date: </strong>{{competition.date.strftime("%d %B %Y")}}</p>
                     <p><strong>Location: </strong>{{competition.location}}</p>
                     <p><strong>Level: </strong>{{competition.level}}</p>
@@ -87,12 +102,11 @@
                     <p><strong>Moderators: </strong>
                     {% for moderator in competition.moderators %}
                         <a style="color: white" href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
-                            <p>{{moderator.username}}</p>
+                            <p>{{moderator.username | capitalize}}</p>
                         </a>
                     {% endfor %}
                     </p> 
                 </div>
-            </a>
         </div>
     
     {% endfor %}
