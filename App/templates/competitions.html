@@ -69,6 +69,10 @@
         text-align: center;
     }
 
+    .mod-link:hover {
+        text-decoration: underline;
+    }
+
 </style>
 <div>
     <div>
@@ -101,7 +105,7 @@
                     <p><strong>Max Score: </strong>{{competition.max_score}}</p>
                     <p><strong>Moderators: </strong>
                     {% for moderator in competition.moderators %}
-                        <a style="color: white" href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
+                        <a class="mod-link" style="color: white" href="{{url_for('index_views.moderator_profile', id=moderator.id)}}">
                             <p>{{moderator.username | capitalize}}</p>
                         </a>
                     {% endfor %}

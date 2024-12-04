@@ -197,18 +197,10 @@
                             <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
                             {{'%0.2f' % student['rating score'] | float}} 
                         </td>
-                        {%elif student['placement'] == 2%}
-                        <td class="points">
-                            <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
-                            {{'%0.2f' % student['rating score'] | float}} 
-                        </td>
-                        {%elif student['placement'] == 3%}
-                        <td class="points">
-                            <img class="medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
-                            {{'%0.2f' % student['rating score'] | float}} 
-                        </td>
                         {%else%}
-                        <td class="points">{{'%0.2f' % student['rating score'] | float}}</td>
+                        <td class="points">
+                            {{'%0.2f' % student['rating score'] | float}} 
+                        </td>
                         {%endif%}
                     </tr>
                     {%endfor%}
