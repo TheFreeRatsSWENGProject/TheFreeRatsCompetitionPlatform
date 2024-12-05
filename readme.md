@@ -6,7 +6,7 @@
 ![Tests](https://github.com/uwidcit/flaskmvc/actions/workflows/dev.yml/badge.svg)
 
 
-#Special Feature 
+# Special Feature 
 For the rank-history of a student
 ```bash
 flask student rank-history <name>
