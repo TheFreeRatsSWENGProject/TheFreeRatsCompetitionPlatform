@@ -6,11 +6,87 @@
 ![Tests](https://github.com/uwidcit/flaskmvc/actions/workflows/dev.yml/badge.svg)
 
 
-# Special Feature 
+# Special Feature Commands
 For the rank-history of a student
 ```bash
-flask student rank-history <name>
+$ flask student rank-history <name>
 ```
+For creating of a student
+```bash
+$ flask student create <name>
+```
+For displaying a student profile
+```bash
+$ flask student display <name>
+```
+For displaying all students in database
+```bash
+$ flask student list
+```
+For displaying all students in database
+```bash
+$ flask student list
+```
+For displaying all notifications for a specific student
+```bash
+$ flask student notifications <name>
+```
+For displaying all students in database
+```bash
+$ flask student list
+```
+For updating a student username
+```bash
+$ flask student update <id> <name>
+```
+
+For creating a mod
+```bash
+$ flask mod addMod <name> <password>
+```
+For adding a mod to a competition
+```bash
+$ flask mod addMod <name> <competition_name>
+```
+For adding restuls to a competition
+```bash
+$ flask mod addResults <name> <competition_name> <team_name> <student1> <student2> <student3> <score>
+```
+For confirming results for a competition
+```bash
+$ flask mod addMod <name> <competition_name>
+```
+For displaying rankings (leaderboard)
+```bash
+$ flask mod rankings
+```
+For listing all moderators
+```bash
+$ flask mod list
+```
+
+For creating a competition
+```bash
+$ flask comp <mod_name> <comp_name> <date> <location> <level> <max_score>
+```
+For displaying competition details
+```bash
+$ flask comp details <comp_name>
+```
+For listing all competitions
+```bash
+$ flask comp list 
+```
+For displaying competiton results
+```bash
+$ flask comp reults <comp_name>
+```
+
+
+
+
+
+
 
 # Flask MVC Template
 A template for flask applications structured in the Model View Controller pattern [Demo](https://dcit-flaskmvc.herokuapp.com/). [Postman Collection](https://documenter.getpostman.com/view/583570/2s83zcTnEJ)
