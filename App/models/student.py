@@ -83,6 +83,10 @@ class Student(User, Observer):
                 self.curr_rank = new_rank
                 notification = Notification(self.id, message)
                 self.notifications.append(notification)
+                db.session.add(notification)
+                db.session.commit()
+                for notifation in self.notifications:
+                    print(notifation.to_dict())
                 # print("New rank is: ", new_rank)
                 #print("Inside notification:" + str(self.to_Dict()))
                 #print(f"StudentNotification: {self.username}, your rank has been updated to '{new_rank}'!")
