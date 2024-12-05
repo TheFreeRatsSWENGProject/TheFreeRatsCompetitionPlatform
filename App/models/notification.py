@@ -4,7 +4,7 @@ from App.models.observer import Observer
 class Notification(db.Model, Observer):  #extend da observer
     __tablename__ = 'notification'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     message = db.Column(db.String, nullable=False)
 

@@ -43,7 +43,7 @@ class Competition(db.Model, Subject):
         for m in self.moderators:
             if m.id == mod.id:
                 print(f'{mod.username} already added to {self.name}!')
-                return None
+                return False
 
         try:
             # Commit the Competition instance to the database to ensure it has an id
@@ -68,7 +68,7 @@ class Competition(db.Model, Subject):
         except Exception as e:
             db.session.rollback()
             print(f"Something went wrong adding mod to comp: {e}")
-            return None
+            return False
 
     def add_team(self, team):
         from App.models.team import Team  # Local import to avoid circular import
@@ -112,7 +112,7 @@ class Competition(db.Model, Subject):
             "location": self.location,
             "level": self.level,
             "max_score": self.max_score,
-            "confirm": self.confirm,  # Include the confirm field
+            # "confirm": self.confirm,  # Include the confirm field
             "moderators": [mod.username for mod in self.moderators],
             "teams": [team.name for team in self.teams]
         }

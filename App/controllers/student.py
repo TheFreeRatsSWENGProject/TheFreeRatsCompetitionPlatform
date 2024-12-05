@@ -75,12 +75,13 @@ def display_student_info(username):
 
 def display_notifications(username):
     student = get_student_by_username(username)
-
+    # print(student.to_dict())
     if not student:
         print(f'{username} does not exist!')
         return None
     else:
-        return {"notifications":[notification.to_dict() for notification in student.notifications]}
+        notifications = {"notifications":[notification.to_dict() for notification in student.notifications]}
+        return notifications
 
 
 def create_ranking(student_id, rank, date, score):
